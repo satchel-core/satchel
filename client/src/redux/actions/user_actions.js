@@ -1,4 +1,6 @@
 import axios from "axios";
+import Web3 from "web3";
+import WalletConnectProvider from "@walletconnect/web3-provider";
 
 import * as types from "../types";
 import contractAbi from "../../contracts/UnicefSatchel.sol/UnicefSatchel.json";
@@ -289,10 +291,17 @@ export const withdraw =
     }
   };
 
-export const handleUserLogout = (history) => {
-  history.push({ pathname: "/Login" });
-  return {
-    type: types.LOGOUT_USER,
-    payload: {},
-  };
+export const handleUserLogout = (history) => async (dispatch) => {
+  try {
+    const provider = new WalletConnectProvider({
+      infuraId: process.env.REACT_APP_INFURA,
+    });
+    await provider.disconnect();
+    history.push({ pathname: "/Login" });
+    dispatch({
+      type: types.LOGOUT_USER,
+    });
+  } catch (e) {
+    console.log(e);
+  }
 };
