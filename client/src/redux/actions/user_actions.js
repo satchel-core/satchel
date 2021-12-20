@@ -1,4 +1,4 @@
-import Web3 from "web3";
+import axios from "axios";
 
 import * as types from "../types";
 import contractAbi from "../../contracts/UnicefSatchel.sol/UnicefSatchel.json";
@@ -6,12 +6,12 @@ import erc20Abi from "../../contracts/User.sol/Erc20.json";
 import cTokenAbi from "../../contracts/User.sol/CErc20.json";
 import userAbi from "../../contracts/User.sol/User.json";
 import schoolAbi from "../../contracts/School.sol/School.json";
-import axios from "axios";
 import assets from "../../assets.json";
-
-const web3 = new Web3(Web3.givenProvider);
+import { connectWallet } from "../../components/helpers";
 
 export const handleUserLogin = (history) => async (dispatch) => {
+  const web3 = await connectWallet();
+
   let contractInstance = new web3.eth.Contract(
     contractAbi.abi,
     process.env.REACT_APP_CONTRACT_ADDRESS
@@ -20,14 +20,7 @@ export const handleUserLogin = (history) => async (dispatch) => {
   console.log(process.env.REACT_APP_CONTRACT_ADDRESS);
 
   try {
-    if (!window.ethereum) {
-      console.log("Metamask not installed");
-      return;
-    }
-    const accounts = await window.ethereum.request({
-      method: "eth_requestAccounts",
-    });
-
+    const accounts = await web3.eth.getAccounts();
     let userContractAddress = await contractInstance.methods
       .getUserContract()
       .call({ from: accounts[0] });
@@ -57,6 +50,8 @@ export const handleUserLogin = (history) => async (dispatch) => {
 };
 
 export const handleUserSignup = (school, name, history) => async (dispatch) => {
+  const web3 = await connectWallet();
+
   let contractInstance = new web3.eth.Contract(
     contractAbi.abi,
     process.env.REACT_APP_CONTRACT_ADDRESS
@@ -65,13 +60,7 @@ export const handleUserSignup = (school, name, history) => async (dispatch) => {
   console.log(process.env.REACT_APP_CONTRACT_ADDRESS);
 
   try {
-    if (!window.ethereum) {
-      console.log("Metamask not installed");
-      return;
-    }
-    const accounts = await window.ethereum.request({
-      method: "eth_requestAccounts",
-    });
+    const accounts = await web3.eth.getAccounts();
 
     let userContractAddress = await contractInstance.methods
       .getUserContract()
@@ -109,6 +98,8 @@ export const handleUserSignup = (school, name, history) => async (dispatch) => {
 };
 
 export const getName = (contractAddress) => async (dispatch) => {
+  const web3 = await connectWallet();
+
   let userContract = new web3.eth.Contract(userAbi.abi, contractAddress);
   let name = await userContract.methods.name().call();
   console.log("Name is ", name);
@@ -116,6 +107,8 @@ export const getName = (contractAddress) => async (dispatch) => {
 };
 
 export const getBalance = (contractAddress) => async (dispatch) => {
+  const web3 = await connectWallet();
+
   let userContract = new web3.eth.Contract(userAbi.abi, contractAddress);
   try {
     const promises = assets.map(async (asset) => {
@@ -138,7 +131,7 @@ export const getBalance = (contractAddress) => async (dispatch) => {
 
     // Get prices
     const prices = await axios.get(
-      "http://localhost:4000/api/user/getTokenPrices",
+      `${process.env.REACT_APP_SERVER_URL}/api/user/getTokenPrices`,
       { params: { tokens: assets.map((asset) => asset.symbol).join() } }
     );
 
@@ -187,6 +180,8 @@ export const getBalance = (contractAddress) => async (dispatch) => {
 };
 
 export const getContribution = (contractAddress) => async (dispatch) => {
+  const web3 = await connectWallet();
+
   const userContract = new web3.eth.Contract(userAbi.abi, contractAddress);
   let x = (await userContract.methods.getContribution().call()) / 1e18;
   dispatch({ type: types.GET_CONTRIBUTION, payload: x });
@@ -226,6 +221,8 @@ const underlyingDecimals = 18;
 // const cToken = new web3.eth.Contract(cTokenAbi.abi, cTokenAddress);
 
 export const deposit = (contractAddress, amount, asset) => async (dispatch) => {
+  const web3 = await connectWallet();
+
   console.log("handleGet\n\n\n");
   dispatch({ type: types.LOAD_DEPOSIT });
 
@@ -263,6 +260,8 @@ export const deposit = (contractAddress, amount, asset) => async (dispatch) => {
 export const withdraw =
   (contractAddress, withdrawAmount, asset) => async (dispatch) => {
     try {
+      const web3 = await connectWallet();
+
       dispatch({ type: types.LOAD_WITHDRAW });
       const amount = web3.utils.toHex(
         withdrawAmount * Math.pow(10, underlyingDecimals)

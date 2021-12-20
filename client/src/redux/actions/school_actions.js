@@ -38,7 +38,7 @@ export const getSchoolByUser = (userAddress) => async (dispatch) => {
 
 export const getSchoolProjects = (schoolAddress) => async (dispatch) => {
   let { data } = await axios.get(
-    "http://localhost:4000/api/project?schoolAddress=" + schoolAddress
+    `${process.env.REACT_APP_SERVER_URL}/api/project?schoolAddress=${schoolAddress}`
   );
   dispatch({
     type: types.GET_SCHOOL_PROJECTS,
@@ -134,10 +134,13 @@ export const deploySchool = (schoolName, history) => async (dispatch) => {
     const schoolAddress = await contractInstance.methods.schoolArray(id).call();
     console.log(schoolAddress); // Gives address of school contract
 
-    await axios.post("http://localhost:4000/api/school/createSchool", {
-      name: schoolName,
-      address: schoolAddress,
-    });
+    await axios.post(
+      `${process.env.REACT_APP_SERVER_URL}/api/school/createSchool`,
+      {
+        name: schoolName,
+        address: schoolAddress,
+      }
+    );
 
     dispatch({
       type: types.GET_SCHOOL_INFO,
