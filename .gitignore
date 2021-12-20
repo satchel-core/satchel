@@ -1,0 +1,8 @@
+.DS_Store
+node_modules/
+.build/
+.env
+cache/
+artifacts/
+client/contract_types
+blockchain/contract_types
