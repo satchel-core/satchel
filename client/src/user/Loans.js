@@ -78,6 +78,7 @@ class Loans extends Component {
               margin: "4vh 10% 0 10%",
             }}
             type="submit"
+            onClick={() => this.props.history.push({ pathname: "/NewLoan" })}
           >
             Take out a New Loan{" "}
           </Button>
