@@ -11,6 +11,7 @@
     "typechain": "cross-env TS_NODE_TRANSPILE_ONLY=true hardhat typechain"
   },
   "devDependencies": {
+    "@tenderly/hardhat-tenderly": "^1.0.13",
     "@ethersproject/providers": "^5.4.5",
     "@nomiclabs/hardhat-ethers": "^2.0.2",
     "@nomiclabs/hardhat-waffle": "^2.0.1",
