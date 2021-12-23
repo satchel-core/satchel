@@ -14,6 +14,8 @@ class ConfirmNewLoan extends Component {
   };
 
   async componentDidMount() {
+    // const receivedProps = this.props.location.state;
+
     if (!this.props.contractAddress) {
       this.props.history.push({ pathname: "Login" });
     } else {
@@ -23,7 +25,7 @@ class ConfirmNewLoan extends Component {
 
   render() {
     console.log(this.state.amount);
-    // console.log(this.props.location.state.detail);
+    console.log(this.props.location.state);
     const data = [
       { title: "Loan", data: "New House" },
       { title: "Due Date", data: "12/18/2022" },
@@ -52,7 +54,7 @@ class ConfirmNewLoan extends Component {
             }}
           >
             <div style={{ fontWeight: "bold" }}> You are borrowing</div>
-            <h3>45.00 DAI </h3>
+            <h3>{this.props.location.state.amount} DAI </h3>
             <div
               style={{
                 display: "flex",
@@ -140,7 +142,7 @@ class ConfirmNewLoan extends Component {
               }}
               type="submit"
               onClick={() =>
-                this.props.history.push({ pathname: "RepayComplete" })
+                this.props.history.push({ pathname: "NewLoanComplete" })
               }
             >
               Repay

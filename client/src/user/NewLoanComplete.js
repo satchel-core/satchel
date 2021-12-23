@@ -43,7 +43,7 @@ class NewLoanComplete extends Component {
               margin: "4vh 10% 0 10%",
             }}
             type="submit"
-            onClick={() => this.props.history.push({ pathname: "/LoanDetail" })}
+            onClick={() => this.props.history.push({ pathname: "/Loans" })}
           >
             Back to Borrow
           </Button>

@@ -89,7 +89,9 @@ class NewLoan extends Component {
                 width: "35vw",
               }}
               onClick={() =>
-                this.props.history.push({ pathname: "LoanDetail" })
+                this.props.history.push({
+                  pathname: "LoanDetail",
+                })
               }
               className="LogoutButton"
             >
@@ -106,7 +108,12 @@ class NewLoan extends Component {
               }}
               type="submit"
               onClick={() =>
-                this.props.history.push({ pathname: "ConfirmNewLoan" })
+                this.props.history.push({
+                  pathname: "/ConfirmNewLoan",
+                  state: {
+                    ...this.state,
+                  },
+                })
               }
             >
               Preview Loan
