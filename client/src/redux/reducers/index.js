@@ -1,7 +1,9 @@
 import { combineReducers } from "redux";
 import user from "./user_reducer";
 import school from "./school_reducer";
+import loans from "./loan_reducer";
 export default combineReducers({
   user,
   school,
+  loans,
 });

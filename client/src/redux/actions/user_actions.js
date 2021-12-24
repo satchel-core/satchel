@@ -211,16 +211,7 @@ export const getInterestRate = (contractAddress) => async (dispatch) => {
   });
 };
 
-// think this needs to be initialized for each asset we want to do...
 const underlyingDecimals = 18;
-// const underlyingMainnetAddress = process.env.REACT_APP_TOKEN_ADDRESS;
-// const underlying = new web3.eth.Contract(
-//   erc20Abi.abi,
-//   underlyingMainnetAddress
-// );
-
-// const cTokenAddress = process.env.REACT_APP_CTOKEN_ADDRESS;
-// const cToken = new web3.eth.Contract(cTokenAbi.abi, cTokenAddress);
 
 export const deposit = (contractAddress, amount, asset) => async (dispatch) => {
   const web3 = await connectWallet();

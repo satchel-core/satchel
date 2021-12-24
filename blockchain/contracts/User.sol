@@ -27,7 +27,7 @@ interface CErc20 is Erc20 {
 
     function borrow(uint) external returns (uint);
 
-    function repayBorrow(uint) external returns (uint);
+    function repayBorrow(uint) external returns (uint); 
     
     event Failure(uint, uint, uint);
 }
@@ -36,6 +36,8 @@ interface Comptroller {
     function enterMarkets(address[] calldata) external returns (uint[] memory);
 
     function exitMarket(address) external returns (uint);
+
+    // function getAssetsIn(address) external view returns (CToken[] memory);
 }
 
 contract User is Exponential {
@@ -220,6 +222,8 @@ contract User is Exponential {
         Erc20 underlying = Erc20(_erc20Contract);
         return underlying.balanceOf(msg.sender);
     }
+
+
 
     /** Allows the user to enter the market
      * This is necessary in order to begin borrowing from any market on Compound

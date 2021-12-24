@@ -82,6 +82,25 @@ class Loans extends Component {
           >
             Take out a New Loan{" "}
           </Button>
+          <Button
+            style={{
+              backgroundColor: "#146EFF",
+              color: "white",
+              fontWeight: "bold",
+              borderRadius: "10px",
+              borderWidth: "0px",
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-around",
+              width: "80vw",
+              margin: "4vh 10% 0 10%",
+            }}
+            type="submit"
+            onClick={() => this.props.history.push({ pathname: "/ExpLoan" })}
+          >
+            Try Out New Loans Here!
+          </Button>
           <div className="Welcome">Active Loans</div>
           <LoanCard
             date="10/01/2020"

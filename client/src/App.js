@@ -24,6 +24,7 @@ import RepayComplete from "./user/RepayComplete";
 import NewLoan from "./user/NewLoan";
 import ConfirmNewLoan from "./user/ConfirmNewLoan";
 import NewLoanComplete from "./user/NewLoanComplete";
+import Borrow from "./user/Borrow";
 class App extends Component {
   render() {
     return (
@@ -55,6 +56,8 @@ class App extends Component {
             <Route exact path="/NewLoan" component={NewLoan} />
             <Route exact path="/ConfirmNewLoan" component={ConfirmNewLoan} />
             <Route exact path="/NewLoanComplete" component={NewLoanComplete} />
+
+            <Route exact path="/ExpLoan" component={Borrow} />
 
             <Route exact path="/Community" component={Community} />
           </Switch>
