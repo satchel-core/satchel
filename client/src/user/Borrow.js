@@ -16,24 +16,7 @@ import assets from "../assets.json";
 
 class Loans extends Component {
   state = {
-    activeTab: 0,
-    Balance: "",
-    Deposit: "",
-    Withdraw: "",
-    InterestRate: "",
-    Contribution: "",
-    RoundedContribution: "",
-    School: "",
-    Name: "",
-    SchoolContract: "",
-    SchoolName: "",
-    SchoolAddress: "",
-    projects: [],
-    withdrawLoading: false,
-    depositLoading: false,
-    dropdownOpen: false,
-    dropDownValue: "Select Asset",
-    activeAsset: {},
+    activeAsset: assets[0],
   };
 
   async componentDidMount() {
@@ -63,8 +46,27 @@ class Loans extends Component {
         <div className="screens">
           <div className="Welcome">Experimental Loans</div>
           <div> Loans only supported for Dai at the moment... </div>
-          <Button>Enter market for DAI</Button>
-          <Button>Exit market for DAI</Button>
+          <Button
+            onClick={(e) => {
+              e.preventDefault();
+              this.props.enterMarket(
+                this.props.contractAddress,
+                this.state.activeAsset.cTokenAddress
+              );
+            }}
+          >
+            Enter market for DAI
+          </Button>
+          <Button
+            onClick={() =>
+              this.props.exitMarket(
+                this.props.contractAddress,
+                this.state.activeAsset.cTokenAddress
+              )
+            }
+          >
+            Exit market for DAI
+          </Button>
         </div>
         <NavBar active={1} history={this.props.history} />
       </div>
