@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Button } from "reactstrap";
+import { Button, Input } from "reactstrap";
 import "../App.css";
 
 import {
@@ -10,6 +10,8 @@ import {
   getBorrowInterestRate,
   enterMarket,
   exitMarket,
+  borrow,
+  repay,
 } from "../redux/actions";
 import NavBar from "../components/Navbar";
 import assets from "../assets.json";
@@ -17,6 +19,7 @@ import assets from "../assets.json";
 class Loans extends Component {
   state = {
     activeAsset: assets[0],
+    amount: 0,
   };
 
   async componentDidMount() {
@@ -33,6 +36,12 @@ class Loans extends Component {
       // this.props.getSchoolByUser(this.props.contractAddress);
     }
   }
+
+  setWithdraw = (event) => {
+    event.preventDefault();
+    const x = event.target.value;
+    this.setState({ amount: x });
+  };
 
   render() {
     console.log("User Address: ", this.props.contractAddress);
@@ -67,6 +76,45 @@ class Loans extends Component {
           >
             Exit market for DAI
           </Button>
+
+          <Input
+            onChange={this.setWithdraw}
+            type="number"
+            name="text"
+            id="amount"
+            placeholder="Enter amount"
+            style={{
+              backgroundColor: "#ECF3FF",
+              color: "black",
+              borderRadius: "10px",
+              border: "white",
+              fontSize: "12px",
+            }}
+          />
+
+          <Button
+            onClick={(e) => {
+              e.preventDefault();
+              this.props.borrow(
+                this.props.contractAddress,
+                this.state.activeAsset,
+                this.state.amount
+              );
+            }}
+          >
+            Borrow Dai
+          </Button>
+          <Button
+            onClick={() =>
+              this.props.repay(
+                this.props.contractAddress,
+                this.state.activeAsset,
+                this.state.amount
+              )
+            }
+          >
+            Repay Dai
+          </Button>
         </div>
         <NavBar active={1} history={this.props.history} />
       </div>
@@ -96,4 +144,6 @@ export default connect(mapStateToProps, {
   getBorrowBalance,
   enterMarket,
   exitMarket,
+  borrow,
+  repay,
 })(Loans);

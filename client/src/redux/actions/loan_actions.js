@@ -52,7 +52,7 @@ export const getBorrowBalance = (contractAddress) => async (dispatch) => {
 
   for (let i = 0; i < assets.length; i++) {
     // And do any mantissa processing here...
-    payload[assets[i].symbol] = results[i];
+    payload[assets[i].symbol] = results[i] / 10 ** assets[i].decimals;
   }
 
   console.log(process.env.REACT_APP_CONTRACT_ADDRESS);
@@ -88,4 +88,34 @@ export const exitMarket =
     dispatch({ type: types.EXIT_MARKET });
   };
 
-export const borrow = (contractAddress, asset) => async (dispatch) => {};
+export const borrow = (contractAddress, asset, amount) => async (dispatch) => {
+  const web3 = await connectWallet();
+  const accounts = await web3.eth.getAccounts();
+
+  const userContract = new web3.eth.Contract(userAbi.abi, contractAddress);
+  await userContract.methods
+    .borrow(
+      asset.tokenAddress,
+      asset.cTokenAddress,
+      web3.utils.toHex(amount * Math.pow(10, asset.decimals))
+    )
+    .send({ from: accounts[0] });
+
+  dispatch(getBorrowBalance(contractAddress));
+};
+
+export const repay = (contractAddress, asset, amount) => async (dispatch) => {
+  const web3 = await connectWallet();
+  const accounts = await web3.eth.getAccounts();
+
+  const userContract = new web3.eth.Contract(userAbi.abi, contractAddress);
+  await userContract.methods
+    .repayBorrow(
+      asset.tokenAddress,
+      asset.cTokenAddress,
+      web3.utils.toHex(amount * Math.pow(10, asset.decimals))
+    )
+    .send({ from: accounts[0] });
+
+  dispatch(getBorrowBalance(contractAddress));
+};

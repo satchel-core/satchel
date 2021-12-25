@@ -126,7 +126,9 @@ export const getBalance = (contractAddress) => async (dispatch) => {
     const balance = {};
 
     for (let i = 0; i < assets.length; i++) {
-      balance[assets[i].symbol] = Number((data[i] / 1e18).toFixed(2));
+      balance[assets[i].symbol] = Number(
+        (data[i] / 10 ** assets[i].decimals).toFixed(2)
+      );
     }
 
     dispatch({ type: types.GET_BALANCE, payload: balance });
@@ -181,6 +183,7 @@ export const getBalance = (contractAddress) => async (dispatch) => {
   }
 };
 
+// This is a little bit broken....
 export const getContribution = (contractAddress) => async (dispatch) => {
   const web3 = await connectWallet();
 
@@ -211,8 +214,6 @@ export const getInterestRate = (contractAddress) => async (dispatch) => {
   });
 };
 
-const underlyingDecimals = 18;
-
 export const deposit = (contractAddress, amount, asset) => async (dispatch) => {
   const web3 = await connectWallet();
 
@@ -225,10 +226,9 @@ export const deposit = (contractAddress, amount, asset) => async (dispatch) => {
     const userContract = new web3.eth.Contract(userAbi.abi, contractAddress);
 
     const underlying = new web3.eth.Contract(erc20Abi.abi, asset.tokenAddress);
-    const underlyingDecimals = 18;
 
     console.log("Approve funds");
-    let supply = web3.utils.toHex(amount * Math.pow(10, underlyingDecimals));
+    let supply = web3.utils.toHex(amount * Math.pow(10, asset.decimals));
     await underlying.methods.approve(contractAddress, supply).send({
       from: accounts[0],
       gasLimit: web3.utils.toHex(1000000),
@@ -257,7 +257,7 @@ export const withdraw =
 
       dispatch({ type: types.LOAD_WITHDRAW });
       const amount = web3.utils.toHex(
-        withdrawAmount * Math.pow(10, underlyingDecimals)
+        withdrawAmount * Math.pow(10, asset.decimals)
       );
 
       const accounts = await web3.eth.getAccounts();
