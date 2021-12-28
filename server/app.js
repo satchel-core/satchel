@@ -24,6 +24,13 @@ db.on('error', (err) => {
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
+app.use(function (req, res, next) {
+    res.set({
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*', // replace with hostname of frontend (CloudFront)
+    });
+    next();
+});
 
 app.use('/api/user/', userRouter);
 app.use('/api/school/', schoolRouter);

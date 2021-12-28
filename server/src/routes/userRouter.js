@@ -40,6 +40,7 @@ router.post('/createUser', async (req, res) => {
         return res.status(400).json({
             address: 'Address not found',
         });
+        // res.set('Content-Type', 'text/plain')
     }
 
     try {
