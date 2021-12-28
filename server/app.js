@@ -5,9 +5,9 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const sls = require('serverless-http');
 
-const userRouter = require('./routes/userRouter');
-const schoolRouter = require('./routes/schoolRouter');
-const projectRouter = require('./routes/projectRouter');
+const userRouter = require('./src/routes/userRouter');
+const schoolRouter = require('./src/routes/schoolRouter');
+const projectRouter = require('./src/routes/projectRouter');
 
 const port = process.env.PORT ? process.env.PORT : 4000;
 
@@ -28,9 +28,5 @@ app.use(cors());
 app.use('/api/user/', userRouter);
 app.use('/api/school/', schoolRouter);
 app.use('/api/project/', projectRouter);
-
-app.listen(port, () => {
-    console.log(`Listening on port ${port}`);
-});
 
 module.exports.server = sls(app);
