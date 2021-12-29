@@ -17,3 +17,5 @@ contract Migrations {
     last_completed_migration = completed;
   }
 }
+
+// remixd -s /Users/timg/Documents/GitHub/satchel-core/blockchain/contracts -u https://remix.ethereum.org/

@@ -21,7 +21,7 @@ interface Erc20 {
 interface CErc20 is Erc20 {
     function mint(uint256) external returns (uint256);
 
-    function balanceOfUnderlying(address) external view returns (uint256);
+    function balanceOfUnderlying(address) external returns (uint256);
 
     function redeemUnderlying(uint) external returns (uint);
 
