@@ -4,7 +4,7 @@ const INITIAL_STATE = {
   name: "",
   address: "",
   projects: [],
-  balance: 0,
+  balance: {},
   loginLoading: false,
   deployLoading: false,
   withdrawLoading: false,

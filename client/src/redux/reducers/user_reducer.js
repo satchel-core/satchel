@@ -10,6 +10,7 @@ const INITIAL_STATE = {
   depositLoading: false,
   withdrawLoading: false,
   totalBalance: 0,
+  assetPrices: {},
 };
 
 export default function (state = INITIAL_STATE, action) {
@@ -39,6 +40,8 @@ export default function (state = INITIAL_STATE, action) {
       return { ...state, withdrawLoading: true };
     case types.GET_TOTAL_BALANCE:
       return { ...state, totalBalance: action.payload };
+    case types.GET_ASSET_PRICES:
+      return { ...state, assetPrices: action.payload };
     default:
       return state;
   }

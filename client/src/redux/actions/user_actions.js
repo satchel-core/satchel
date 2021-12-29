@@ -183,6 +183,19 @@ export const getBalance = (contractAddress) => async (dispatch) => {
   }
 };
 
+export const getAssetPrices = () => async (dispatch) => {
+  const priceData = await axios.get(
+    `${process.env.REACT_APP_SERVER_URL}/api/user/getTokenPrices`,
+    { params: { tokens: assets.map((asset) => asset.symbol).join() } }
+  );
+
+  const prices = {};
+  assets.forEach((asset) => {
+    prices[asset.symbol] = priceData.data.data[asset.symbol].quote.USD.price;
+  });
+  dispatch({ type: types.GET_ASSET_PRICES, payload: prices });
+};
+
 // This is a little bit broken....
 export const getContribution = (contractAddress) => async (dispatch) => {
   const web3 = await connectWallet();
@@ -213,6 +226,23 @@ export const getInterestRate = (contractAddress) => async (dispatch) => {
     payload: Number(((data.cToken[0].supply_rate.value / 2) * 100).toFixed(2)),
   });
 };
+
+export const donate =
+  (contractAddress, schoolAddress, amount, asset) => async (dispatch) => {
+    const web3 = await connectWallet();
+    const accounts = await web3.eth.getAccounts();
+
+    const underlying = new web3.eth.Contract(erc20Abi.abi, asset.tokenAddress);
+
+    let supply = web3.utils.toHex(amount * Math.pow(10, asset.decimals));
+    await underlying.methods.transfer(schoolAddress, supply).send({
+      from: accounts[0],
+      gasLimit: web3.utils.toHex(1000000),
+      gasPrice: web3.utils.toHex(20000000000),
+    });
+
+    dispatch(getBalance(contractAddress));
+  };
 
 export const deposit = (contractAddress, amount, asset) => async (dispatch) => {
   const web3 = await connectWallet();

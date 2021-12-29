@@ -20,7 +20,8 @@ import {
   handleSchoolLogout,
   getSchoolBalance,
   withdrawSchool,
-} from "../redux/actions/school_actions";
+  getAssetPrices,
+} from "../redux/actions";
 
 const theme = createMuiTheme({
   palette: {
@@ -82,6 +83,7 @@ class SchoolDashboard extends Component {
     } else {
       this.props.getSchoolProjects(this.props.address);
       this.props.getSchoolBalance(this.props.address);
+      this.props.getAssetPrices();
     }
   }
 
@@ -276,4 +278,5 @@ export default connect(mapStateToProps, {
   handleSchoolLogout,
   getSchoolBalance,
   withdrawSchool,
+  getAssetPrices,
 })(SchoolDashboard);

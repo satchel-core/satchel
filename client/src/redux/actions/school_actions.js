@@ -1,16 +1,15 @@
 import Web3 from "web3";
+import axios from "axios";
 
 import * as types from "../types";
 import contractAbi from "../../contracts/UnicefSatchel.sol/UnicefSatchel.json";
-import erc20Abi from "../../contracts/User.sol/Erc20.json";
-import cTokenAbi from "../../contracts/User.sol/CErc20.json";
+import assets from "../../assets.json";
 import userAbi from "../../contracts/User.sol/User.json";
 import schoolAbi from "../../contracts/School.sol/School.json";
-import axios from "axios";
-
-const web3 = new Web3(Web3.givenProvider);
+import { connectWallet } from "../../components/helpers";
 
 export const getSchoolByUser = (userAddress) => async (dispatch) => {
+  const web3 = await connectWallet();
   const userContract = new web3.eth.Contract(userAbi.abi, userAddress);
 
   try {
@@ -48,6 +47,7 @@ export const getSchoolProjects = (schoolAddress) => async (dispatch) => {
 
 export const loginSchool = (schoolName, history) => async (dispatch) => {
   dispatch({ type: types.LOAD_LOGIN_SCHOOL });
+  const web3 = await connectWallet();
 
   let contractInstance = new web3.eth.Contract(
     contractAbi.abi,
@@ -110,6 +110,8 @@ export const loginSchool = (schoolName, history) => async (dispatch) => {
 };
 
 export const deploySchool = (schoolName, history) => async (dispatch) => {
+  const web3 = await connectWallet();
+
   let contractInstance = new web3.eth.Contract(
     contractAbi.abi,
     process.env.REACT_APP_CONTRACT_ADDRESS
@@ -170,61 +172,61 @@ export const handleSchoolLogout = (history) => {
   };
 };
 
-// All this needs to be changed
-// Mainnet address of the underlying token contract. Example: Dai.
-const underlyingMainnetAddress = process.env.REACT_APP_TOKEN_ADDRESS;
-const underlying = new web3.eth.Contract(
-  erc20Abi.abi,
-  underlyingMainnetAddress
-);
+export const getSchoolBalance = (contractAddress) => async (dispatch) => {
+  const web3 = await connectWallet();
 
-// Mainnet contract address and ABI for the cToken, which can be found in the
-// mainnet tab on this page: https://compound.finance/docs
-const cTokenAddress = process.env.REACT_APP_CTOKEN_ADDRESS;
-const cToken = new web3.eth.Contract(cTokenAbi.abi, cTokenAddress);
-
-export const getSchoolBalance = (schoolAddress) => async (dispatch) => {
+  let schoolContract = new web3.eth.Contract(schoolAbi.abi, contractAddress);
   try {
-    const schoolInstance = new web3.eth.Contract(schoolAbi.abi, schoolAddress);
-
-    let schoolBalance = await schoolInstance.methods
-      .getBalance(underlyingMainnetAddress)
-      .call();
-    console.log("schoolBalance: " + Number((schoolBalance / 1e18).toFixed(2)));
-    dispatch({
-      type: types.SET_SCHOOL_BALANCE,
-      payload: Number((schoolBalance / 1e18).toFixed(6)),
+    const promises = assets.map(async (asset) => {
+      console.log(asset);
+      return schoolContract.methods.getBalance(asset.tokenAddress).call();
     });
-  } catch (err) {
-    console.log("setBalance " + err.message);
+    console.log(promises);
+
+    let data = await Promise.all(promises);
+    console.log(data);
+    const balance = {};
+
+    for (let i = 0; i < assets.length; i++) {
+      balance[assets[i].symbol] = Number(
+        (data[i] / 10 ** assets[i].decimals).toFixed(2)
+      );
+    }
+    console.log(balance);
+    dispatch({ type: types.SET_SCHOOL_BALANCE, payload: balance });
+  } catch (e) {
+    console.log(e);
+    console.log(e.message);
   }
 };
 
 // This is probably broken...
 const underlyingDecimals = 18;
-export const withdrawSchool = (schoolAddress, withdraw) => async (dispatch) => {
-  const amount = web3.utils.toHex(withdraw * Math.pow(10, underlyingDecimals));
-  dispatch({ type: types.LOAD_SCHOOL_WITHDRAW });
-  try {
-    const accounts = await web3.eth.getAccounts();
-    const schoolInstance = new web3.eth.Contract(schoolAbi.abi, schoolAddress);
+export const withdrawSchool =
+  (schoolAddress, withdraw, asset) => async (dispatch) => {
+    const web3 = await connectWallet();
 
-    let schoolBalance = await schoolInstance.methods
-      .getBalance(underlyingMainnetAddress)
-      .call();
-    console.log("school balance: " + schoolBalance / 1e18);
-    console.log("withdrawing ... ");
+    const amount = web3.utils.toHex(
+      withdraw * Math.pow(10, underlyingDecimals)
+    );
+    dispatch({ type: types.LOAD_SCHOOL_WITHDRAW });
+    try {
+      const accounts = await web3.eth.getAccounts();
+      const schoolInstance = new web3.eth.Contract(
+        schoolAbi.abi,
+        schoolAddress
+      );
 
-    await schoolInstance.methods
-      .withdrawBalance(schoolBalance, underlyingMainnetAddress)
-      .send({
-        from: accounts[0],
-        gasLimit: web3.utils.toHex(1000000),
-        gasPrice: web3.utils.toHex(20000000000),
-      });
+      await schoolInstance.methods
+        .withdrawBalance(amount, asset.tokenAddress)
+        .send({
+          from: accounts[0],
+          gasLimit: web3.utils.toHex(1000000),
+          gasPrice: web3.utils.toHex(20000000000),
+        });
 
-    dispatch(getSchoolBalance(schoolAddress));
-  } catch (err) {
-    console.log(err.message);
-  }
-};
+      dispatch(getSchoolBalance(schoolAddress));
+    } catch (err) {
+      console.log(err.message);
+    }
+  };

@@ -26,6 +26,7 @@ import {
   getInterestRate,
   deposit,
   withdraw,
+  donate,
 } from "../redux/actions/user_actions";
 import { getSchoolByUser } from "../redux/actions/school_actions";
 import NavBar from "../components/Navbar";
@@ -182,6 +183,37 @@ class Account extends Component {
                           size={20}
                         />
                       </Button>
+                      <Button
+                        style={{
+                          backgroundColor: "#146EFF",
+                          color: "white",
+                          fontWeight: "bold",
+                          borderRadius: "10px",
+                          borderWidth: "0px",
+                          display: "flex",
+                          flexDirection: "row",
+                          alignItems: "center",
+                          justifyContent: "space-around",
+                        }}
+                        className="AmountButton"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          this.props.donate(
+                            this.props.contractAddress,
+                            this.props.schoolAddress,
+                            this.state.Deposit,
+                            this.state.activeAsset
+                          );
+                        }}
+                        type="submit"
+                      >
+                        Donate
+                        <ClipLoader
+                          color={"#FFFFFF"}
+                          loading={this.props.depositLoading}
+                          size={20}
+                        />
+                      </Button>
                     </Row>
                   </Form>
                 </Col>
@@ -303,4 +335,5 @@ export default connect(mapStateToProps, {
   getInterestRate,
   deposit,
   withdraw,
+  donate,
 })(Account);
