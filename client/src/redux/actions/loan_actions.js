@@ -107,14 +107,20 @@ export const borrow = (contractAddress, asset, amount) => async (dispatch) => {
 export const repay = (contractAddress, asset, amount) => async (dispatch) => {
   const web3 = await connectWallet();
   const accounts = await web3.eth.getAccounts();
+  const supply = web3.utils.toHex(amount * Math.pow(10, asset.decimals));
+  const underlying = new web3.eth.Contract(erc20Abi.abi, asset.tokenAddress);
 
+  console.log("Approve funds");
+  await underlying.methods.approve(contractAddress, supply).send({
+    from: accounts[0],
+    gasLimit: web3.utils.toHex(1000000),
+    gasPrice: web3.utils.toHex(20000000000),
+  });
+
+  console.log("Withdraw funds");
   const userContract = new web3.eth.Contract(userAbi.abi, contractAddress);
   await userContract.methods
-    .repayBorrow(
-      asset.tokenAddress,
-      asset.cTokenAddress,
-      web3.utils.toHex(amount * Math.pow(10, asset.decimals))
-    )
+    .repayBorrow(asset.tokenAddress, asset.cTokenAddress, supply)
     .send({ from: accounts[0] });
 
   dispatch(getBorrowBalance(contractAddress));
