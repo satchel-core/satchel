@@ -9,22 +9,22 @@ import Solutions from './components/Solutions'
 export const App = () => (
   <ChakraProvider theme={theme}>
     <Box mb={20}>
-      <Box as="section" pt="6rem" pb={{ base: '0', md: '5rem' }}>
-        <Container>
+      <Box as="section" pt="6rem" pb="96px">
+        <Container centerContent maxW="container.xl">
           <Hero />
         </Container>
       </Box>
-      <Box as="section" pt="48px" pb="32px">
-        <Container>
+      <Box as="section" pt="48px" pb="96px">
+        <Container centerContent maxW="container.xl">
           <Problems />
         </Container>
       </Box>
-      <Box as="section" pt="48px" pb="32px">
+      <Box as="section" pt="48px" pb="96px">
         <Container>
           <Solutions />
         </Container>
       </Box>
-      <Box as="section" pt="48px" pb="32px">
+      <Box as="section" pt="48px">
         <Container>
           <CTA />
         </Container>

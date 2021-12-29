@@ -7,9 +7,9 @@ const Footer = () => {
       as="footer"
       backgroundColor="#4A585E"
       color="white"
-      spacing={4}
-      justifyContent="center"
       height="180px"
+      justifyContent="center"
+      spacing={4}
       textAlign="center"
     >
       <Stack mt={4} direction="row" spacing="12px" justify="center">

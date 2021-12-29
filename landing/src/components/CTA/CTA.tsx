@@ -1,10 +1,12 @@
 import { Button, Center, chakra, Flex, Heading, Text } from '@chakra-ui/react'
-import { FiGlobe, FiUser, FiUsers } from 'react-icons/fi'
+
+import { ReactComponent as CTABlob } from '../../assets/svg/cta.svg'
 
 const CTA = () => {
   return (
-    <Center>
-      <Button>Contact Us</Button>
+    <Center flexDirection="column">
+      <CTABlob />
+      <Button mt="48px">Contact Us</Button>
     </Center>
   )
 }
