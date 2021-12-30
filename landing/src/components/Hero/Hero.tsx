@@ -48,7 +48,9 @@ const Hero = () => {
               />
               <Input type="email" variant="filled" placeholder="Email" />
             </InputGroup>
-            <Button colorScheme="blue">Join Waitlist</Button>
+            <Button backgroundColor="#01AFEE" color="white">
+              Join Waitlist
+            </Button>
           </Flex>
         </Stack>
       </Box>

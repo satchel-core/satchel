@@ -1,17 +1,15 @@
-import { Box, chakra, Container, Flex } from '@chakra-ui/react'
+import { IconButton, Box, chakra, Container, Flex } from '@chakra-ui/react'
 
 import { ReactComponent as SatchelLogo } from '../../assets/svg/satchel-logo.svg'
-import { ReactComponent as MediumLogo } from '../../assets/svg/medium-logo.svg'
-import { ReactComponent as TwitterLogo } from '../../assets/svg/twitter-logo.svg'
 
-interface Props {}
+import { AiOutlineMedium, AiOutlineTwitter } from 'react-icons/ai'
 
-const Header = (props: Props) => {
+const Header = () => {
   return (
     <chakra.header
       backgroundColor="white"
       left="0"
-      pt="12px"
+      pt="48px"
       right="0"
       top="0"
       transition="box-shadow 0.2s, background-color 0.2s"
@@ -22,12 +20,24 @@ const Header = (props: Props) => {
         <Flex align="center" justify="space-between">
           <SatchelLogo height={64} />
           <Flex>
-            <Box cursor="pointer" _hover={{ opacity: 0.75 }}>
-              <MediumLogo height={48} />
-            </Box>
-            <Box cursor="pointer" _hover={{ opacity: 0.75 }}>
-              <TwitterLogo height={48} />
-            </Box>
+            <IconButton
+              borderColor="#01AFEE"
+              color="#01AFEE"
+              variant="outline"
+              aria-label="medium"
+              size="lg"
+              icon={<AiOutlineMedium />}
+              mr={3}
+            />
+            <IconButton
+              borderColor="#01AFEE"
+              color="#01AFEE"
+              variant="outline"
+              colorScheme="white"
+              aria-label="twitter"
+              size="lg"
+              icon={<AiOutlineTwitter />}
+            />
           </Flex>
         </Flex>
       </Container>

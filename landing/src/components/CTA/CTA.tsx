@@ -11,7 +11,12 @@ const CTA = () => {
         style={{ height: '200px' }}
       />
       <Center flexDirection="column">
-        <Button colorScheme="blue" mt="48px" variant="outline">
+        <Button
+          borderColor="#01AFEE"
+          color="#01AFEE"
+          mt="48px"
+          variant="outline"
+        >
           Contact Us
         </Button>
       </Center>

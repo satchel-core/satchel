@@ -10,7 +10,7 @@ import Row from './components/Row'
 const Problems = () => {
   return (
     <Flex alignItems="center" justifyContent="space-between">
-      <Box alignSelf="center" direction="flex" flex={1} mr="48px">
+      <Box alignSelf="center" direction="flex" flex={1} mr="84px">
         <Player
           autoplay
           loop

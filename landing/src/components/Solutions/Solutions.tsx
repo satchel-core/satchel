@@ -8,8 +8,8 @@ import Solution3 from '../../assets/png/solutions3.png'
 import Card from './components/Card'
 
 const cardText = [
-  'Splits yield between individuals & schools for individual & local socioeconomic mobility',
-  'Enables community governance over Satchel-wide decisions & locally-funded school projects',
+  'Splits yield between individuals & schools for  socioeconomic mobility',
+  'Governance over Satchel-wide decisions & locally-funded school projects',
   'Savings accounts & loans for underbanked school communities via key DeFi protocols',
   'Tax-deductible contributions to school communities in need around the world',
 ]
