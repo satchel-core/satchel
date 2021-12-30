@@ -49,17 +49,25 @@ const Solutions = () => {
             <Player
               autoplay
               loop
-              src="https://assets3.lottiefiles.com/packages/lf20_xtct6zai.json"
+              src="https://assets8.lottiefiles.com/packages/lf20_50gmpyjw.json"
               style={{ height: '100px' }}
             />
           </Box>
           <Card image={Solution0}>{cardText[0]}</Card>
         </Box>
-        <Box position="relative">
-          <Card image={Solution1}>{cardText[1]}</Card>
-        </Box>
+        <Card image={Solution1}>{cardText[1]}</Card>
         <Card image={Solution2}>{cardText[2]}</Card>
-        <Card image={Solution3}>{cardText[3]}</Card>
+        <Box position="relative">
+          <Box position="absolute" bottom={0} right="-65px" zIndex={2}>
+            <Player
+              autoplay
+              loop
+              src="https://assets4.lottiefiles.com/packages/lf20_y0gnebqg.json"
+              style={{ height: '100px' }}
+            />
+          </Box>
+          <Card image={Solution3}>{cardText[3]}</Card>
+        </Box>
       </SimpleGrid>
     </Fade>
   )
