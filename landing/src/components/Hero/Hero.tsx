@@ -11,9 +11,19 @@ import {
   Text,
 } from '@chakra-ui/react'
 import { Player } from '@lottiefiles/react-lottie-player'
+import { useState } from 'react'
 import { FiMail } from 'react-icons/fi'
 
+import useAirtable from '../../hooks/useAirtable'
+
 const Hero = () => {
+  const { onAddEmail } = useAirtable()
+  const [email, setEmail] = useState('')
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value)
+  }
+
   return (
     <Flex>
       <Box direction="flex">
@@ -45,9 +55,19 @@ const Hero = () => {
                 pointerEvents="none"
                 children={<Icon as={FiMail} color="gray.300" />}
               />
-              <Input type="email" variant="filled" placeholder="Email" />
+              <Input
+                value={email}
+                onChange={handleChange}
+                type="email"
+                variant="filled"
+                placeholder="Email"
+              />
             </InputGroup>
-            <Button backgroundColor="#01AFEE" color="white">
+            <Button
+              backgroundColor="#01AFEE"
+              color="white"
+              onClick={() => onAddEmail(email)}
+            >
               Join Waitlist
             </Button>
           </Flex>
