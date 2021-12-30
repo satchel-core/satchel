@@ -22,7 +22,7 @@ export const App = () => (
         </Container>
       </Box>
       <Box as="section" pt="48px" pb="96px">
-        <Container>
+        <Container centerContent>
           <Solutions />
         </Container>
       </Box>

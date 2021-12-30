@@ -1,38 +1,45 @@
-import { Box, chakra, Flex, Heading, Text } from '@chakra-ui/react'
-import { FiGlobe, FiUser, FiUsers } from 'react-icons/fi'
+import { Box, Flex, Heading, Stack } from '@chakra-ui/react'
+import { Player } from '@lottiefiles/react-lottie-player'
 
-import { ReactComponent as ProblemBlob } from '../../assets/svg/problems.svg'
+import GlobalIcon from '../../assets/png/global.png'
+import IndividualIcon from '../../assets/png/individual.png'
+import LocalIcon from '../../assets/png/local.png'
 
 import Row from './components/Row'
 
 const Problems = () => {
   return (
     <Flex alignItems="center" justifyContent="space-between">
-      <Box direction="flex" flex={1} mr="24px">
-        <ProblemBlob />
+      <Box alignSelf="center" direction="flex" flex={1} mr="48px">
+        <Player
+          autoplay
+          loop
+          src="https://assets6.lottiefiles.com/packages/lf20_uhohskoe.json"
+          style={{ width: '300px' }}
+        />
       </Box>
       <Box direction="flex" flex={2}>
-        <div>
-          <Heading size="lg">
+        <Stack direction="column" spacing={6}>
+          <Heading mb="12px" size="lg">
             Communities around the world lack trusted financial primitives and
             governance models
           </Heading>
           <Row
-            RowIcon={FiUser}
+            image={IndividualIcon}
             text={`Lack of trusted banks & hyperinflation restrict individual financial agency.`}
             title="Individual"
           />
           <Row
-            RowIcon={FiUsers}
+            image={LocalIcon}
             text={`Governments limit individual agency in community decision-making.`}
             title="Local"
           />
           <Row
-            RowIcon={FiGlobe}
+            image={GlobalIcon}
             text={`Bureaucratic financial & educational infrastructure deny users agency.`}
             title="Global"
           />
-        </div>
+        </Stack>
       </Box>
     </Flex>
   )

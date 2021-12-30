@@ -1,16 +1,16 @@
-import { chakra, Flex, Icon, Heading, Text } from '@chakra-ui/react'
+import { Image, chakra, Flex, Icon, Heading, Text } from '@chakra-ui/react'
 import { IconType } from 'react-icons'
 
 interface RowProps {
-  RowIcon: IconType
+  image: string
   text: string
   title: string
 }
 
-const Row: React.FC<RowProps> = ({ RowIcon, text, title }) => {
+const Row: React.FC<RowProps> = ({ image, text, title }) => {
   return (
     <Flex align="center">
-      <Icon as={RowIcon} h={20} w={20} />
+      <Image alt={title} height="48px" src={image} />
       <chakra.div ml="24px">
         <Heading as="h4" size="lg">
           {title}
