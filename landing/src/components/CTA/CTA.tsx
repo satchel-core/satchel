@@ -1,28 +1,43 @@
-import { Button, Center } from '@chakra-ui/react'
+import { Button, Center, Fade } from '@chakra-ui/react'
 import { Player } from '@lottiefiles/react-lottie-player'
+import { useEffect, useRef, useState } from 'react'
+
+import useOnScreen from '../../hooks/useOnScreen'
 
 const CTA = () => {
+  const ref: any = useRef<HTMLDivElement>()
+  const [show, setShow] = useState(false)
+  const onScreen = useOnScreen<HTMLDivElement>(ref, '-200px')
+
+  useEffect(() => {
+    if (onScreen) {
+      setShow(true)
+    }
+  }, [onScreen])
+
   return (
-    <>
-      <Player
-        autoplay
-        loop
-        src="https://assets3.lottiefiles.com/packages/lf20_kl1ksggn.json"
-        style={{ height: '200px' }}
-      />
-      <Center flexDirection="column">
-        <Button
-          as="a"
-          href="mailto:contact@satchel.finance"
-          borderColor="#01AFEE"
-          color="#01AFEE"
-          mt="48px"
-          variant="outline"
-        >
-          Contact Us
-        </Button>
-      </Center>
-    </>
+    <Fade in={show}>
+      <div ref={ref}>
+        <Player
+          autoplay
+          loop
+          src="https://assets4.lottiefiles.com/packages/lf20_dojvzsfz.json"
+          style={{ height: '200px' }}
+        />
+        <Center flexDirection="column">
+          <Button
+            as="a"
+            href="mailto:contact@satchel.finance"
+            borderColor="#01AFEE"
+            color="#01AFEE"
+            mt="48px"
+            variant="outline"
+          >
+            Contact Us
+          </Button>
+        </Center>
+      </div>
+    </Fade>
   )
 }
 

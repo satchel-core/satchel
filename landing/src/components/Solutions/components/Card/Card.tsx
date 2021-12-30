@@ -19,6 +19,7 @@ const Card: React.FC<CardProps> = ({ title, image, children, ...props }) => {
       ref={hoverRef}
       rounded="12px"
       shadow="base"
+      height="100%"
       _before={
         isHovered
           ? {
