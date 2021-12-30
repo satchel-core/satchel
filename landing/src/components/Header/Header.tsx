@@ -1,4 +1,11 @@
-import { IconButton, Box, chakra, Container, Flex } from '@chakra-ui/react'
+import {
+  IconButton,
+  Box,
+  chakra,
+  Container,
+  Flex,
+  Link,
+} from '@chakra-ui/react'
 
 import { ReactComponent as SatchelLogo } from '../../assets/svg/satchel-logo.svg'
 
@@ -18,7 +25,9 @@ const Header = () => {
     >
       <Container maxW="container.lg">
         <Flex align="center" justify="space-between">
-          <SatchelLogo height={64} />
+          <Link href="https://satchel.finance/">
+            <SatchelLogo height={64} />
+          </Link>
           <Flex>
             <IconButton
               borderColor="#01AFEE"

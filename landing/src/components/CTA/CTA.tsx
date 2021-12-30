@@ -7,11 +7,13 @@ const CTA = () => {
       <Player
         autoplay
         loop
-        src="https://assets3.lottiefiles.com/packages/lf20_otlivlpt.json"
+        src="https://assets3.lottiefiles.com/packages/lf20_kl1ksggn.json"
         style={{ height: '200px' }}
       />
       <Center flexDirection="column">
         <Button
+          as="a"
+          href="mailto:contact@satchel.finance"
           borderColor="#01AFEE"
           color="#01AFEE"
           mt="48px"

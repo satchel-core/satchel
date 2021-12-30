@@ -16,13 +16,13 @@ import { FiMail } from 'react-icons/fi'
 const Hero = () => {
   return (
     <Flex>
-      <Box direction="flex" flex={2}>
+      <Box direction="flex">
         <Stack direction="column" spacing={6}>
           <chakra.h1
             bgGradient="linear(to-l, #FFB5AA 30%, #01AFEE)"
             bgClip="text"
-            maxW="16ch"
-            fontSize={{ base: '2.25rem', sm: '3rem', lg: '4rem' }}
+            maxW="12ch"
+            fontSize={{ base: '1.25rem', sm: '2rem', lg: '3rem' }}
             fontFamily="heading"
             letterSpacing="tighter"
             fontWeight="extrabold"
@@ -33,8 +33,7 @@ const Hero = () => {
           <Text
             maxW="560px"
             fontSize={{ base: 'lg', lg: 'xl' }}
-            fontWeight="semibold"
-            mt="6"
+            fontWeight="medium"
           >
             Satchel uplifts underbanked school communities by facilitating
             locally-governed projects &amp; bootstrapping capital through

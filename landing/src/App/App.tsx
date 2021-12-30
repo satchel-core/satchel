@@ -1,13 +1,17 @@
-import { Box, ChakraProvider, Container, theme } from '@chakra-ui/react'
+import { Box, ChakraProvider, Container } from '@chakra-ui/react'
+import '@fontsource/inter/800.css'
+import '@fontsource/inter/400.css'
 
-import CTA from './components/CTA'
-import Footer from './components/Footer'
-import Header from './components/Header'
-import Hero from './components/Hero'
-import Problems from './components/Problems'
-import Solutions from './components/Solutions'
+import theme from './theme'
 
-export const App = () => (
+import CTA from '../components/CTA'
+import Footer from '../components/Footer'
+import Header from '../components/Header'
+import Hero from '../components/Hero'
+import Problems from '../components/Problems'
+import Solutions from '../components/Solutions'
+
+const App = () => (
   <ChakraProvider theme={theme}>
     <Header />
     <Box mb={20}>
@@ -37,3 +41,5 @@ export const App = () => (
     </Box>
   </ChakraProvider>
 )
+
+export default App

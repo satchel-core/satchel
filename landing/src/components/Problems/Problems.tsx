@@ -10,16 +10,16 @@ import Row from './components/Row'
 const Problems = () => {
   return (
     <Flex alignItems="center" justifyContent="space-between">
-      <Box alignSelf="center" direction="flex" flex={1} mr="84px">
+      <Box alignSelf="center" direction="flex" flex={1}>
         <Player
           autoplay
           loop
-          src="https://assets6.lottiefiles.com/packages/lf20_uhohskoe.json"
-          style={{ width: '300px' }}
+          src="https://assets7.lottiefiles.com/packages/lf20_wrkvuuof.json"
+          style={{ height: '100%' }}
         />
       </Box>
-      <Box direction="flex" flex={2}>
-        <Stack direction="column" spacing={6}>
+      <Box direction="flex" ml="84px">
+        <Stack direction="column" maxW="560px" spacing={6}>
           <Heading mb="12px" size="lg">
             Communities around the world lack trusted financial primitives and
             governance models
