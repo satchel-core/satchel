@@ -1,4 +1,5 @@
-import { Box, ChakraProvider, Container } from '@chakra-ui/react'
+import { useEffect } from 'react'
+import { Box, ChakraProvider, Container, useColorMode } from '@chakra-ui/react'
 import '@fontsource/inter/800.css'
 import '@fontsource/inter/400.css'
 
@@ -13,33 +14,46 @@ import Solutions from '../components/Solutions'
 
 const App = () => (
   <ChakraProvider theme={theme}>
-    <Header />
-    <Box mb={20}>
-      <Box as="section" pt="6rem" pb="96px">
-        <Container maxW="container.lg">
-          <Hero />
-        </Container>
-      </Box>
-      <Box as="section" pt="48px" pb="96px">
-        <Container maxW="container.lg">
-          <Problems />
-        </Container>
-      </Box>
-      <Box as="section" pt="48px" pb="96px">
-        <Container centerContent>
-          <Solutions />
-        </Container>
-      </Box>
-      <Box as="section" pt="48px">
-        <Container>
-          <CTA />
-        </Container>
-      </Box>
-    </Box>
-    <Box as="footer">
-      <Footer />
-    </Box>
+    <Inner />
   </ChakraProvider>
 )
+
+const Inner = () => {
+  const { colorMode, setColorMode } = useColorMode()
+
+  useEffect(() => {
+    if (colorMode === 'dark') setColorMode('light')
+  }, [])
+  return (
+    <>
+      <Header />
+      <Box mb={20}>
+        <Box as="section" pt="6rem" pb="96px">
+          <Container maxW="container.lg">
+            <Hero />
+          </Container>
+        </Box>
+        <Box as="section" pt="48px" pb="96px">
+          <Container maxW="container.lg">
+            <Problems />
+          </Container>
+        </Box>
+        <Box as="section" pt="48px" pb="96px">
+          <Container centerContent>
+            <Solutions />
+          </Container>
+        </Box>
+        <Box as="section" pt="48px">
+          <Container>
+            <CTA />
+          </Container>
+        </Box>
+      </Box>
+      <Box as="footer">
+        <Footer />
+      </Box>
+    </>
+  )
+}
 
 export default App
