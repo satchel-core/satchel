@@ -43,22 +43,22 @@ const Problems = () => {
         >
           <Stack direction="column" maxW="560px" spacing={6}>
             <Heading mb="12px" size="lg">
-              Communities around the world lack trusted financial primitives and
-              governance models
+              We empower underbanked school communities with financial
+              primitives &amp; governance models.
             </Heading>
             <Row
               image={IndividualIcon}
-              text={`Lack of trusted banks & hyperinflation restrict individual financial agency.`}
+              text={`Accessible financial services enable financial mobility & autonomy.`}
               title="Individual"
             />
             <Row
               image={LocalIcon}
-              text={`Governments limit individual agency in community decision-making.`}
+              text={`Voting on school projects enable local-level self-governance.`}
               title="Local"
             />
             <Row
               image={GlobalIcon}
-              text={`Bureaucratic financial & educational infrastructure deny users agency.`}
+              text={`Satchel-wide proposals enable community-guided financial infrastructure.`}
               title="Global"
             />
           </Stack>
