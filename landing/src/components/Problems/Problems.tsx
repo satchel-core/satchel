@@ -35,7 +35,7 @@ const Problems = () => {
             <Player
               autoplay
               loop
-              src="https://assets7.lottiefiles.com/packages/lf20_wrkvuuof.json"
+              src="https://assets1.lottiefiles.com/packages/lf20_fdqi2p8n.json"
               style={{ height: '100%' }}
             />
           </Box>
