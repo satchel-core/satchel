@@ -41,7 +41,7 @@ const Card: React.FC<CardProps> = ({ title, image, children, ...props }) => {
       }
     >
       <Image alt="tax" boxSize={16} src={image} />
-      <Text fontSize="lg" mt="12px" opacity={0.7}>
+      <Text fontSize="lg" mt="12px">
         {children}
       </Text>
     </Box>

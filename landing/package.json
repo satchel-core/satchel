@@ -17,6 +17,7 @@
     "@types/react-dom": "^16.9.0",
     "airtable": "^0.11.1",
     "framer-motion": "^4.0.0",
+    "ismobilejs": "^1.1.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-icons": "^3.0.0",

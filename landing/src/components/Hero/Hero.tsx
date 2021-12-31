@@ -25,7 +25,7 @@ const Hero = () => {
   }
 
   return (
-    <Flex direction={{ sm: 'column', md: 'row' }}>
+    <Flex direction={{ base: 'column', md: 'row' }}>
       <Flex mx="auto" mb={12}>
         <Stack direction="column" spacing={6}>
           <chakra.h1

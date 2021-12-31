@@ -1,6 +1,7 @@
+import { useEffect, useRef, useState } from 'react'
 import { Button, Center, Fade } from '@chakra-ui/react'
 import { Player } from '@lottiefiles/react-lottie-player'
-import { useEffect, useRef, useState } from 'react'
+import ismobilejs from 'ismobilejs'
 
 import useOnScreen from '../../hooks/useOnScreen'
 
@@ -9,6 +10,8 @@ const CTA = () => {
   const [show, setShow] = useState(false)
   const onScreen = useOnScreen<HTMLDivElement>(ref, '-200px')
 
+  const isMobile = ismobilejs(window.navigator).any
+
   useEffect(() => {
     if (onScreen) {
       setShow(true)
@@ -16,7 +19,7 @@ const CTA = () => {
   }, [onScreen])
 
   return (
-    <Fade in={show}>
+    <Fade in={show || isMobile}>
       <div ref={ref}>
         <Player
           autoplay
