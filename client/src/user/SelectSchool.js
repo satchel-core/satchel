@@ -40,7 +40,7 @@ class SelectSchool extends Component {
 
   getSchools = async () => {
     await axios
-      .get("http://localhost:4000/api/school/allSchools")
+      .get(`${process.env.REACT_APP_SERVER_URL}/api/school/allSchools`)
       .then((res) => this.setState({ schools: res.data.schools }));
   };
 
