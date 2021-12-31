@@ -13,6 +13,7 @@ const Footer = () => {
       spacing={4}
       textAlign="center"
     >
+      <Text>Proudly made by &#x1F43B; in Berkeley, CA</Text>
       <Stack mt={4} direction="row" spacing="12px" justify="center">
         <Link href="https://medium.com/satchel-finance" isExternal>
           <IconButton
@@ -33,7 +34,6 @@ const Footer = () => {
           />
         </Link>
       </Stack>
-      <Text>© Satchel, 2021</Text>
     </VStack>
   )
 }

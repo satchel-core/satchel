@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Fade, Box, Flex, Heading, Stack } from '@chakra-ui/react'
+import { chakra, Fade, Box, Flex, Heading, Stack } from '@chakra-ui/react'
 import { Player } from '@lottiefiles/react-lottie-player'
 
 import useOnScreen from '../../hooks/useOnScreen'
@@ -23,8 +23,13 @@ const Problems = () => {
 
   return (
     <Fade in={show}>
-      <Flex alignItems="center" justifyContent="space-between" ref={ref}>
-        <Box alignSelf="center" direction="flex" flex={1}>
+      <Flex
+        alignItems="center"
+        direction={{ base: 'column-reverse', md: 'row' }}
+        justifyContent="space-between"
+        ref={ref}
+      >
+        <Box alignSelf="center" direction="flex" flex={1} mx="auto">
           <Player
             autoplay
             loop
@@ -32,7 +37,10 @@ const Problems = () => {
             style={{ height: '100%' }}
           />
         </Box>
-        <Box direction="flex" ml="84px">
+        <Box
+          direction="flex"
+          margin={{ base: '0 auto 36px', md: '0 0 0 84px' }}
+        >
           <Stack direction="column" maxW="560px" spacing={6}>
             <Heading mb="12px" size="lg">
               Communities around the world lack trusted financial primitives and

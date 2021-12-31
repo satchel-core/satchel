@@ -33,19 +33,23 @@ const Solutions = () => {
       <Box maxW="760px" mx="auto" ref={ref} textAlign="center" mb="36px">
         <chakra.h2
           textStyle="heading"
-          maxW="16ch"
-          fontSize={{ base: '1.25rem', sm: '2rem', lg: '3rem' }}
+          fontSize={{ base: '2.25rem', lg: '3rem' }}
           fontFamily="heading"
           letterSpacing="tighter"
           fontWeight="bold"
           lineHeight="1.2"
         >
-          Core Values
+          Core Features
         </chakra.h2>
       </Box>
-      <SimpleGrid columns={2} spacing={10}>
+      <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10}>
         <Box position="relative">
-          <Box position="absolute" top={-20} zIndex={2}>
+          <Box
+            position="absolute"
+            display={{ base: 'none', md: 'inline' }}
+            top={-20}
+            zIndex={2}
+          >
             <Player
               autoplay
               loop
@@ -58,7 +62,13 @@ const Solutions = () => {
         <Card image={Solution1}>{cardText[1]}</Card>
         <Card image={Solution2}>{cardText[2]}</Card>
         <Box position="relative">
-          <Box position="absolute" bottom={0} right="-65px" zIndex={2}>
+          <Box
+            position="absolute"
+            bottom={0}
+            display={{ base: 'none', md: 'inline' }}
+            right="-65px"
+            zIndex={2}
+          >
             <Player
               autoplay
               loop

@@ -26,7 +26,7 @@ const Header = () => {
       <Container maxW="container.lg">
         <Flex align="center" justify="space-between">
           <Link href="https://satchel.finance/">
-            <SatchelLogo height={64} />
+            <SatchelLogo height={64} width={128} />
           </Link>
           <Flex>
             <Link href="https://medium.com/satchel-finance" isExternal>
