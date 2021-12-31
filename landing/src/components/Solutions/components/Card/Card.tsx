@@ -1,5 +1,6 @@
-import { Box, Flex, Heading, Image, Text } from '@chakra-ui/react'
+import { Box, Image, Text } from '@chakra-ui/react'
 import ismobilejs from 'ismobilejs'
+import { isSafari } from 'react-device-detect'
 
 import useHover from '../../../../hooks/useHover'
 
@@ -13,7 +14,7 @@ const Card: React.FC<CardProps> = ({ title, image, children, ...props }) => {
   console.log('🚀 ~ isHovered', isHovered)
 
   const isMobile = ismobilejs(window.navigator).any
-  const show = isHovered && !isMobile
+  const show = isHovered && !isMobile && !isSafari
 
   return (
     <Box
