@@ -21,7 +21,7 @@ const CTA = () => {
         <Player
           autoplay
           loop
-          src="https://assets4.lottiefiles.com/packages/lf20_dojvzsfz.json"
+          src="https://assets10.lottiefiles.com/packages/lf20_ek8lrpx4.json"
           style={{ height: '200px' }}
         />
         <Center flexDirection="column">
