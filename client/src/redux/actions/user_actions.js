@@ -51,53 +51,54 @@ export const handleUserLogin = (history) => async (dispatch) => {
   }
 };
 
-export const handleUserSignup = (school, name, history) => async (dispatch) => {
-  const web3 = await connectWallet();
+export const handleUserSignup =
+  (school, name, community, history) => async (dispatch) => {
+    const web3 = await connectWallet();
 
-  let contractInstance = new web3.eth.Contract(
-    contractAbi.abi,
-    process.env.REACT_APP_CONTRACT_ADDRESS
-  );
+    let contractInstance = new web3.eth.Contract(
+      contractAbi.abi,
+      process.env.REACT_APP_CONTRACT_ADDRESS
+    );
 
-  console.log(process.env.REACT_APP_CONTRACT_ADDRESS);
+    console.log(process.env.REACT_APP_CONTRACT_ADDRESS);
 
-  try {
-    const accounts = await web3.eth.getAccounts();
+    try {
+      const accounts = await web3.eth.getAccounts();
 
-    let userContractAddress = await contractInstance.methods
-      .getUserContract()
-      .call({ from: accounts[0] });
-    console.log("user addresss: " + userContractAddress);
-    console.log("account[0]" + accounts[0]);
-
-    if (userContractAddress == "0x0000000000000000000000000000000000000000") {
-      await contractInstance.methods
-        .createUserContract(name, school.address, true)
-        .send({ from: accounts[0] });
-
-      userContractAddress = await contractInstance.methods
+      let userContractAddress = await contractInstance.methods
         .getUserContract()
         .call({ from: accounts[0] });
+      console.log("user addresss: " + userContractAddress);
+      console.log("account[0]" + accounts[0]);
 
-      dispatch({
-        type: types.LOGIN_USER_SUCCESS,
-        payload: {
-          contractAddress: userContractAddress,
-          address: accounts[0],
-          name,
-        },
-      });
-      history.push({ pathname: "/Account" });
-    } else {
-      console.log("Not a new user!");
-      history.push({ pathname: "/Login" });
+      if (userContractAddress == "0x0000000000000000000000000000000000000000") {
+        await contractInstance.methods
+          .createUserContract(name, school.address, community)
+          .send({ from: accounts[0] });
+
+        userContractAddress = await contractInstance.methods
+          .getUserContract()
+          .call({ from: accounts[0] });
+
+        dispatch({
+          type: types.LOGIN_USER_SUCCESS,
+          payload: {
+            contractAddress: userContractAddress,
+            address: accounts[0],
+            name,
+          },
+        });
+        history.push({ pathname: "/Account" });
+      } else {
+        console.log("Not a new user!");
+        history.push({ pathname: "/Login" });
+      }
+    } catch (err) {
+      console.log(err);
+      console.log(err.message);
+      dispatch({ type: types.LOGIN_USER_FAILURE, payload: err.message });
     }
-  } catch (err) {
-    console.log(err);
-    console.log(err.message);
-    dispatch({ type: types.LOGIN_USER_FAILURE, payload: err.message });
-  }
-};
+  };
 
 export const getName = (contractAddress) => async (dispatch) => {
   const web3 = await connectWallet();
