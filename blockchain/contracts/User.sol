@@ -2,6 +2,8 @@
 pragma solidity ^0.6.12;
 
 import "./floating_point/Exponential.sol";
+import "hardhat/console.sol";
+
 
 interface Erc20 {
     function approve(address, uint256) external returns (bool);
@@ -21,7 +23,7 @@ interface Erc20 {
 interface CErc20 is Erc20 {
     function mint(uint256) external returns (uint256);
 
-    function balanceOfUnderlying(address) external returns (uint256);
+    function balanceOfUnderlying(address) external view returns (uint256);
 
     function redeemUnderlying(uint) external returns (uint);
 
@@ -29,7 +31,7 @@ interface CErc20 is Erc20 {
 
     function repayBorrow(uint) external returns (uint); 
     
-    // event Failure(uint, uint, uint);
+    event Failure(uint, uint, uint);
 }
 
 interface Comptroller {
@@ -59,19 +61,42 @@ contract User is Exponential {
         _;
     }
 
+    // Store the fraction that goes to schools under non-community members
+    Exp interestSplit;
 
     struct FloatingPoint {
         Exp fractionToWithdraw;
         Exp interestToWithdraw;
-        Exp halfWithdrawnInterest;
-    }
-        
+        Exp schoolWithdrawnInterest;
+    }        
 
     constructor(address payable _schoolContract, string memory _name, bool _community, address payable _owner) public {
       name = _name;
       community = _community;
       owner = _owner;
       schoolContract = _schoolContract;
+      MathError mErr = MathError.NO_ERROR;
+      (mErr, interestSplit) = getExp(3,4);
+
+        if (mErr != MathError.NO_ERROR) {
+            revert("Exponential Failure when setting interestSplit");
+        }
+    }
+
+    /***
+    * Allow the user to set the fraction of the interest that goes towards schools as a non-community member
+    * @param _numerator the numerator of the interest to set
+    * @param _denominator the denominator of the interest to set
+    */
+    function setInterestSplit(uint _numerator, uint _denominator) public onlyOwner {
+        require(_denominator >= _numerator, "Interest split must be between 0 and 1");
+
+        MathError mErr = MathError.NO_ERROR;
+        (mErr, interestSplit) = getExp(_numerator,_denominator);
+
+        if (mErr != MathError.NO_ERROR) {
+            revert("Exponential Failure when setting interestSplit");
+        }
     }
 
     /**
@@ -170,16 +195,19 @@ contract User is Exponential {
 
         // Now calculate half of the amount generated from interest
         if (community) {
-            (mErr, floatingPoint.halfWithdrawnInterest) = divScalar(floatingPoint.interestToWithdraw, 2);
-            if (mErr != MathError.NO_ERROR) {
-                revert("Exponential Failure when calculating halfWithdrawnInterest");
-            }
-            // Convert Exponential back into native units of the underlying token
-            interestToSendToSchool = floatingPoint.halfWithdrawnInterest.mantissa / expScale;
+            (mErr, floatingPoint.schoolWithdrawnInterest) = divScalar(floatingPoint.interestToWithdraw, 2);
         } else {
-            // Non-community member: the whole interest goes to school, and convert exp back into native units
-            interestToSendToSchool = floatingPoint.interestToWithdraw.mantissa / expScale;
+            // Non-community member: interest is split according to the parameters set
+            (mErr, floatingPoint.schoolWithdrawnInterest) = mulExp(floatingPoint.interestToWithdraw, interestSplit);
         }
+
+        if (mErr != MathError.NO_ERROR) {
+            revert("Exponential Failure when calculating schoolWithdrawnInterest");
+        }
+
+        // Convert Exponential back into native units of the underlying token
+        interestToSendToSchool = floatingPoint.schoolWithdrawnInterest.mantissa / expScale;
+        //console.log(interestToSendToSchool);
 
         // Now the user will get the amount to withdraw, minus the interest that went to the school
         (mErr, amountForUser) = subUInt(amount, interestToSendToSchool);
@@ -194,12 +222,14 @@ contract User is Exponential {
         // Bookkeeping: Now we need to identify the amount withdrawn that came from the initial deposit (not from interest)
         if (community) {
             (mErr, totalInterestWithdrawn) = mulUInt(interestToSendToSchool, 2);
-            if (mErr != MathError.NO_ERROR) {
-                revert("Arithmetic Failure when calculating totalInterestWithdrawn");
-            }
         } else {
-            totalInterestWithdrawn = interestToSendToSchool;
+            (mErr, totalInterestWithdrawn) = divScalarByExpTruncate(interestToSendToSchool, interestSplit);
         }
+        if (mErr != MathError.NO_ERROR) {
+            revert("Arithmetic Failure when calculating totalInterestWithdrawn");
+        }
+        //console.log(totalInterestWithdrawn);
+
 
         (mErr, amountWithdrawnFromDeposit) = subUInt(amount, totalInterestWithdrawn);
         if (mErr != MathError.NO_ERROR) {
@@ -208,7 +238,11 @@ contract User is Exponential {
 
         (mErr, underlyingAmountDeposited[address(underlying)]) = subUInt(underlyingAmountDeposited[address(underlying)], amountWithdrawnFromDeposit);
         if (mErr != MathError.NO_ERROR) {
-            revert("Arithmetic Failure when calculating nnewUnderlyingAmountDeposited");
+            if (mErr == MathError.INTEGER_UNDERFLOW){
+                revert("Arithmetic Failure when calculating newUnderlyingAmountDeposited");
+            } else {
+                revert("Arithmetic Failure when calculating nnewUnderlyingAmountDeposited");
+            }
         }
 
         // underlyingAmountDeposited[address(underlying)] = newUnderlyingAmountDeposited;

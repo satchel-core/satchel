@@ -8,7 +8,8 @@
     "prettier": "prettier --config ./.prettierrc.yaml --write \"**/*.{js,json,md,sol,ts}\"",
     "prettier:check": "prettier --check --config ./.prettierrc.yaml \"**/*.{js,json,md,sol,ts}\"",
     "test": "hardhat test",
-    "typechain": "cross-env TS_NODE_TRANSPILE_ONLY=true hardhat typechain"
+    "typechain": "cross-env TS_NODE_TRANSPILE_ONLY=true hardhat typechain",
+    "remix": "remixd -s /Users/timg/Documents/GitHub/satchel-core/blockchain/contracts -u https://remix.ethereum.org/"
   },
   "devDependencies": {
     "@tenderly/hardhat-tenderly": "^1.0.13",
