@@ -32,6 +32,7 @@ class SelectSchool extends Component {
   state = {
     schools: [],
     name: "",
+    community: false,
   };
 
   componentDidMount() {
@@ -45,6 +46,7 @@ class SelectSchool extends Component {
   };
 
   render() {
+    console.log(this.state);
     return (
       <div className="App">
         <div className="LoginItems">
@@ -82,6 +84,21 @@ class SelectSchool extends Component {
                 }}
               />
             </FormGroup>
+            <FormGroup>
+              <Input
+                bsSize="lg"
+                className="mb-3"
+                type="select"
+                onChange={(e) =>
+                  this.setState({
+                    community: e.target.value == "Community Member",
+                  })
+                }
+              >
+                <option>Non-Community Member</option>
+                <option>Community Member</option>
+              </Input>
+            </FormGroup>
           </Form>
 
           {this.state.schools.length > 0
@@ -92,6 +109,7 @@ class SelectSchool extends Component {
                     this.props.handleUserSignup(
                       school,
                       this.state.name,
+                      this.state.community,
                       this.props.history
                     )
                   }
