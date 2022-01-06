@@ -12,7 +12,8 @@ import {
   } from "@chakra-ui/react"
 import { FunctionComponent } from "react"
 import { Logo } from "../Logo"
-import { WalletButton } from "./WalletButton"
+import { WalletButton } from "../components/WalletButton"
+import { Link as RouterLink } from "react-router-dom"
 
 export const Login: FunctionComponent = () => <Box textAlign="center">
                                                 <Grid minH="100vh" p={3}>
@@ -30,7 +31,7 @@ export const Login: FunctionComponent = () => <Box textAlign="center">
                                                       </VStack>
                                                     </Box>
                                                     <Text fontSize="12px">
-                                                      New? <Link color="#01afee">Create Account</Link>
+                                                      New? <Link as={RouterLink} to="/CreateAccount" color="#01afee">Create Account</Link>
                                                     </Text>
                                                   </VStack>
                                                 </Grid>

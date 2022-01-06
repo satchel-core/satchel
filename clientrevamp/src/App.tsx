@@ -18,8 +18,9 @@ import {
   Routes,
   Navigate,
 } from "react-router-dom";
-import { Landing } from "./components/Landing";
-import { Login } from "./components/Login";
+import { Landing } from "./pages/Landing";
+import { Login } from "./pages/Login";
+import { CreateAccount } from "./pages/CreateAccount";
 
 export const App = () => (
   <ChakraProvider theme={theme}>
@@ -27,6 +28,7 @@ export const App = () => (
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="Login" element={<Login />} />
+        <Route path="CreateAccount" element={<CreateAccount />} />
       </Routes>
     </Router>
   </ChakraProvider>
