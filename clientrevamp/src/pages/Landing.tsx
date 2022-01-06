@@ -1,12 +1,8 @@
 import {
-    ChakraProvider,
     Box,
     Text,
-    Link,
     VStack,
-    Code,
     Grid,
-    theme,
     Button,
   } from "@chakra-ui/react"
 import { Logo } from "../Logo"

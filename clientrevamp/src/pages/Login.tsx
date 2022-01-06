@@ -1,14 +1,10 @@
 import {
-    ChakraProvider,
     Box,
     Text,
     Link,
     VStack,
-    Code,
     Grid,
-    theme,
-    Button,
-    Icon,
+    Progress,
   } from "@chakra-ui/react"
 import { FunctionComponent } from "react"
 import { Logo } from "../Logo"
@@ -17,6 +13,7 @@ import { Link as RouterLink } from "react-router-dom"
 
 export const Login: FunctionComponent = () => <Box textAlign="center">
                                                 <Grid minH="100vh" p={3}>
+                                                  <Progress />
                                                   <VStack spacing={2}>
                                                     <Logo h="20vmin" pointerEvents="none" />
                                                     <Box borderWidth="1px" borderRadius="md" borderColor="black" padding="5px">
