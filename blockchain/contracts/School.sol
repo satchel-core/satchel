@@ -39,11 +39,14 @@ contract School is Exponential {
      * Allow a user to deposit tokens into the protocol
      * NOTE: Users must call _erc20Contract.approve() before calling this function
      * since we this contract will be using their tokens to deposit into aave
+     * NOTE: We force all decimals to be 18 regardless of asset
      * @param asset the ERC contract for the underlying token
-     * @param amount the amount of token supplied, multipled by 10^12
+     * @param amount the amount of token supplied, multipled by 10^18
      * @return nothing, emits Deposit event upon successful completion
      */
-    function deposit(address asset, uint amount, address lendingPool) public {
+    function deposit(address asset, address underlying, uint amount) public {
+
+        // Check if there are 
         if (totalShares[asset] == 0){
             return depositInitial(asset, amount);
         }
@@ -54,22 +57,25 @@ contract School is Exponential {
         // Calculate how much interest has been earned so far
         uint interestSoFar = calculateInterest(asset, userData[msg.sender][asset].neib, shares);
 
-        // Update the new shares
-        userData[msg.sender][asset].shares = shares;
+        // Issue new shares at the current rate
+        userData[msg.sender][asset].shares += shares;
         totalShares[asset] += shares;
 
-        // Do the aave stuff to transfer the asset in
+        // Deposit assets in aave and receive atokens
         ILendingPool pool = ILendingPool(lendingPool);
-
+        pool.deposit(asset, amount, address(this), 0);
 
         // Calculate new neib based on new share proportion and 
         userData[msg.sender][asset].neib = calculateInterest(asset, interestSoFar, shares);
-        
-        // do Aave stuff, properly set UserData, transfer aTokens to school contract
-
     }
 
-    function depositInitial(address asset, uint amount) private {
+    function depositInitial(address asset, address underlying, uint amount) private {
+
+        // Deposit asset into Aave
+        ILendingPool pool = ILendingPool(lendingPool);
+        pool.deposit(asset, amount, address(this), 0);
+
+        // Issue shares at a rate of one share per asset
         userData[msg.sender][asset].shares = amount;
         userData[msg.sender][asset].neib = amount;
         totalShares[asset] = amount;
@@ -77,32 +83,54 @@ contract School is Exponential {
     
     /**
      * Allow a user to withdraw tokens out of the protocol, splitting interest acccordingly
-     * NOTE: Users must call _erc20Contract.approve() before calling this function
-     * since we this contract will be using their tokens to deposit into aave
+     * NOTE: 
      * @param asset the ERC contract for the underlying token
-     * @param amount the amount of token user wishes to withdraw, multipled by 10^12
-     * @return nothing, emits Deposit event upon successful completion
+     * @param amount the amount of token user wishes to withdraw, multipled by 10^18
+     * @return nothing, emits Withdraw event upon successful completion
      */
-    function withdraw(address asset, uint amount) public {
+    function withdraw(address asset, address underlying, uint amount) public {
+        
+        // Convert asset amount to shares 
+        uint shares = convertToShares(asset, amount);
 
+        // Require that the user has enough shares to withdraw
+        require(userData[msg.sender][asset].shares >= shares, "Not enough tokens");
+
+        // Calculate interest and school interest cut
+        uint interest = calculateInterest(asset, neib, shares);
+        (MathError mer1, uint schoolCut) = mulScalarTruncate(fractionToWithdraw, interest);
+        if (mErr != MathError.NO_ERROR) {
+            revert("Exponential Failure when calculating school interest cut");
+        }
+
+        // Withdraw the user's cut and the school's cut
+        ILendingPool pool = ILendingPool(lendingPool);
+        pool.withdraw(underlying, amount - schoolCut, msg.sender);
+        pool.withdraw(underlying, schoolCut, address(this));
+
+        // Update userData based on new shares 
+        userData[msg.sender][asset].shares -= shares;
+        totalShares[asset] -= shares;
+        userData[msg.sender][asset].neib = amount;
     }
 
     /**
-     * Gets the total amount of atokens owned by the user
-     * @param asset the ATOKEN contract address for the underlying token
+     * Gets the total amount of tokens owned by the user
+     * @param asset the TOKEN contract address for the underlying token
      * @param user the address of the user
-     * @return the number of ATOKENS the user has in the protocol, multipled by 10^12
+     * @return the number of TOKENS the user has in the protocol, multipled by 10^18
      */
-    function getBalance(address asset, address user) public view {
-
+    function getBalance(address asset, address user) public view returns(uint) {
+        IERC20 aTokenContract = IERC20(asset);
+        return aTokenContract.balanceOf(user);
     }
 
     /**
      * Gets the total amount of atokens owned
      * @param asset the ATOKEN contract address for the underlying token
-     * @return the number of ATOKENS the school has, multipled by 10^12
+     * @return the number of ATOKENS the school has, multipled by 10^18
      */
-    function getTotalBalance(address asset) public view {
+    function getTotalBalance(address asset) public view returns(uint) {
         IERC20 aTokenContract = IERC20(asset);
         return aTokenContract.balanceOf(address(this));
     }
@@ -111,19 +139,18 @@ contract School is Exponential {
         return amount * totalShares[asset] / getTotalBalance(asset);
     }
     
-    function convertToAsset(address asset, uint amount) internal view returns(uint) {
+    function convertToAsset(address asset, uint shares) internal view returns(uint) {
         return amount * getTotalBalance(asset) / totalShares[asset];
     }
 
     /**
-     * Approves tokens for withdraw by the overarching organization
+     * Calculates the interest earned so far.
      * NOTE should prob be access controlled, only organization contract
      * @param asset the token contract address for the underlying token
      * @param amount the amount of assets to approve in the asset's native decimal amount
      */
     function calculateInterest(address asset, uint neib, uint shares) internal view returns(uint) {
-        uint withdraw = shares * getTotalBalance(asset) / totalShares[asset];
-        return withdraw - neib;
+        return convertToAsset(asset, shares) - neib;
     }
 
     /**
