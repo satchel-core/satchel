@@ -20,7 +20,7 @@ export const CreateAccount: FunctionComponent = () => {
               <Grid minH="100vh" p={3}>
                 <Progress />
                 <VStack spacing={2}>
-                  <Text fontSize="20px">
+                  <Text fontSize="20px" fontWeight="bold">
                     Onboard Message
                   </Text>
                   <Text fontSize="14px">
@@ -28,10 +28,10 @@ export const CreateAccount: FunctionComponent = () => {
                   </Text>
                   <Logo boxSize={"200px"} />
                   <HStack>
-                    <Tag colorScheme={slide === 0 ? "satchel_blue" : "gray"} size="sm"></Tag>
-                    <Tag colorScheme={slide === 1 ? "satchel_blue" : "gray"} size="sm"></Tag>
-                    <Tag colorScheme={slide === 2 ? "satchel_blue" : "gray"} size="sm"></Tag>
-                    <Tag colorScheme={slide === 3 ? "satchel_blue" : "gray"} size="sm"></Tag>
+                    <Tag colorScheme={slide === 0 ? "satchel_blue_notint" : "gray"} size="sm"></Tag>
+                    <Tag colorScheme={slide === 1 ? "satchel_blue_notint" : "gray"} size="sm"></Tag>
+                    <Tag colorScheme={slide === 2 ? "satchel_blue_notint" : "gray"} size="sm"></Tag>
+                    <Tag colorScheme={slide === 3 ? "satchel_blue_notint" : "gray"} size="sm"></Tag>
                   </HStack>
                   <HStack>
                     <Button isFullWidth size="sm" colorScheme="satchel_blue" variant="outline" onClick={() => setPage(1)}>Get Started</Button>
@@ -46,7 +46,7 @@ export const CreateAccount: FunctionComponent = () => {
                 <Progress value={25} colorScheme="satchel_blue"></Progress>
                 <VStack spacing={2}>
                   <Logo></Logo>
-                  <Text fontSize="20px">
+                  <Text fontSize="20px" fontWeight="bold">
                     Are you an educational organization?
                   </Text>
                   <Button isFullWidth maxW="40vh" size="sm" colorScheme="satchel_blue" variant="outline" onClick={() => setPage(10)}>YES</Button>
@@ -60,7 +60,7 @@ export const CreateAccount: FunctionComponent = () => {
                 <Progress value={25} colorScheme="satchel_blue"></Progress>
                 <VStack spacing={2}>
                   <Logo></Logo>
-                  <Text fontSize="20px">
+                  <Text fontSize="20px" fontWeight="bold">
                     Are you a community member?
                   </Text>
                   <Button isFullWidth maxW="40vh" size="sm" colorScheme="satchel_blue" variant="outline" onClick={() => setPage(20)}>YES</Button>

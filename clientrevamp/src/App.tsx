@@ -30,6 +30,18 @@ const theme = extendTheme({
       700: "#008fe7",
       800: "#007fe4",
       900: "#006fe0",
+    },
+    satchel_blue_notint: {
+      50: "#01afee",
+      100: "#01afee",
+      200: "#01afee",
+      300: "#01afee",
+      400: "#01afee",
+      500: "#01afee",
+      600: "#01afee",
+      700: "#01afee",
+      800: "#01afee",
+      900: "#01afee",
     }
   }
 })

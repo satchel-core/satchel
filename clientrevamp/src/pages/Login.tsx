@@ -18,7 +18,7 @@ export const Login: FunctionComponent = () => <Box textAlign="center">
                                                     <Logo h="20vmin" pointerEvents="none" />
                                                     <Box borderWidth="1px" borderRadius="md" borderColor="black" padding="5px">
                                                       <VStack spacing={2}>
-                                                        <Text fontSize="16px">
+                                                        <Text fontSize="16px" fontWeight="bold">
                                                           Connect to Wallet
                                                         </Text>
                                                         <WalletButton walletName="MetaMask" />
