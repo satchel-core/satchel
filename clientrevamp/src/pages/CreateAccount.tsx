@@ -28,14 +28,14 @@ export const CreateAccount: FunctionComponent = () => {
                   </Text>
                   <Logo boxSize={"200px"} />
                   <HStack>
-                    <Tag bg={slide === 0 ? "#01afee" : "#edf2f7"} size="sm"></Tag>
-                    <Tag bg={slide === 1 ? "#01afee" : "#edf2f7"} size="sm"></Tag>
-                    <Tag bg={slide === 2 ? "#01afee" : "#edf2f7"} size="sm"></Tag>
-                    <Tag bg={slide === 3 ? "#01afee" : "#edf2f7"} size="sm"></Tag>
+                    <Tag colorScheme={slide === 0 ? "satchel_blue" : "gray"} size="sm"></Tag>
+                    <Tag colorScheme={slide === 1 ? "satchel_blue" : "gray"} size="sm"></Tag>
+                    <Tag colorScheme={slide === 2 ? "satchel_blue" : "gray"} size="sm"></Tag>
+                    <Tag colorScheme={slide === 3 ? "satchel_blue" : "gray"} size="sm"></Tag>
                   </HStack>
                   <HStack>
-                    <Button isFullWidth size="sm" borderColor="#01afee" color="#01afee" variant="outline" onClick={() => setPage(1)}>Get Started</Button>
-                    <Button isFullWidth size="sm" bg="#01afee" color="white" variant="solid" onClick={() => setSlide((slide+1)%4)}>Next</Button>
+                    <Button isFullWidth size="sm" colorScheme="satchel_blue" variant="outline" onClick={() => setPage(1)}>Get Started</Button>
+                    <Button isFullWidth size="sm" colorScheme="satchel_blue" variant="solid" onClick={() => setSlide((slide+1)%4)}>Next</Button>
                   </HStack>
                 </VStack>
               </Grid>
@@ -43,28 +43,28 @@ export const CreateAccount: FunctionComponent = () => {
     case 1:
       return <Box textAlign="center">
               <Grid minH="100vh" p={3}>
-                <Progress value={25}></Progress>
+                <Progress value={25} colorScheme="satchel_blue"></Progress>
                 <VStack spacing={2}>
                   <Logo></Logo>
                   <Text fontSize="20px">
                     Are you an educational organization?
                   </Text>
-                  <Button isFullWidth maxW="40vh" size="sm" borderColor="#01afee" color="#01afee" variant="outline" onClick={() => setPage(10)}>Yes</Button>
-                  <Button isFullWidth maxW="40vh" size="sm" borderColor="#01afee" color="#01afee" variant="outline" onClick={() => setPage(2)}>No</Button>
+                  <Button isFullWidth maxW="40vh" size="sm" colorScheme="satchel_blue" variant="outline" onClick={() => setPage(10)}>YES</Button>
+                  <Button isFullWidth maxW="40vh" size="sm" colorScheme="satchel_blue" variant="outline" onClick={() => setPage(2)}>NO</Button>
                 </VStack>
               </Grid>
             </Box>
     case 2:
       return <Box textAlign="center">
               <Grid minH="100vh" p={3}>
-                <Progress value={25}></Progress>
+                <Progress value={25} colorScheme="satchel_blue"></Progress>
                 <VStack spacing={2}>
                   <Logo></Logo>
                   <Text fontSize="20px">
                     Are you a community member?
                   </Text>
-                  <Button isFullWidth maxW="40vh" size="sm" borderColor="#01afee" color="#01afee" variant="outline" onClick={() => setPage(20)}>Yes</Button>
-                  <Button isFullWidth maxW="40vh" size="sm" borderColor="#01afee" color="#01afee" variant="outline" onClick={() => setPage(3)}>No</Button>
+                  <Button isFullWidth maxW="40vh" size="sm" colorScheme="satchel_blue" variant="outline" onClick={() => setPage(20)}>YES</Button>
+                  <Button isFullWidth maxW="40vh" size="sm" colorScheme="satchel_blue" variant="outline" onClick={() => setPage(3)}>NO</Button>
                 </VStack>
               </Grid>
             </Box>

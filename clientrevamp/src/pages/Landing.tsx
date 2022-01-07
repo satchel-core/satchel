@@ -21,8 +21,8 @@ export const Landing: FunctionComponent = () => {
               <Text fontSize="14px">
                 Satchel uplifts underbanked school communities by facilitating locally-governed projects & capital growth via DeFi-powered donations & financial primitives.
               </Text>
-              <Button size="sm" bg="#01afee" color="white" variant="solid" onClick={handleClick("/CreateAccount")}>CREATE ACCOUNT</Button>
-              <Button size="sm" borderColor="#01afee" color="#01afee" variant="outline" onClick={handleClick("/Login")}>LOGIN</Button>
+              <Button size="sm" colorScheme="satchel_blue" variant="solid" onClick={handleClick("/CreateAccount")}>CREATE ACCOUNT</Button>
+              <Button size="sm" colorScheme="satchel_blue" variant="outline" onClick={handleClick("/Login")}>LOGIN</Button>
             </VStack>
           </Grid>
         </Box>
