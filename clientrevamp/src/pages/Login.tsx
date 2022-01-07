@@ -28,7 +28,7 @@ export const Login: FunctionComponent = () => <Box textAlign="center">
                                                       </VStack>
                                                     </Box>
                                                     <Text fontSize="12px">
-                                                      New? <Link as={RouterLink} to="/CreateAccount" color="#01afee">Create Account</Link>
+                                                      New? <Link as={RouterLink} to="/CreateAccount" color="satchel_blue.500">Create Account</Link>
                                                     </Text>
                                                   </VStack>
                                                 </Grid>
