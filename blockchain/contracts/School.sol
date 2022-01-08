@@ -4,6 +4,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "./floating_point/Exponential.sol";
 import "./ILendingPool.sol";
+import "hardhat/console.sol";
 
 contract School is Exponential {
     
@@ -45,6 +46,8 @@ contract School is Exponential {
      */
     function deposit(address asset, address underlying, uint amount) public {
 
+        console.log("Depositing");
+        console.log(totalShares[asset]);
         // Check if there are 
         if (totalShares[asset] == 0){
             return depositInitial(asset, underlying, amount);
@@ -70,11 +73,14 @@ contract School is Exponential {
 
     function depositInitial(address asset, address underlying, uint amount) private {
 
+        console.log("Depositing Initial");
+
         // Deposit asset into Aave
         ILendingPool pool = ILendingPool(lendingPool);
         pool.deposit(asset, amount, address(this), 0);
-
         // Issue shares at a rate of one share per asset
+        
+        console.log("Should be deposited");
         userData[msg.sender][asset].shares = amount;
         userData[msg.sender][asset].neib = amount;
         totalShares[asset] = amount;
