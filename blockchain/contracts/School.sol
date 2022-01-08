@@ -27,11 +27,11 @@ contract School is Exponential {
         organization = _organization;
         lendingPool = _lendingPool;
 
-        (MathError mErr, uint _shareDecimals) = getExp(3,4);
+        (MathError mErr, Exp memory _fractionToWithdraw) = getExp(3,4);
         if (mErr != MathError.NO_ERROR) {
             revert("Exponential Failure when setting interestSplit");
         }
-        shareDecimals = _shareDecimals;
+        fractionToWithdraw = _fractionToWithdraw;
 
     }
 
@@ -42,13 +42,12 @@ contract School is Exponential {
      * NOTE: We force all decimals to be 18 regardless of asset
      * @param asset the ERC contract for the underlying token
      * @param amount the amount of token supplied, multipled by 10^18
-     * @return nothing, emits Deposit event upon successful completion
      */
     function deposit(address asset, address underlying, uint amount) public {
 
         // Check if there are 
         if (totalShares[asset] == 0){
-            return depositInitial(asset, amount);
+            return depositInitial(asset, underlying, amount);
         }
         
         // Convert amount to shares
@@ -86,7 +85,6 @@ contract School is Exponential {
      * NOTE: 
      * @param asset the ERC contract for the underlying token
      * @param amount the amount of token user wishes to withdraw, multipled by 10^18
-     * @return nothing, emits Withdraw event upon successful completion
      */
     function withdraw(address asset, address underlying, uint amount) public {
         
@@ -97,8 +95,8 @@ contract School is Exponential {
         require(userData[msg.sender][asset].shares >= shares, "Not enough tokens");
 
         // Calculate interest and school interest cut
-        uint interest = calculateInterest(asset, neib, shares);
-        (MathError mer1, uint schoolCut) = mulScalarTruncate(fractionToWithdraw, interest);
+        uint interest = calculateInterest(asset, userData[msg.sender][asset].neib, shares);
+        (MathError mErr, uint schoolCut) = mulScalarTruncate(fractionToWithdraw, interest);
         if (mErr != MathError.NO_ERROR) {
             revert("Exponential Failure when calculating school interest cut");
         }
@@ -140,14 +138,15 @@ contract School is Exponential {
     }
     
     function convertToAsset(address asset, uint shares) internal view returns(uint) {
-        return amount * getTotalBalance(asset) / totalShares[asset];
+        return shares * getTotalBalance(asset) / totalShares[asset];
     }
 
     /**
      * Calculates the interest earned so far.
      * NOTE should prob be access controlled, only organization contract
      * @param asset the token contract address for the underlying token
-     * @param amount the amount of assets to approve in the asset's native decimal amount
+     * @param neib non interest bearing part of the asset
+     * @param shares number of shares that the interest is being calculated for
      */
     function calculateInterest(address asset, uint neib, uint shares) internal view returns(uint) {
         return convertToAsset(asset, shares) - neib;
