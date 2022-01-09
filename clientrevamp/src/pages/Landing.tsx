@@ -1,8 +1,7 @@
 import {
-    Box,
     Text,
-    VStack,
     Grid,
+    GridItem,
     Button,
   } from "@chakra-ui/react"
 import { Logo } from "../Logo"
@@ -14,16 +13,20 @@ export const Landing: FunctionComponent = () => {
   function handleClick(toRedirect: To) {
     return () => navigate(toRedirect);
   }
-  return <Box textAlign="center">
-          <Grid minH="100vh" p={3}>
-            <VStack spacing={2}>
-              <Logo h="20vmin" pointerEvents="none" />
-              <Text fontSize="14px">
-                Satchel uplifts underbanked school communities by facilitating locally-governed projects & capital growth via DeFi-powered donations & financial primitives.
-              </Text>
-              <Button size="sm" colorScheme="satchel_blue" variant="solid" onClick={handleClick("/CreateAccount")}>CREATE ACCOUNT</Button>
-              <Button size="sm" colorScheme="satchel_blue" variant="outline" onClick={handleClick("/Login")}>LOGIN</Button>
-            </VStack>
+  return <Grid minH="37vh" p={3}>
+              <GridItem rowStart={1} rowEnd={1} colStart={1} colEnd={1}>
+                <Logo h="20vmin" pointerEvents="none" />
+              </GridItem>
+              <GridItem rowStart={2} rowEnd={2} colStart={1} colEnd={1}>
+                <Text fontSize="14px">
+                  Satchel uplifts underbanked school communities by facilitating locally-governed projects & capital growth via DeFi-powered donations & financial primitives.
+                </Text>
+              </GridItem>
+              <GridItem rowStart={3} rowEnd={3} colStart={1} colEnd={2}>
+                <Button size="sm" minW="40vw" colorScheme="satchel_blue" variant="solid" onClick={handleClick("/CreateAccount")}>CREATE ACCOUNT</Button>
+              </GridItem>
+              <GridItem rowStart={4} rowEnd={4} colStart={1} colEnd={1}>
+                <Button size="sm" minW="40vw" colorScheme="satchel_blue" variant="outline" onClick={handleClick("/Login")}>LOGIN</Button>
+              </GridItem>
           </Grid>
-        </Box>
 }
