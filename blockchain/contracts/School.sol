@@ -47,21 +47,21 @@ contract School is Exponential {
      */
     function deposit(address asset, address lpAsset, uint amount) public {
 
-        console.log(totalShares[lpAsset]);
+        // console.log(totalShares[lpAsset]);
         // Check if the user has previously deposited
         if (totalShares[lpAsset] == 0){
             return depositInitial(asset, lpAsset, amount);
         }
-        console.log(totalShares[lpAsset]);
+        // console.log(totalShares[lpAsset]);
         // Convert amount to shares
         uint shares = convertToShares(lpAsset, amount);
-        console.log("Shares");
-        console.log(shares);
+        // console.log("Shares");
+        // console.log(shares);
 
         // Calculate how much interest has been earned so far
         uint interestSoFar = calculateInterest(lpAsset, userData[msg.sender][lpAsset].neib, shares);
-        console.log("Interest so far");
-        console.log(interestSoFar);
+        // console.log("Interest so far");
+        // console.log(interestSoFar);
 
         // Issue new shares at the current rate
         userData[msg.sender][lpAsset].shares += shares;
@@ -122,12 +122,14 @@ contract School is Exponential {
         // Withdraw the user's cut and the school's cut
         ILendingPool pool = ILendingPool(lendingPool);
         pool.withdraw(asset, amount - schoolCut, msg.sender);
-        pool.withdraw(asset, schoolCut, address(this));
+        if (schoolCut > 0) {
+            pool.withdraw(asset, schoolCut, address(this));
+        }
 
         // Update userData based on new shares 
+        userData[msg.sender][lpAsset].neib = userData[msg.sender][lpAsset].neib * shares / userData[msg.sender][lpAsset].shares;
         userData[msg.sender][lpAsset].shares -= shares;
         totalShares[lpAsset] -= shares;
-        userData[msg.sender][lpAsset].neib = amount;
     }
 
     /**
@@ -137,8 +139,7 @@ contract School is Exponential {
      * @return the number of TOKENS the user has in the protocol, multipled by 10^18
      */
     function getBalance(address asset, address user) public view returns(uint) {
-        IERC20 aTokenContract = IERC20(asset);
-        return aTokenContract.balanceOf(user);
+        return getTotalBalance(asset) * userData[user][asset].shares / totalShares[asset];
     }
 
     /**
@@ -179,7 +180,12 @@ contract School is Exponential {
      * @param shares number of shares that the interest is being calculated for
      */
     function calculateInterest(address lpAsset, uint neib, uint shares) internal view returns(uint) {
-        return convertToAsset(lpAsset, shares) - neib;
+        uint assetEquivalent = convertToAsset(lpAsset, shares);
+        uint neibEquivalent = neib * shares / userData[msg.sender][lpAsset].shares;
+        if (assetEquivalent < neib){
+            return 0;
+        }
+        return assetEquivalent - neib;
     }
 
     /**
