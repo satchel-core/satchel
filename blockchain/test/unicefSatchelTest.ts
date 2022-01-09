@@ -10,6 +10,7 @@ import { IERC20 } from "../contract_types/IERC20";
 import { ILendingPool } from "../contract_types/ILendingPool";
 import chai, { expect } from "chai";
 import { solidity } from "ethereum-waffle";
+import { BigNumber } from "ethers";
 chai.use(solidity);
 const { deployContract } = hre.waffle;
 
@@ -48,7 +49,6 @@ describe("School Specific Functionality", function () {
 
     // deploy School Contract
     const schoolArtifact: Artifact = await hre.artifacts.readArtifact("School");
-    console.log(schoolArtifact.abi);
     school = <School>(
       (<any>(
         await deployContract(
@@ -87,8 +87,8 @@ describe("School Specific Functionality", function () {
   });
 
   describe("Basic Tests", () => {
-    it("User should be able to deposit into the User Contract and User Contract should get cDai", async () => {
-      //1. Let's transfer Dai from a whale to Alice
+    it("User should be able to deposit once and the school should get aDai", async () => {
+      //Transfer Dai from a whale to Alice
       const addrOfDaiWhale = "0x64f65e10f1c3cd7e920a6b34b83daf2f100f15e6";
       const daiWhaleUser = await ethers.getSigner(addrOfDaiWhale);
 
@@ -107,19 +107,67 @@ describe("School Specific Functionality", function () {
         .balanceOf(alice.address);
       expect(aliceDaiBalance).to.be.eq(daiAmtForAlice);
 
-      // Approve school to use Alice's balance
+      // Approve the school contract to use Alice's balance
       await dai.connect(alice).approve(school.address, daiAmtForAlice);
 
-      // Now let's deposit this
+      // Deposit funds into school
       let response = await school
         .connect(alice)
         .deposit(dai.address, aDai.address, daiAmtForAlice);
-      console.log(response);
+
+      // Check that Alice doesn't have money anymore
       let userDaiBalance = await dai.balanceOf(alice.address);
       expect(userDaiBalance).to.be.eq(0);
 
+      // Check that the school has aDai
       let schoolContractADaiBalance = await aDai.balanceOf(school.address);
       expect(schoolContractADaiBalance).to.be.eq(daiAmtForAlice);
+
+      // Check that the school issued the correct amount of shares
+      let shares = await school.totalShares(aDai.address);
+      expect(shares).to.be.eq(daiAmtForAlice);
+    });
+
+    it("User should be able to deposit multiple times and the school should get aDai", async () => {
+      //1. Let's transfer Dai from a whale to Alice
+      const addrOfDaiWhale = "0x64f65e10f1c3cd7e920a6b34b83daf2f100f15e6";
+      const daiWhaleUser = await ethers.getSigner(addrOfDaiWhale);
+
+      // Impersonate the account
+      await hre.network.provider.request({
+        method: "hardhat_impersonateAccount",
+        params: [addrOfDaiWhale],
+      });
+
+      const daiAmtForAlice = BigInt(500 * 10 ** 18);
+      const deposit1 = BigInt(200 * 10 ** 18);
+      const deposit2 = BigInt(300 * 10 ** 18);
+
+      await dai.connect(daiWhaleUser).transfer(alice.address, daiAmtForAlice);
+
+      let aliceDaiBalance = await dai
+        .connect(daiWhaleUser)
+        .balanceOf(alice.address);
+      expect(aliceDaiBalance).to.be.eq(daiAmtForAlice);
+
+      // Approve the school contract to use Alice's balance
+      await dai.connect(alice).approve(school.address, daiAmtForAlice);
+
+      // Deposit funds into school
+      await school.connect(alice).deposit(dai.address, aDai.address, deposit1);
+      await school.connect(alice).deposit(dai.address, aDai.address, deposit2);
+
+      // Check that Alice doesn't have money anymore
+      let userDaiBalance = await dai.balanceOf(alice.address);
+      expect(userDaiBalance).to.be.eq(0);
+
+      // Check that the school has aDai
+      let schoolContractADaiBalance = await aDai.balanceOf(school.address);
+      expect(schoolContractADaiBalance.gte(daiAmtForAlice)).to.be.eq(true);
+
+      // Check that the school issued the correct amount of shares
+      let shares = await school.totalShares(aDai.address);
+      expect(shares.lte(daiAmtForAlice)).to.be.eq(true);
     });
   });
 });

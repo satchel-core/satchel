@@ -42,66 +42,78 @@ contract School is Exponential {
      * since we this contract will be using their tokens to deposit into aave
      * NOTE: We force all decimals to be 18 regardless of asset
      * @param asset the ERC contract for the underlying token
+     * @param lpAsset the ERC contract for the liquidity token
      * @param amount the amount of token supplied, multipled by 10^18
      */
-    function deposit(address asset, address underlying, uint amount) public {
+    function deposit(address asset, address lpAsset, uint amount) public {
 
-        console.log("Depositing");
-        console.log(totalShares[asset]);
-        // Check if there are 
-        if (totalShares[asset] == 0){
-            return depositInitial(asset, underlying, amount);
+        console.log(totalShares[lpAsset]);
+        // Check if the user has previously deposited
+        if (totalShares[lpAsset] == 0){
+            return depositInitial(asset, lpAsset, amount);
         }
-        
+        console.log(totalShares[lpAsset]);
         // Convert amount to shares
-        uint shares = convertToShares(asset, amount);
+        uint shares = convertToShares(lpAsset, amount);
+        console.log("Shares");
+        console.log(shares);
 
         // Calculate how much interest has been earned so far
-        uint interestSoFar = calculateInterest(asset, userData[msg.sender][asset].neib, shares);
+        uint interestSoFar = calculateInterest(lpAsset, userData[msg.sender][lpAsset].neib, shares);
+        console.log("Interest so far");
+        console.log(interestSoFar);
 
         // Issue new shares at the current rate
-        userData[msg.sender][asset].shares += shares;
-        totalShares[asset] += shares;
+        userData[msg.sender][lpAsset].shares += shares;
+        totalShares[lpAsset] += shares;
 
-        // Deposit assets in aave and receive atokens
+        // Temporarily move user's assets into the School contract 
+        IERC20 assetContract = IERC20(asset);
+        assetContract.transferFrom(msg.sender, address(this), amount);
+
+        // Deposit assets into Aave's lending pool and receive tokens
         ILendingPool pool = ILendingPool(lendingPool);
+        assetContract.approve(lendingPool, amount);
         pool.deposit(asset, amount, address(this), 0);
 
-        // Calculate new neib based on new share proportion and 
-        userData[msg.sender][asset].neib = calculateInterest(asset, interestSoFar, shares);
+        // Calculate new neib based on new share proportion and previously  earned interest
+        userData[msg.sender][lpAsset].neib = calculateInterest(lpAsset, interestSoFar, shares);
     }
 
-    function depositInitial(address asset, address underlying, uint amount) private {
+    function depositInitial(address asset, address lpAsset, uint amount) private {
 
-        console.log("Depositing Initial");
+        // Temporarily move user's assets into the School contract 
+        IERC20 assetContract = IERC20(asset);
+        assetContract.transferFrom(msg.sender, address(this), amount);
 
-        // Deposit asset into Aave
+        // Deposit assets into Aave's lending pool and receive tokens
         ILendingPool pool = ILendingPool(lendingPool);
+        assetContract.approve(lendingPool, amount);
         pool.deposit(asset, amount, address(this), 0);
+
         // Issue shares at a rate of one share per asset
-        
-        console.log("Should be deposited");
-        userData[msg.sender][asset].shares = amount;
-        userData[msg.sender][asset].neib = amount;
-        totalShares[asset] = amount;
+        userData[msg.sender][lpAsset].shares = amount;
+        userData[msg.sender][lpAsset].neib = amount;
+        totalShares[lpAsset] = amount;
     }
     
     /**
      * Allow a user to withdraw tokens out of the protocol, splitting interest acccordingly
      * NOTE: 
      * @param asset the ERC contract for the underlying token
+     * @param lpAsset the ERC contract for the liquidity token
      * @param amount the amount of token user wishes to withdraw, multipled by 10^18
      */
-    function withdraw(address asset, address underlying, uint amount) public {
+    function withdraw(address asset, address lpAsset, uint amount) public {
         
         // Convert asset amount to shares 
-        uint shares = convertToShares(asset, amount);
+        uint shares = convertToShares(lpAsset, amount);
 
         // Require that the user has enough shares to withdraw
-        require(userData[msg.sender][asset].shares >= shares, "Not enough tokens");
+        require(userData[msg.sender][lpAsset].shares >= shares, "Not enough tokens");
 
         // Calculate interest and school interest cut
-        uint interest = calculateInterest(asset, userData[msg.sender][asset].neib, shares);
+        uint interest = calculateInterest(lpAsset, userData[msg.sender][lpAsset].neib, shares);
         (MathError mErr, uint schoolCut) = mulScalarTruncate(fractionToWithdraw, interest);
         if (mErr != MathError.NO_ERROR) {
             revert("Exponential Failure when calculating school interest cut");
@@ -109,13 +121,13 @@ contract School is Exponential {
 
         // Withdraw the user's cut and the school's cut
         ILendingPool pool = ILendingPool(lendingPool);
-        pool.withdraw(underlying, amount - schoolCut, msg.sender);
-        pool.withdraw(underlying, schoolCut, address(this));
+        pool.withdraw(asset, amount - schoolCut, msg.sender);
+        pool.withdraw(asset, schoolCut, address(this));
 
         // Update userData based on new shares 
-        userData[msg.sender][asset].shares -= shares;
-        totalShares[asset] -= shares;
-        userData[msg.sender][asset].neib = amount;
+        userData[msg.sender][lpAsset].shares -= shares;
+        totalShares[lpAsset] -= shares;
+        userData[msg.sender][lpAsset].neib = amount;
     }
 
     /**
@@ -139,23 +151,35 @@ contract School is Exponential {
         return aTokenContract.balanceOf(address(this));
     }
 
-    function convertToShares(address asset, uint amount) internal view returns(uint) {
-        return amount * totalShares[asset] / getTotalBalance(asset);
+    /**
+     * Converts some amount of atokens to shares
+     * @param lpAsset the ATOKEN contract address for the underlying token
+     * @param amount the number of ATOKENS the school has, multipled by 10^18 
+     * @return the number of shares that amount of ATOKENS is equivalent to
+     */
+    function convertToShares(address lpAsset, uint amount) internal view returns(uint) {
+        return amount * totalShares[lpAsset] / getTotalBalance(lpAsset);
     }
     
-    function convertToAsset(address asset, uint shares) internal view returns(uint) {
-        return shares * getTotalBalance(asset) / totalShares[asset];
+    /**
+     * Converts some amount of atokens to shares
+     * @param lpAsset the ATOKEN contract address for the underlying token
+     * @param shares the number of ATOKENS the school has, multipled by 10^18 
+     * @return the number of shares that amount of ATOKENS is equivalent to
+     */
+    function convertToAsset(address lpAsset, uint shares) internal view returns(uint) {
+        return shares * getTotalBalance(lpAsset) / totalShares[lpAsset];
     }
 
     /**
      * Calculates the interest earned so far.
      * NOTE should prob be access controlled, only organization contract
-     * @param asset the token contract address for the underlying token
+     * @param lpAsset the ATOKEN contract address for the underlying token
      * @param neib non interest bearing part of the asset
      * @param shares number of shares that the interest is being calculated for
      */
-    function calculateInterest(address asset, uint neib, uint shares) internal view returns(uint) {
-        return convertToAsset(asset, shares) - neib;
+    function calculateInterest(address lpAsset, uint neib, uint shares) internal view returns(uint) {
+        return convertToAsset(lpAsset, shares) - neib;
     }
 
     /**
@@ -168,6 +192,5 @@ contract School is Exponential {
         IERC20 aTokenContract = IERC20(asset);
         aTokenContract.approve(organization, amount);
     }
-
      
 }
