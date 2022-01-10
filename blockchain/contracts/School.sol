@@ -108,12 +108,16 @@ contract School is Exponential {
         
         // Convert asset amount to shares 
         uint shares = convertToShares(lpAsset, amount);
+        // console.log("Shares");
+        // console.log(shares);
 
         // Require that the user has enough shares to withdraw
         require(userData[msg.sender][lpAsset].shares >= shares, "Not enough tokens");
 
         // Calculate interest and school interest cut
         uint interest = calculateInterest(lpAsset, userData[msg.sender][lpAsset].neib, shares);
+        // console.log("Interest");
+        // console.log(interest);
         (MathError mErr, uint schoolCut) = mulScalarTruncate(fractionToWithdraw, interest);
         if (mErr != MathError.NO_ERROR) {
             revert("Exponential Failure when calculating school interest cut");
@@ -127,8 +131,9 @@ contract School is Exponential {
         }
 
         // Update userData based on new shares 
-        userData[msg.sender][lpAsset].neib = userData[msg.sender][lpAsset].neib * shares / userData[msg.sender][lpAsset].shares;
+        uint oldShares = userData[msg.sender][lpAsset].shares;
         userData[msg.sender][lpAsset].shares -= shares;
+        userData[msg.sender][lpAsset].neib = userData[msg.sender][lpAsset].neib * userData[msg.sender][lpAsset].shares / oldShares;
         totalShares[lpAsset] -= shares;
     }
 
@@ -182,10 +187,10 @@ contract School is Exponential {
     function calculateInterest(address lpAsset, uint neib, uint shares) internal view returns(uint) {
         uint assetEquivalent = convertToAsset(lpAsset, shares);
         uint neibEquivalent = neib * shares / userData[msg.sender][lpAsset].shares;
-        if (assetEquivalent < neib){
+        if (assetEquivalent < neibEquivalent){
             return 0;
         }
-        return assetEquivalent - neib;
+        return assetEquivalent - neibEquivalent;
     }
 
     /**
@@ -197,6 +202,17 @@ contract School is Exponential {
     function approve(address asset, uint amount) public {
         IERC20 aTokenContract = IERC20(asset);
         aTokenContract.approve(organization, amount);
+    }
+
+    /**
+     * Moves tokens to the overaching organization
+     * NOTE should prob be access controlled, only organization contract
+     * @param asset the token contract address for the underlying token
+     * @param amount the amount of assets to approve in the asset's native decimal amount
+     */
+    function transfer(address asset, uint amount) public {
+        IERC20 aTokenContract = IERC20(asset);
+        aTokenContract.transfer(organization, amount);
     }
      
 }
