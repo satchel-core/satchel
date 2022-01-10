@@ -87,7 +87,7 @@ describe("School Specific Functionality", function () {
     multiplier = 10 ** 18;
   });
 
-  describe("Single User Tests", () => {
+  describe("Single User Deposit and Withdraw", () => {
     it("User should be able to deposit once and the school should get aDai", async () => {
       // Let's Transfer Dai from a whale to Alice
       const daiAmtForAlice = BigInt(500 * 10 ** 18);
@@ -380,12 +380,173 @@ describe("School Specific Functionality", function () {
           .sub(BigInt(125 * 10 ** 18))
           .mul(3)
           .sub(schoolDaiBalance)
+          .abs()
           .lt(uncertainty)
       ).to.be.true;
 
       // Check that the two balances sum to the withdraw amount
       expect(
-        userDaiBalance.add(schoolDaiBalance).sub(daiAmtForAlice).lt(uncertainty)
+        userDaiBalance
+          .add(schoolDaiBalance)
+          .sub(daiAmtForAlice)
+          .abs()
+          .lt(uncertainty)
+      ).to.be.true;
+    });
+
+    it("User should be able to deposit later and withdraw immediately with the correct interest split", async () => {
+      // Let's transfer Dai from a whale to Alice
+      const daiAmtForAlice = BigInt(750 * 10 ** 18);
+      const deposit1 = BigInt(500 * 10 ** 18);
+      const deposit2 = daiAmtForAlice - deposit1;
+      await seedAccount(
+        "0x1e3D6eAb4BCF24bcD04721caA11C478a2e59852D",
+        alice,
+        dai,
+        daiAmtForAlice
+      );
+
+      // Approve the school contract to use Alice's balance
+      await dai.connect(alice).approve(school.address, daiAmtForAlice);
+
+      // Deposit funds into school
+      await school.connect(alice).deposit(dai.address, aDai.address, deposit1);
+
+      // Check that the money was deposited
+      let userDaiBalance = await dai.balanceOf(alice.address);
+      expect(userDaiBalance).to.be.eq(deposit2);
+
+      // Check that the school thinks Alice has dai deposited
+      let userDepositedAssets = await school.getBalance(
+        aDai.address,
+        alice.address
+      );
+      expect(userDepositedAssets.gte(deposit1));
+
+      // Artificially increase the school's ADAI balance
+      let interest = BigInt(250 * 10 ** 18);
+      let schoolADai = await seedAccountNoChecks(
+        "0x7d6149ad9a573a6e2ca6ebf7d4897c1b766841b4",
+        school,
+        aDai,
+        interest
+      );
+
+      // Deposit more funds into school
+      await school.connect(alice).deposit(dai.address, aDai.address, deposit2);
+
+      // Check that the money was deposited
+      userDaiBalance = await dai.balanceOf(alice.address);
+      expect(userDaiBalance).to.be.eq(0);
+
+      //Withdraw all of the money
+      schoolADai = await aDai.balanceOf(school.address);
+      await school
+        .connect(alice)
+        .withdraw(dai.address, aDai.address, schoolADai);
+
+      userDaiBalance = await dai.balanceOf(alice.address);
+      let schoolDaiBalance = await dai.balanceOf(school.address);
+
+      // Check that the second deposit generated no interest
+      expect(
+        userDaiBalance
+          .sub(daiAmtForAlice)
+          .mul(3)
+          .sub(schoolDaiBalance)
+          .abs()
+          .lt(uncertainty)
+      ).to.be.true;
+
+      // Check that the two balances sum to the withdraw amount
+      expect(
+        userDaiBalance
+          .add(schoolDaiBalance)
+          .sub(schoolADai)
+          .abs()
+          .lt(uncertainty)
+      ).to.be.true;
+    });
+
+    it("User should be able to deposit later and withdraw later with the correct interest split", async () => {
+      // Let's transfer Dai from a whale to Alice
+      const daiAmtForAlice = BigInt(750 * 10 ** 18);
+      const deposit1 = BigInt(500 * 10 ** 18);
+      const deposit2 = daiAmtForAlice - deposit1;
+      await seedAccount(
+        "0x1e3D6eAb4BCF24bcD04721caA11C478a2e59852D",
+        alice,
+        dai,
+        daiAmtForAlice
+      );
+
+      // Approve the school contract to use Alice's balance
+      await dai.connect(alice).approve(school.address, daiAmtForAlice);
+
+      // Deposit funds into school
+      await school.connect(alice).deposit(dai.address, aDai.address, deposit1);
+
+      // Check that the money was deposited
+      let userDaiBalance = await dai.balanceOf(alice.address);
+      expect(userDaiBalance).to.be.eq(deposit2);
+
+      // Check that the school thinks Alice has dai deposited
+      let userDepositedAssets = await school.getBalance(
+        aDai.address,
+        alice.address
+      );
+      expect(userDepositedAssets.gte(deposit1));
+
+      // Artificially increase the school's ADAI balance
+      let interest1 = BigInt(500 * 10 ** 18);
+      await seedAccountNoChecks(
+        "0x7d6149ad9a573a6e2ca6ebf7d4897c1b766841b4",
+        school,
+        aDai,
+        interest1
+      );
+
+      // Deposit more funds into school
+      await school.connect(alice).deposit(dai.address, aDai.address, deposit2);
+
+      // Check that the money was deposited
+      userDaiBalance = await dai.balanceOf(alice.address);
+      expect(userDaiBalance).to.be.eq(0);
+
+      // Artificially increase the school's ADAI balance
+      let interest2 = BigInt(500 * 10 ** 18);
+      let schoolADai = await seedAccountNoChecks(
+        "0x7d6149ad9a573a6e2ca6ebf7d4897c1b766841b4",
+        school,
+        aDai,
+        interest2
+      );
+
+      // Withdraw all of the money
+      await school
+        .connect(alice)
+        .withdraw(dai.address, aDai.address, schoolADai);
+
+      userDaiBalance = await dai.balanceOf(alice.address);
+      let schoolDaiBalance = await dai.balanceOf(school.address);
+
+      // Check that the second deposit the appropriate amount of interest
+      expect(
+        userDaiBalance
+          .sub(daiAmtForAlice)
+          .mul(3)
+          .sub(schoolDaiBalance)
+          .abs()
+          .lt(uncertainty)
+      ).to.be.true;
+
+      // Check that the two balances sum to the withdraw amount
+      expect(
+        userDaiBalance
+          .add(schoolDaiBalance)
+          .sub(schoolADai)
+          .abs()
+          .lt(uncertainty)
       ).to.be.true;
     });
   });

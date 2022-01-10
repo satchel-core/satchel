@@ -33,7 +33,6 @@ contract School is Exponential {
             revert("Exponential Failure when setting interestSplit");
         }
         fractionToWithdraw = _fractionToWithdraw;
-
     }
 
     /**
@@ -59,7 +58,7 @@ contract School is Exponential {
         // console.log(shares);
 
         // Calculate how much interest has been earned so far
-        uint interestSoFar = calculateInterest(lpAsset, userData[msg.sender][lpAsset].neib, shares);
+        uint interestSoFar = calculateInterest(lpAsset, userData[msg.sender][lpAsset].neib, userData[msg.sender][lpAsset].shares);
         // console.log("Interest so far");
         // console.log(interestSoFar);
 
@@ -77,7 +76,15 @@ contract School is Exponential {
         pool.deposit(asset, amount, address(this), 0);
 
         // Calculate new neib based on new share proportion and previously  earned interest
-        userData[msg.sender][lpAsset].neib = calculateInterest(lpAsset, interestSoFar, shares);
+        // console.log("Old neib");
+        // console.log(userData[msg.sender][lpAsset].neib);
+
+        userData[msg.sender][lpAsset].neib = convertToAsset(lpAsset, userData[msg.sender][lpAsset].shares) - interestSoFar;
+        // console.log("Adjusted neib");
+        // console.log(userData[msg.sender][lpAsset].neib);
+
+        // console.log("Testing Interest");
+        // console.log(calculateInterest(lpAsset, userData[msg.sender][lpAsset].neib, userData[msg.sender][lpAsset].shares));
     }
 
     function depositInitial(address asset, address lpAsset, uint amount) private {
@@ -200,6 +207,7 @@ contract School is Exponential {
      * @param amount the amount of assets to approve in the asset's native decimal amount
      */
     function approve(address asset, uint amount) public {
+        assert(msg.sender == organization);
         IERC20 aTokenContract = IERC20(asset);
         aTokenContract.approve(organization, amount);
     }
@@ -208,9 +216,10 @@ contract School is Exponential {
      * Moves tokens to the overaching organization
      * NOTE should prob be access controlled, only organization contract
      * @param asset the token contract address for the underlying token
-     * @param amount the amount of assets to approve in the asset's native decimal amount
+     * @param amount the amount of assets to transfer to the organization, in the asset's native decimal amount
      */
     function transfer(address asset, uint amount) public {
+        assert(msg.sender == organization);
         IERC20 aTokenContract = IERC20(asset);
         aTokenContract.transfer(organization, amount);
     }
