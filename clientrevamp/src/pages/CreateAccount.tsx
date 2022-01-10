@@ -16,7 +16,7 @@ import { Logo } from "../Logo"
 import { QuestionIcon } from '@chakra-ui/icons'
 
 export const CreateAccount: FunctionComponent = () => {
-  let navigate = useNavigate();
+  const navigate = useNavigate();
   function handleClick(toRedirect: To) {
     return () => navigate(toRedirect);
   }

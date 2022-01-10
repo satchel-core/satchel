@@ -9,7 +9,7 @@ import { To, useNavigate } from "react-router-dom"
 import { FunctionComponent } from "react";
 
 export const Landing: FunctionComponent = () => {
-  let navigate = useNavigate();
+  const navigate = useNavigate();
   function handleClick(toRedirect: To) {
     return () => navigate(toRedirect);
   }
