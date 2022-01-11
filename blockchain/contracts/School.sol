@@ -13,8 +13,6 @@ contract School is Exponential {
         uint shares;
     }
 
-    uint schoolID;
-
     // Asset addresses are ** aToken ** addresses
     mapping (address => uint) public totalShares;
 
@@ -30,8 +28,7 @@ contract School is Exponential {
     event UserWithdrawMade(address user, address asset, address lpAsset, uint amount);
     event WithdrawToSchool(address asset, uint amount);
 
-    constructor (uint _schoolID, address _organization, address _lendingPool) public {
-        schoolID = _schoolID;
+    constructor (address _organization, address _lendingPool) public {
         organization = _organization;
         lendingPool = _lendingPool;
 

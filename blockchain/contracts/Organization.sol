@@ -12,7 +12,10 @@ contract Organization {
      constructor (uint _orgID) public {
          orgID = _orgID;
      } 
-    
+
+     function getID() public view returns (uint) {
+         return orgID;
+     }
 
      /* Possibly do null checks here */
      function createSchool(uint schoolID, address lendingPool) public {
