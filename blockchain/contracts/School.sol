@@ -146,7 +146,7 @@ contract School is Exponential {
 
     /**
      * Gets the total amount of tokens owned by the user
-     * @param asset the TOKEN contract address for the underlying token
+     * @param asset the ATOKEN contract address for the underlying token
      * @param user the address of the user
      * @return the number of TOKENS the user has in the protocol, multipled by 10^18
      */
@@ -192,6 +192,10 @@ contract School is Exponential {
      * @param shares number of shares that the interest is being calculated for
      */
     function calculateInterest(address lpAsset, uint neib, uint shares) internal view returns(uint) {
+        if (userData[msg.sender][lpAsset].shares == 0) {
+            return 0;
+        }
+
         uint assetEquivalent = convertToAsset(lpAsset, shares);
         uint neibEquivalent = neib * shares / userData[msg.sender][lpAsset].shares;
         if (assetEquivalent < neibEquivalent){

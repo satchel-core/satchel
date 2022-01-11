@@ -552,9 +552,9 @@ describe("School Specific Functionality", function () {
   });
 
   describe("Multiple User Tests", () => {
-    xit("Two users should be able to deposit and get allocated the correct fraction of the pool", async () => {
+    it("Multiple users should be able to deposit and get allocated the correct fraction of the pool", async () => {
       // Let's transfer Dai from a whale to Alice
-      const daiAmtForAlice = BigInt(500 * 10 ** 18);
+      const daiAmtForAlice = BigInt(600 * 10 ** 18);
       await seedAccount(
         "0x1e3D6eAb4BCF24bcD04721caA11C478a2e59852D",
         alice,
@@ -570,17 +570,194 @@ describe("School Specific Functionality", function () {
         .connect(alice)
         .deposit(dai.address, aDai.address, daiAmtForAlice);
 
-      // Check that Alice doesn't have money anymore
-      let userDaiBalance = await dai.balanceOf(alice.address);
-      expect(userDaiBalance).to.be.eq(0);
-
       // Check that the school has aDai
       let schoolContractADaiBalance = await aDai.balanceOf(school.address);
-      expect(schoolContractADaiBalance.gte(daiAmtForAlice)).to.be.eq(true);
+      expect(
+        schoolContractADaiBalance.sub(daiAmtForAlice).abs().lte(uncertainty)
+      ).to.be.eq(true);
 
       // Check that the school issued the correct amount of shares
       let shares = await school.totalShares(aDai.address);
       expect(shares.lte(daiAmtForAlice)).to.be.eq(true);
+
+      // Transfer dai to Bob
+      const daiAmtForBob = BigInt(400 * 10 ** 18);
+      await seedAccount(
+        "0x64f65e10f1c3cd7e920a6b34b83daf2f100f15e6",
+        bob,
+        dai,
+        daiAmtForBob
+      );
+
+      // Approve the school contract to use Alice's balance
+      await dai.connect(bob).approve(school.address, daiAmtForBob);
+
+      // Deposit funds into school
+      await school
+        .connect(bob)
+        .deposit(dai.address, aDai.address, daiAmtForBob);
+
+      // Check that the school has aDai
+      schoolContractADaiBalance = await aDai.balanceOf(school.address);
+      expect(
+        schoolContractADaiBalance
+          .sub(daiAmtForAlice + daiAmtForBob)
+          .abs()
+          .lte(uncertainty)
+      ).to.be.eq(true);
+
+      // Check that the school issued the correct amount of shares
+      shares = await school.totalShares(aDai.address);
+      expect(
+        shares
+          .sub(daiAmtForAlice + daiAmtForBob)
+          .abs()
+          .lte(uncertainty)
+      ).to.be.eq(true);
+
+      // Transfer dai to admin
+      const daiAmtForAdmin = BigInt(300 * 10 ** 18);
+      await seedAccount(
+        "0x1e3D6eAb4BCF24bcD04721caA11C478a2e59852D",
+        admin,
+        dai,
+        daiAmtForAdmin
+      );
+
+      // Approve the school contract to use Alice's balance
+      await dai.connect(admin).approve(school.address, daiAmtForBob);
+
+      // Deposit funds into school
+      await school
+        .connect(admin)
+        .deposit(dai.address, aDai.address, daiAmtForAdmin);
+
+      // Check that the school has aDai
+      schoolContractADaiBalance = await aDai.balanceOf(school.address);
+      expect(
+        schoolContractADaiBalance
+          .sub(daiAmtForAlice + daiAmtForBob + daiAmtForAdmin)
+          .abs()
+          .lte(uncertainty)
+      ).to.be.eq(true);
+
+      // Check that the school issued the correct amount of shares
+      shares = await school.totalShares(aDai.address);
+      expect(
+        shares
+          .sub(daiAmtForAlice + daiAmtForBob + daiAmtForAdmin)
+          .abs()
+          .lte(uncertainty)
+      ).to.be.eq(true);
+    });
+
+    it("Deposits and Withdraws should not be affected by other users", async () => {
+      // Let's transfer Dai from a whale to Alice
+      const daiAmtForAlice = BigInt(750 * 10 ** 18);
+      const deposit1 = BigInt(500 * 10 ** 18);
+      const deposit2 = daiAmtForAlice - deposit1;
+      await seedAccount(
+        "0x1e3D6eAb4BCF24bcD04721caA11C478a2e59852D",
+        alice,
+        dai,
+        daiAmtForAlice
+      );
+
+      // Approve the school contract to use Alice's balance
+      await dai.connect(alice).approve(school.address, daiAmtForAlice);
+
+      // Deposit funds into school
+      await school.connect(alice).deposit(dai.address, aDai.address, deposit1);
+
+      // Check that the school has aDai
+      let schoolContractADaiBalance = await aDai.balanceOf(school.address);
+      expect(schoolContractADaiBalance.gte(deposit1)).to.be.eq(true);
+
+      // Transfer Dai from a whale to Bob
+      const daiAmtForBob = BigInt(500 * 10 ** 18);
+      await seedAccount(
+        "0x1e3D6eAb4BCF24bcD04721caA11C478a2e59852D",
+        bob,
+        dai,
+        daiAmtForBob
+      );
+
+      // Approve the school contract to use Bob's balance
+      await dai.connect(bob).approve(school.address, daiAmtForBob);
+
+      // Deposit funds into school
+      await school
+        .connect(bob)
+        .deposit(dai.address, aDai.address, daiAmtForBob);
+
+      // Check that the school has aDai
+      schoolContractADaiBalance = await aDai.balanceOf(school.address);
+      expect(schoolContractADaiBalance.gte(deposit1 + daiAmtForBob)).to.be.eq(
+        true
+      );
+
+      // Artificially increase the school's ADAI balance
+      let interest1 = BigInt(500 * 10 ** 18);
+      await seedAccountNoChecks(
+        "0x7d6149ad9a573a6e2ca6ebf7d4897c1b766841b4",
+        school,
+        aDai,
+        interest1
+      );
+
+      // Deposit more funds into school
+      await school.connect(alice).deposit(dai.address, aDai.address, deposit2);
+
+      // Check that the money was deposited
+      let userDaiBalance = await dai.balanceOf(alice.address);
+      expect(userDaiBalance).to.be.eq(0);
+
+      // Artificially increase the school's ADAI balance
+      let interest2 = BigInt(500 * 10 ** 18);
+      let schoolADai = await seedAccountNoChecks(
+        "0x7d6149ad9a573a6e2ca6ebf7d4897c1b766841b4",
+        school,
+        aDai,
+        interest2
+      );
+
+      // Find Alice's total balance
+      let aliceBalance = await school.getBalance(aDai.address, alice.address);
+      expect(
+        aliceBalance
+          .sub(daiAmtForAlice)
+          .sub(interest1 / BigInt(2))
+          .sub((interest2 * BigInt(1000)) / BigInt(1750))
+          .abs()
+          .lte(uncertainty)
+      ).to.be.true;
+
+      // Withdraw all of the money
+      await school
+        .connect(alice)
+        .withdraw(dai.address, aDai.address, aliceBalance);
+
+      userDaiBalance = await dai.balanceOf(alice.address);
+      let schoolDaiBalance = await dai.balanceOf(school.address);
+
+      // Check that the second deposit the appropriate amount of interest
+      expect(
+        userDaiBalance
+          .sub(daiAmtForAlice)
+          .mul(3)
+          .sub(schoolDaiBalance)
+          .abs()
+          .lt(uncertainty)
+      ).to.be.true;
+
+      // Check that the two balances sum to the withdraw amount
+      expect(
+        userDaiBalance
+          .add(schoolDaiBalance)
+          .sub(aliceBalance)
+          .abs()
+          .lt(uncertainty)
+      ).to.be.true;
     });
   });
 });
