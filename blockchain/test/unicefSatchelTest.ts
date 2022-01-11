@@ -5,17 +5,20 @@ import { Artifact } from "hardhat/types";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/dist/src/signer-with-address";
 import { Signers } from "./types";
 import { School } from "../contract_types/School";
+import { Organization } from "../contract_types/Organization";
+import { OrganizationFactory } from "../contract_types/OrganizationFactory";
 import { TestDai } from "../contract_types/TestDai";
 import { IERC20 } from "../contract_types/IERC20";
 import { ILendingPool } from "../contract_types/ILendingPool";
-import chai, { expect } from "chai";
+import chai, { assert, expect } from "chai";
 import { solidity } from "ethereum-waffle";
 import { BigNumber } from "ethers";
 chai.use(solidity);
 const { deployContract } = hre.waffle;
 
-describe("School Specific Functionality", function () {
-  let school: School;
+describe("Organization Functionality", function () {
+  let org: Organization;
+  let satchel: OrganizationFactory;
   let testDai: TestDai;
   let dai: IERC20;
   let aDai: IERC20;
@@ -39,12 +42,112 @@ describe("School Specific Functionality", function () {
   const daiDecimals = 18;
   const usdcDecimals = 6;
   const uncertainty = 10 ** 13;
+
   beforeEach(async function () {
     this.signers = {} as Signers;
     const signers: SignerWithAddress[] = await hre.ethers.getSigners();
     admin = signers[0];
     owner = signers[1];
     deployer = signers[2];
+    alice = signers[3];
+    bob = signers[4];
+
+    const OrganizationFactoryArtifact: Artifact =
+      await hre.artifacts.readArtifact("OrganizationFactory");
+    satchel = <OrganizationFactory>(
+      (<any>(
+        await deployContract(
+          owner,
+          OrganizationFactoryArtifact,
+          [owner.address],
+          {
+            gasPrice: 1_000_000_00,
+          }
+        )
+      ))
+    );
+
+    const IERC20Artifact: Artifact = await hre.artifacts.readArtifact("IERC20");
+
+    dai = <IERC20>await ethers.getContractAt(IERC20Artifact.abi, daiAddress);
+    aDai = <IERC20>await ethers.getContractAt(IERC20Artifact.abi, aDaiAddress);
+
+    const LendingPoolArtifact: Artifact = await hre.artifacts.readArtifact(
+      "ILendingPool"
+    );
+
+    lendingPool = <ILendingPool>(
+      await ethers.getContractAt(LendingPoolArtifact.abi, lendingPoolAddress)
+    );
+
+    multiplier = 10 ** 18;
+  });
+
+  describe("Organization Factory", function () {
+    it("Organization Factory should create organizations", async () => {
+      await satchel.connect(owner).createOrg(0);
+      let address = await satchel.orgs(0);
+      expect(address).to.be.not.null;
+    });
+
+    it("Non authorized users should not create organizations", async () => {
+      let fail = true;
+      try {
+        await satchel.connect(alice).createOrg(0);
+        fail = false;
+      } catch (e) {
+        expect(true).to.be.true;
+      }
+      expect(fail).to.be.true;
+    });
+
+    it("Users should not create duplicate organizations", async () => {
+      let fail = true;
+      try {
+        await satchel.connect(owner).createOrg(0);
+        await satchel.connect(owner).createOrg(0);
+        fail = false;
+      } catch (e) {
+        console.log(e);
+        expect(true).to.be.true;
+      }
+      expect(fail).to.be.true;
+    });
+  });
+
+  describe("Organizations", function () {
+    it("Organizations should create schools", async () => {});
+
+    it("Non authorized users should not create schools", async () => {});
+
+    it("Organizations should be able to withdraw from school", async () => {});
+
+    it("Organizations should not be able to withdraw more than the school has", async () => {});
+  });
+});
+
+describe("School Specific Functionality", function () {
+  let school: School;
+  let dai: IERC20;
+  let aDai: IERC20;
+  let lendingPool: ILendingPool;
+
+  let admin: SignerWithAddress;
+  let owner: SignerWithAddress;
+  let alice: SignerWithAddress;
+  let bob: SignerWithAddress;
+
+  const lendingPoolAddress = "0x7d2768dE32b0b80b7a3454c06BdAc94A69DDc7A9";
+  const daiAddress = "0x6b175474e89094c44da98b954eedeac495271d0f";
+  const aDaiAddress = "0x028171bCA77440897B824Ca71D1c56caC55b68A3";
+  const zeroAddress = "0x0000000000000000000000000000000000000000";
+
+  const uncertainty = 10 ** 13;
+  beforeEach(async function () {
+    this.signers = {} as Signers;
+    const signers: SignerWithAddress[] = await hre.ethers.getSigners();
+    admin = signers[0];
+    owner = signers[1];
     alice = signers[3];
     bob = signers[4];
 
@@ -63,14 +166,6 @@ describe("School Specific Functionality", function () {
       ))
     );
 
-    // deploy testDai contract
-    const TestDaiArtifact: Artifact = await hre.artifacts.readArtifact(
-      "testDai"
-    );
-    testDai = <TestDai>(<any>await deployContract(owner, TestDaiArtifact, [], {
-      gasPrice: 1_000_000_00,
-    }));
-
     const IERC20Artifact: Artifact = await hre.artifacts.readArtifact("IERC20");
 
     dai = <IERC20>await ethers.getContractAt(IERC20Artifact.abi, daiAddress);
@@ -83,8 +178,6 @@ describe("School Specific Functionality", function () {
     lendingPool = <ILendingPool>(
       await ethers.getContractAt(LendingPoolArtifact.abi, lendingPoolAddress)
     );
-
-    multiplier = 10 ** 18;
   });
 
   describe("Single User Deposit and Withdraw", () => {
@@ -111,11 +204,13 @@ describe("School Specific Functionality", function () {
 
       // Check that the school has aDai
       let schoolContractADaiBalance = await aDai.balanceOf(school.address);
-      expect(schoolContractADaiBalance).to.be.eq(daiAmtForAlice);
+      expect(
+        schoolContractADaiBalance.sub(daiAmtForAlice).abs().lte(uncertainty)
+      ).to.be.true;
 
       // Check that the school issued the correct amount of shares
       let shares = await school.totalShares(aDai.address);
-      expect(shares).to.be.eq(daiAmtForAlice);
+      expect(shares.sub(daiAmtForAlice).abs().lte(uncertainty)).to.be.true;
     });
 
     it("User should be able to deposit multiple times and the school should get aDai", async () => {

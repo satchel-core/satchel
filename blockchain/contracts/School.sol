@@ -13,6 +13,8 @@ contract School is Exponential {
         uint shares;
     }
 
+    uint schoolID;
+
     // Asset addresses are ** aToken ** addresses
     mapping (address => uint) public totalShares;
 
@@ -24,7 +26,12 @@ contract School is Exponential {
     address public lendingPool;
     uint shareDecimals = 10 ** 12;
 
-    constructor (address _organization, address _lendingPool) public {
+    event DepositMade(address user, address asset, address lpAsset, uint amount);
+    event UserWithdrawMade(address user, address asset, address lpAsset, uint amount);
+    event WithdrawToSchool(address asset, uint amount);
+
+    constructor (uint _schoolID, address _organization, address _lendingPool) public {
+        schoolID = _schoolID;
         organization = _organization;
         lendingPool = _lendingPool;
 
@@ -80,6 +87,8 @@ contract School is Exponential {
         // console.log(userData[msg.sender][lpAsset].neib);
 
         userData[msg.sender][lpAsset].neib = convertToAsset(lpAsset, userData[msg.sender][lpAsset].shares) - interestSoFar;
+
+        emit DepositMade(msg.sender, asset, lpAsset, amount);
         // console.log("Adjusted neib");
         // console.log(userData[msg.sender][lpAsset].neib);
 
@@ -102,6 +111,7 @@ contract School is Exponential {
         userData[msg.sender][lpAsset].shares = amount;
         userData[msg.sender][lpAsset].neib = amount;
         totalShares[lpAsset] = amount;
+        emit DepositMade(msg.sender, asset, lpAsset, amount);
     }
     
     /**
@@ -135,6 +145,7 @@ contract School is Exponential {
         pool.withdraw(asset, amount - schoolCut, msg.sender);
         if (schoolCut > 0) {
             pool.withdraw(asset, schoolCut, address(this));
+            emit WithdrawToSchool(asset, schoolCut);
         }
 
         // Update userData based on new shares 
@@ -142,6 +153,8 @@ contract School is Exponential {
         userData[msg.sender][lpAsset].shares -= shares;
         userData[msg.sender][lpAsset].neib = userData[msg.sender][lpAsset].neib * userData[msg.sender][lpAsset].shares / oldShares;
         totalShares[lpAsset] -= shares;
+
+        emit UserWithdrawMade(msg.sender, asset, lpAsset, amount);
     }
 
     /**
