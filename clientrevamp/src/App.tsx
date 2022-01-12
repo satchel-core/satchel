@@ -12,6 +12,7 @@ import {
 import { Landing } from "./pages/Landing";
 import { Login } from "./pages/Login";
 import { CreateAccount } from "./pages/CreateAccount";
+import { Org } from "./pages/Org";
 
 const theme = extendTheme({
   fonts: {
@@ -53,6 +54,7 @@ export const App = () => (
         <Route path="/" element={<Landing />} />
         <Route path="Login" element={<Login />} />
         <Route path="CreateAccount" element={<CreateAccount />} />
+        <Route path="Org" element={<Org />} />
       </Routes>
     </Router>
   </ChakraProvider>

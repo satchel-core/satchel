@@ -14,10 +14,10 @@ export const Landing: FunctionComponent = () => {
     return () => navigate(toRedirect);
   }
   return <Grid minH="37vh" p={3}>
-              <GridItem rowStart={1} rowEnd={1} colStart={1} colEnd={1}>
+              <GridItem rowStart={1} rowEnd={1} colStart={1} colEnd={2}>
                 <Logo h="20vmin" pointerEvents="none" />
               </GridItem>
-              <GridItem rowStart={2} rowEnd={2} colStart={1} colEnd={1}>
+              <GridItem rowStart={2} rowEnd={2} colStart={1} colEnd={2}>
                 <Text fontSize="14px">
                   Satchel uplifts underbanked school communities by facilitating locally-governed projects & capital growth via DeFi-powered donations & financial primitives.
                 </Text>
