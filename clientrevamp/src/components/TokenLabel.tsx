@@ -19,7 +19,7 @@ export const TokenLabel: FunctionComponent<TokenLabelProps> = ({name, amount}) =
               <StatLabel fontSize="14px">{name}</StatLabel>
               <StatLabel fontSize="20px" fontWeight="bold">{amount}</StatLabel>
               <StatHelpText>
-              <StatArrow type='increase' />
+                <StatArrow type='increase' />
                 23.36%
               </StatHelpText>
             </Stat>

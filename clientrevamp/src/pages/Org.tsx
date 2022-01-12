@@ -4,6 +4,7 @@ import {
   GridItem,
   Button,
   HStack,
+  Tag,
 } from "@chakra-ui/react"
 import { Logo } from "../Logo"
 import { FunctionComponent, useState } from "react";
@@ -11,6 +12,7 @@ import { SchoolLabel } from "../components/SchoolLabel";
 import { OrganizationMenu } from "../components/OrganizationMenu";
 import { To, useNavigate } from "react-router-dom"
 import { TokenLabel } from "../components/TokenLabel";
+import { TransactionLabel } from "../components/TransactionLabel";
 
 export const Org: FunctionComponent = () => {
   const navigate = useNavigate();
@@ -26,7 +28,7 @@ export const Org: FunctionComponent = () => {
                 <GridItem rowStart={1} rowEnd={1} colStart={1} colEnd={2}>
                   <HStack>
                     <Logo h="20vmin" pointerEvents="none" />
-                    <Button size="sm" colorScheme="satchel_blue" variant="outline" onClick={handleClick("/Login")}>
+                    <Button size="sm" colorScheme="satchel_blue" variant="outline" onClick={handleClick("/")}>
                       LOG OUT
                     </Button>
                   </HStack>
@@ -57,7 +59,7 @@ export const Org: FunctionComponent = () => {
                 <GridItem rowStart={1} rowEnd={1} colStart={1} colEnd={2}>
                   <HStack>
                     <Logo h="20vmin" pointerEvents="none" />
-                    <OrganizationMenu />
+                    <OrganizationMenu setPage={setPage}/>
                   </HStack>
                 </GridItem>
                 <GridItem rowStart={2} rowEnd={2} colStart={1} colEnd={2}>
@@ -70,7 +72,7 @@ export const Org: FunctionComponent = () => {
                 </GridItem>
                 <GridItem rowStart={4} rowEnd={4} colStart={1} colEnd={2}>
                   <Text fontSize="12px">
-                    Current Balance
+                    CURRENT BALANCE
                   </Text>
                 </GridItem>
                 <GridItem rowStart={5} rowEnd={5} colStart={1} colEnd={2}>
@@ -103,7 +105,51 @@ export const Org: FunctionComponent = () => {
                     TRANSACTION HISTORY
                   </Text>
                 </GridItem>
+                <GridItem rowStart={13} rowEnd={13} colStart={1} colEnd={2}>
+                  <TransactionLabel heading="Transfer from <Donor>" delta="+20.00 BTC" date="January 1, 2022"></TransactionLabel>
+                </GridItem>
+                <GridItem rowStart={14} rowEnd={14} colStart={1} colEnd={2}>
+                  <TransactionLabel heading="Initial Deposit" delta="+60.00 BTC" date="December 1, 2021"></TransactionLabel>
+                </GridItem>
               </Grid>
+    case 2:
+      return <Grid p={3} gap={3}>
+                <GridItem rowStart={1} rowEnd={1} colStart={1} colEnd={2}>
+                  <HStack>
+                    <Logo h="20vmin" pointerEvents="none" />
+                    <OrganizationMenu setPage={setPage}/>
+                  </HStack>
+                </GridItem>
+                <GridItem rowStart={2} rowEnd={2} colStart={1} colEnd={2}>
+                  <Text fontSize="24px">
+                    {school}
+                  </Text>
+                </GridItem>
+                <GridItem rowStart={3} rowEnd={3} colStart={1} colEnd={2}>
+                  <Text fontSize="12px">
+                    COMMUNITY MEMBERS
+                  </Text>
+                </GridItem>
+                <GridItem rowStart={4} rowEnd={4} colStart={1} colEnd={2}>
+                  <Tag colorScheme="satchel_blue" variant="solid">Darya Kaviani</Tag>
+                  <Tag colorScheme="satchel_blue" variant="solid">Ritik Batra</Tag>
+                  <Tag colorScheme="satchel_blue" variant="solid">Timothy Guo</Tag>
+                  <Tag colorScheme="satchel_blue" variant="solid">Darya Kaviani</Tag>
+                  <Tag colorScheme="satchel_blue" variant="solid">Ritik Batra</Tag>
+                  <Tag colorScheme="satchel_blue" variant="solid">Timothy Guo</Tag>
+                  <Tag colorScheme="satchel_blue" variant="solid">Darya Kaviani</Tag>
+                  <Tag colorScheme="satchel_blue" variant="solid">Ritik Batra</Tag>
+                  <Tag colorScheme="satchel_blue" variant="solid">Timothy Guo</Tag>
+                  <Tag colorScheme="satchel_blue" variant="solid">Darya Kaviani</Tag>
+                  <Tag colorScheme="satchel_blue" variant="solid">Ritik Batra</Tag>
+                  <Tag colorScheme="satchel_blue" variant="solid">Timothy Guo</Tag>
+                  <Tag colorScheme="satchel_blue" variant="solid">Darya Kaviani</Tag>
+                  <Tag colorScheme="satchel_blue" variant="solid">Ritik Batra</Tag>
+                  <Tag colorScheme="satchel_blue" variant="solid">Timothy Guo</Tag>
+                </GridItem>
+              </Grid>
+    case 3:
+      return <Text>p3</Text>
     default:
       return <Text>Unimplemented page</Text>
   }
