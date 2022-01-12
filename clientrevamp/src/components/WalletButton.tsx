@@ -10,7 +10,7 @@ type WalletButtonProps = {
 }
 
 export const WalletButton: FunctionComponent<WalletButtonProps> = ({walletName}) => {
-  let navigate = useNavigate();
+  const navigate = useNavigate();
   function handleClick(toRedirect: To) {
     return () => navigate(toRedirect);
   }
