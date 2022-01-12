@@ -7,7 +7,6 @@ import { Signers } from "./types";
 import { School } from "../contract_types/School";
 import { Organization } from "../contract_types/Organization";
 import { OrganizationFactory } from "../contract_types/OrganizationFactory";
-import { TestDai } from "../contract_types/TestDai";
 import { IERC20 } from "../contract_types/IERC20";
 import { ILendingPool } from "../contract_types/ILendingPool";
 import chai, { assert, expect } from "chai";
@@ -19,7 +18,6 @@ const { deployContract } = hre.waffle;
 describe("Organization Functionality", function () {
   let org: Organization;
   let satchel: OrganizationFactory;
-  let testDai: TestDai;
   let dai: IERC20;
   let aDai: IERC20;
   let lendingPool: ILendingPool;
@@ -85,7 +83,7 @@ describe("Organization Functionality", function () {
 
   describe("Organization Factory", function () {
     it("Organization Factory should create organizations", async () => {
-      await satchel.connect(owner).createOrg(0);
+      await satchel.connect(owner).createOrg(1);
       let address = await satchel.orgs(0);
       expect(address).to.be.not.null;
     });
@@ -93,7 +91,7 @@ describe("Organization Functionality", function () {
     it("Non authorized users should not create organizations", async () => {
       let fail = true;
       try {
-        await satchel.connect(alice).createOrg(0);
+        await satchel.connect(alice).createOrg(1);
         fail = false;
       } catch (e) {
         expect(true).to.be.true;
@@ -104,11 +102,21 @@ describe("Organization Functionality", function () {
     it("Users should not create duplicate organizations", async () => {
       let fail = true;
       try {
-        await satchel.connect(owner).createOrg(0);
+        await satchel.connect(owner).createOrg(1);
+        await satchel.connect(owner).createOrg(1);
+        fail = false;
+      } catch (e) {
+        expect(true).to.be.true;
+      }
+      expect(fail).to.be.true;
+    });
+
+    it("Users should not create the zero org", async () => {
+      let fail = true;
+      try {
         await satchel.connect(owner).createOrg(0);
         fail = false;
       } catch (e) {
-        console.log(e);
         expect(true).to.be.true;
       }
       expect(fail).to.be.true;

@@ -28,7 +28,7 @@ contract School is Exponential {
     event UserWithdrawMade(address user, address asset, address lpAsset, uint amount);
     event WithdrawToSchool(address asset, uint amount);
 
-    constructor (address _organization, address _lendingPool) public {
+    constructor (address _organization, address _lendingPool) {
         organization = _organization;
         lendingPool = _lendingPool;
 

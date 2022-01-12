@@ -9,7 +9,7 @@ contract Organization {
     event SchoolCreated(uint id);
     event SchoolWithdraw(uint id, address asset, uint amount);
 
-     constructor (uint _orgID) public {
+     constructor (uint _orgID) {
          orgID = _orgID;
      } 
 
