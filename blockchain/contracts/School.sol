@@ -13,6 +13,8 @@ contract School is Exponential {
         uint shares;
     }
 
+    uint schoolID;
+
     // Asset addresses are ** aToken ** addresses
     mapping (address => uint) public totalShares;
 
@@ -28,7 +30,8 @@ contract School is Exponential {
     event UserWithdrawMade(address user, address asset, address lpAsset, uint amount);
     event WithdrawToSchool(address asset, uint amount);
 
-    constructor (address _organization, address _lendingPool) {
+    constructor (uint _schoolID, address _organization, address _lendingPool) {
+        schoolID = _schoolID;
         organization = _organization;
         lendingPool = _lendingPool;
 
@@ -38,6 +41,10 @@ contract School is Exponential {
         }
         fractionToWithdraw = _fractionToWithdraw;
     }
+
+    function getID() public view returns (uint) {
+        return schoolID;
+     }
 
     /**
      * Allow a user to deposit tokens into the protocol

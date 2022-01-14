@@ -18,6 +18,7 @@ const { deployContract } = hre.waffle;
 describe("Organization Functionality", function () {
   let org: Organization;
   let satchel: OrganizationFactory;
+  let school: School;
   let dai: IERC20;
   let aDai: IERC20;
   let lendingPool: ILendingPool;
@@ -83,15 +84,24 @@ describe("Organization Functionality", function () {
 
   describe("Organization Factory", function () {
     it("Organization Factory should create organizations", async () => {
-      await satchel.connect(owner).createOrg(1);
-      let address = await satchel.orgs(0);
+      await satchel.connect(owner).createOrg(1, admin.address);
+      let address = await satchel.orgs(1);
       expect(address).to.be.not.null;
+
+      const OrganizationArtifact: Artifact = await hre.artifacts.readArtifact(
+        "Organization"
+      );
+      org = <Organization>(
+        await ethers.getContractAt(OrganizationArtifact.abi, address)
+      );
+      const id = await org.getID();
+      expect(id).to.equal(1);
     });
 
     it("Non authorized users should not create organizations", async () => {
       let fail = true;
       try {
-        await satchel.connect(alice).createOrg(1);
+        await satchel.connect(alice).createOrg(1, admin.address);
         fail = false;
       } catch (e) {
         expect(true).to.be.true;
@@ -102,8 +112,8 @@ describe("Organization Functionality", function () {
     it("Users should not create duplicate organizations", async () => {
       let fail = true;
       try {
-        await satchel.connect(owner).createOrg(1);
-        await satchel.connect(owner).createOrg(1);
+        await satchel.connect(owner).createOrg(1, admin.address);
+        await satchel.connect(owner).createOrg(1, admin.address);
         fail = false;
       } catch (e) {
         expect(true).to.be.true;
@@ -114,7 +124,7 @@ describe("Organization Functionality", function () {
     it("Users should not create the zero org", async () => {
       let fail = true;
       try {
-        await satchel.connect(owner).createOrg(0);
+        await satchel.connect(owner).createOrg(0, admin.address);
         fail = false;
       } catch (e) {
         expect(true).to.be.true;
@@ -124,13 +134,146 @@ describe("Organization Functionality", function () {
   });
 
   describe("Organizations", function () {
-    it("Organizations should create schools", async () => {});
+    it("Organizations should create schools", async () => {
+      // Create an organization
+      await satchel.connect(owner).createOrg(1, admin.address);
+      const orgAddress = await satchel.orgs(1);
+      const OrganizationArtifact: Artifact = await hre.artifacts.readArtifact(
+        "Organization"
+      );
+      org = <Organization>(
+        await ethers.getContractAt(OrganizationArtifact.abi, orgAddress)
+      );
 
-    it("Non authorized users should not create schools", async () => {});
+      await org.connect(admin).createSchool(1, lendingPoolAddress);
+      const schoolAddress = await org.schools(1);
+      const SchoolArtifact: Artifact = await hre.artifacts.readArtifact(
+        "School"
+      );
+      school = <School>(
+        await ethers.getContractAt(SchoolArtifact.abi, schoolAddress)
+      );
 
-    it("Organizations should be able to withdraw from school", async () => {});
+      const schoolID = await school.getID();
+      expect(schoolID).to.equal(1);
+    });
 
-    it("Organizations should not be able to withdraw more than the school has", async () => {});
+    it("Non authorized users should not create schools", async () => {
+      // Create an organization
+      await satchel.connect(owner).createOrg(1, admin.address);
+      const orgAddress = await satchel.orgs(1);
+      const OrganizationArtifact: Artifact = await hre.artifacts.readArtifact(
+        "Organization"
+      );
+      org = <Organization>(
+        await ethers.getContractAt(OrganizationArtifact.abi, orgAddress)
+      );
+
+      let error = true;
+      try {
+        await org.connect(alice).createSchool(1, lendingPoolAddress);
+        error = false;
+      } catch (e) {}
+
+      expect(error).to.be.true;
+    });
+
+    it("Organizations should be able to withdraw from school", async () => {
+      // Create an organization
+      await satchel.connect(owner).createOrg(1, admin.address);
+      const orgAddress = await satchel.orgs(1);
+      const OrganizationArtifact: Artifact = await hre.artifacts.readArtifact(
+        "Organization"
+      );
+      org = <Organization>(
+        await ethers.getContractAt(OrganizationArtifact.abi, orgAddress)
+      );
+
+      await org.connect(admin).createSchool(1, lendingPoolAddress);
+      const schoolAddress = await org.schools(1);
+      const SchoolArtifact: Artifact = await hre.artifacts.readArtifact(
+        "School"
+      );
+      school = <School>(
+        await ethers.getContractAt(SchoolArtifact.abi, schoolAddress)
+      );
+
+      const schoolID = await school.getID();
+      expect(schoolID).to.equal(1);
+
+      // Give the school some Dai
+      const daiAmtForSchool = BigInt(500 * 10 ** 18);
+      await seedAccountNoChecks(
+        "0x64f65e10f1c3cd7e920a6b34b83daf2f100f15e6",
+        school,
+        dai,
+        daiAmtForSchool
+      );
+
+      // Attempt to withdraw the DAI to the nonprofit
+      let schoolThinksId = await school.getID();
+      await org
+        .connect(admin)
+        .withdrawFromSchool(schoolThinksId, dai.address, daiAmtForSchool);
+
+      // Check that the school has no DAI left
+      let schoolDaiBalance = await dai.balanceOf(school.address);
+      expect(schoolDaiBalance).to.equal(0);
+
+      // Check that the org has all the DAI left
+      let orgDaiBalance = await dai.balanceOf(org.address);
+      expect(orgDaiBalance).to.equal(daiAmtForSchool);
+    });
+
+    it("Organizations should not be able to withdraw more than the school has", async () => {
+      // Create an organization
+      await satchel.connect(owner).createOrg(1, admin.address);
+      const orgAddress = await satchel.orgs(1);
+      const OrganizationArtifact: Artifact = await hre.artifacts.readArtifact(
+        "Organization"
+      );
+      org = <Organization>(
+        await ethers.getContractAt(OrganizationArtifact.abi, orgAddress)
+      );
+
+      await org.connect(admin).createSchool(1, lendingPoolAddress);
+      const schoolAddress = await org.schools(1);
+      const SchoolArtifact: Artifact = await hre.artifacts.readArtifact(
+        "School"
+      );
+      school = <School>(
+        await ethers.getContractAt(SchoolArtifact.abi, schoolAddress)
+      );
+
+      const schoolID = await school.getID();
+      expect(schoolID).to.equal(1);
+
+      // Give the school some Dai
+      const daiAmtForSchool = BigInt(500 * 10 ** 18);
+      await seedAccountNoChecks(
+        "0x64f65e10f1c3cd7e920a6b34b83daf2f100f15e6",
+        school,
+        dai,
+        daiAmtForSchool
+      );
+
+      // Attempt to withdraw more than the school DAI to the nonprofit
+      let schoolThinksId = await school.getID();
+      let error = true;
+
+      try {
+        await org
+          .connect(admin)
+          .withdrawFromSchool(
+            schoolThinksId,
+            dai.address,
+            daiAmtForSchool + BigInt(100)
+          );
+        error = false;
+      } catch (e) {}
+
+      expect(error).to.be.true;
+    });
   });
 });
 
@@ -166,7 +309,7 @@ describe("School Specific Functionality", function () {
         await deployContract(
           owner,
           schoolArtifact,
-          [owner.address, lendingPoolAddress],
+          [1, owner.address, lendingPoolAddress],
           {
             gasPrice: 1_000_000_00,
           }
