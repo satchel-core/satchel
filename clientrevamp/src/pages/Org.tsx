@@ -15,16 +15,23 @@ import { TokenLabel } from "../components/TokenLabel";
 import { TransactionLabel } from "../components/TransactionLabel";
 import { ProjectLabel } from "../components/ProjectLabel";
 
+export enum OrgPages {
+  Home,
+  SchoolHome,
+  Members,
+  Projects,
+}
+
 export const Org: FunctionComponent = () => {
   const navigate = useNavigate();
   function handleClick(toRedirect: To) {
     return () => navigate(toRedirect);
   }
 
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(OrgPages.Home);
   const [school, setSchool] = useState("");
   switch (page) {
-    case 0:
+    case OrgPages.Home:
       return <Grid p={3} gap={3}>
                 <GridItem rowStart={1} rowEnd={1} colStart={1} colEnd={2}>
                   <HStack>
@@ -55,7 +62,7 @@ export const Org: FunctionComponent = () => {
                   <SchoolLabel name="School D" city="CITY4" country="COUNTRY4" balance="4,567" setPage={setPage} setSchool={setSchool} />
                 </GridItem>
               </Grid>
-    case 1:
+    case OrgPages.SchoolHome:
       return <Grid p={3} gap={3}>
                 <GridItem rowStart={1} rowEnd={1} colStart={1} colEnd={2}>
                   <HStack>
@@ -64,7 +71,7 @@ export const Org: FunctionComponent = () => {
                   </HStack>
                 </GridItem>
                 <GridItem rowStart={2} rowEnd={2} colStart={1} colEnd={2}>
-                  <Button size="sm" minW="40vw" colorScheme="satchel_blue" variant="outline" onClick={() => setPage(0)}>RETURN TO ORGANIZATION</Button>
+                  <Button size="sm" minW="40vw" colorScheme="satchel_blue" variant="outline" onClick={() => setPage(OrgPages.Home)}>RETURN TO ORGANIZATION</Button>
                 </GridItem>
                 <GridItem rowStart={3} rowEnd={3} colStart={1} colEnd={2}>
                   <Text fontSize="24px">
@@ -113,7 +120,7 @@ export const Org: FunctionComponent = () => {
                   <TransactionLabel heading="Initial Deposit" delta="+60.00 BTC" date="December 1, 2021"></TransactionLabel>
                 </GridItem>
               </Grid>
-    case 2:
+    case OrgPages.Members:
       return <Grid p={3} gap={3}>
                 <GridItem rowStart={1} rowEnd={1} colStart={1} colEnd={2}>
                   <HStack>
@@ -151,7 +158,7 @@ export const Org: FunctionComponent = () => {
                   </Grid>
                 </GridItem>
               </Grid>
-    case 3:
+    case OrgPages.Projects:
       return <Grid p={3} gap={3}>
                 <GridItem rowStart={1} rowEnd={1} colStart={1} colEnd={2}>
                   <HStack>

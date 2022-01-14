@@ -7,6 +7,8 @@ import {
     StatArrow
 } from "@chakra-ui/react"
 
+import { OrgPages } from "../pages/Org"
+
 type SchoolLabelProps = {
   name: string,
   city: string,
@@ -18,7 +20,7 @@ type SchoolLabelProps = {
 
 export const SchoolLabel: FunctionComponent<SchoolLabelProps> = ({name, city, country, balance, setPage, setSchool}) => {
   return <StatGroup borderWidth="1px" borderRadius="md" borderColor="black" padding={1} onClick={() => {
-    setPage(1);
+    setPage(OrgPages.SchoolHome);
     setSchool(name);
   }}>
             <Stat>

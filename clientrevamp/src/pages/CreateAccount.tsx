@@ -15,6 +15,12 @@ import { Logo } from "../Logo"
 
 import { QuestionIcon } from '@chakra-ui/icons'
 
+enum CreateAccountPages {
+  Main,
+  IsOrg,
+  IsCommunity,
+}
+
 export const CreateAccount: FunctionComponent = () => {
   const navigate = useNavigate();
   function handleClick(toRedirect: To) {
@@ -23,10 +29,10 @@ export const CreateAccount: FunctionComponent = () => {
 
   const toast = useToast();
 
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(CreateAccountPages.Main);
   const [slide, setSlide] = useState(0);
   switch (page) {
-    case 0:
+    case CreateAccountPages.Main:
       return <Grid minH="40vh" p={3} gap={20}>
                 <Button maxW="20vw" size="sm" colorScheme="satchel_blue" variant="outline" onClick={handleClick("/Login")}>SIGN IN</Button>
                 <VStack spacing={2}>
@@ -44,12 +50,12 @@ export const CreateAccount: FunctionComponent = () => {
                     <Tag colorScheme={slide === 3 ? "satchel_blue_notint" : "gray"} size="sm"></Tag>
                   </HStack>
                   <HStack minWidth="80vw">
-                    <Button isFullWidth size="sm" colorScheme="satchel_blue" variant="outline" onClick={() => setPage(1)}>GET STARTED</Button>
+                    <Button isFullWidth size="sm" colorScheme="satchel_blue" variant="outline" onClick={() => setPage(CreateAccountPages.IsOrg)}>GET STARTED</Button>
                     <Button isFullWidth size="sm" colorScheme="satchel_blue" variant="solid" onClick={() => setSlide((slide+1)%4)}>NEXT</Button>
                   </HStack>
                 </VStack>
               </Grid>
-    case 1:
+    case CreateAccountPages.IsOrg:
       return <Grid minH="40vh" p={3} gap={3}>
                 <HStack>
                   <Button size="sm" colorScheme="satchel_blue" variant="outline" onClick={() => setPage(0)}>GO BACK</Button>
@@ -71,10 +77,10 @@ export const CreateAccount: FunctionComponent = () => {
                     Are you an educational organization?
                   </Text>
                   <Button isFullWidth maxW="60vw" size="sm" colorScheme="satchel_blue" variant="outline" onClick={() => setPage(10)}>YES</Button>
-                  <Button isFullWidth maxW="60vw" size="sm" colorScheme="satchel_blue" variant="outline" onClick={() => setPage(2)}>NO</Button>
+                  <Button isFullWidth maxW="60vw" size="sm" colorScheme="satchel_blue" variant="outline" onClick={() => setPage(CreateAccountPages.IsCommunity)}>NO</Button>
                 </VStack>
               </Grid>
-    case 2:
+    case CreateAccountPages.IsCommunity:
       return <Grid minH="40vh" p={3} gap={3}>
                 <HStack>
                   <Button size="sm" colorScheme="satchel_blue" variant="outline" onClick={() => setPage(1)}>GO BACK</Button>
