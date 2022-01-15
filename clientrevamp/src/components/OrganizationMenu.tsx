@@ -8,7 +8,7 @@ import {
   import { FunctionComponent } from "react";
   import { HamburgerIcon } from "@chakra-ui/icons";
 
-  import { OrgPages } from "../pages/Org"
+  import { OrgPages } from "../pages/org/Organization"
 
   type OrganizationMenuProps = {
     setPage: React.Dispatch<React.SetStateAction<number>>

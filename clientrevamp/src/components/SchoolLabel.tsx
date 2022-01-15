@@ -7,7 +7,7 @@ import {
     StatArrow
 } from "@chakra-ui/react"
 
-import { OrgPages } from "../pages/Org"
+import { OrgPages } from "../pages/org/Organization"
 
 type SchoolLabelProps = {
   name: string,
