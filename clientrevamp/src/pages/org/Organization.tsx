@@ -6,12 +6,16 @@ import { OrgHome } from "./OrgHome";
 import { OrgSchoolHome } from "./OrgSchoolHome";
 import { OrgMembers } from "./OrgMembers";
 import { OrgProjects } from "./OrgProjects";
+import { OrgWithdraw } from "./OrgWithdraw";
+import { OrgDeposit } from "./OrgDeposit";
 
 export enum OrgPages {
   Home,
   SchoolHome,
   Members,
   Projects,
+  Withdraw,
+  Deposit,
 }
 
 export const Organization: FunctionComponent = () => {
@@ -26,6 +30,10 @@ export const Organization: FunctionComponent = () => {
       return <OrgMembers setPage={setPage} school={school}/>
     case OrgPages.Projects:
       return <OrgProjects setPage={setPage} />
+    case OrgPages.Withdraw:
+      return <OrgWithdraw origSetPage={setPage} />
+    case OrgPages.Deposit:
+      return <OrgDeposit origSetPage={setPage} />
     default:
       return <Text>Unimplemented page</Text>
   }

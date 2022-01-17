@@ -44,10 +44,10 @@ export const OrgSchoolHome: FunctionComponent<OrgSchoolHomeProps> = ({setPage, s
               </Text>
             </GridItem>
             <GridItem rowStart={6} rowEnd={6} colStart={1} colEnd={2}>
-              <Button size="sm" minW="40vw" colorScheme="satchel_blue" variant="outline" onClick={() => setPage(10)}>WITHDRAW MONEY</Button>
+              <Button size="sm" minW="40vw" colorScheme="satchel_blue" variant="outline" onClick={() => setPage(OrgPages.Withdraw)}>WITHDRAW MONEY</Button>
             </GridItem>
             <GridItem rowStart={7} rowEnd={7} colStart={1} colEnd={2}>
-              <Button size="sm" minW="40vw" colorScheme="satchel_blue" variant="outline" onClick={() => setPage(20)}>DEPOSIT MONEY</Button>
+              <Button size="sm" minW="40vw" colorScheme="satchel_blue" variant="outline" onClick={() => setPage(OrgPages.Deposit)}>DEPOSIT MONEY</Button>
             </GridItem>
             <GridItem rowStart={8} rowEnd={8} colStart={1} colEnd={2}>
               <Text fontSize="12px">
