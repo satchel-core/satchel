@@ -15,6 +15,8 @@ import { CreateAccount } from "./pages/createacc/CreateAccount";
 import { Organization } from "./pages/org/Organization";
 
 const theme = extendTheme({
+  initialColorMode: 'light',
+  useSystemColorMode: false,
   fonts: {
     heading: 'Inter',
     body: 'Inter'
