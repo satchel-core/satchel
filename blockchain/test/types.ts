@@ -1,6 +1,4 @@
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/dist/src/signer-with-address";
-import { School } from "../contract_types/School";
-import { UnicefSatchel } from '../contract_types/UnicefSatchel';
 
 export interface Signers {
   admin: SignerWithAddress;
