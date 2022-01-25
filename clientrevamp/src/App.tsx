@@ -13,6 +13,7 @@ import { Landing } from "./pages/Landing";
 import { Login } from "./pages/Login";
 import { CreateAccount } from "./pages/createacc/CreateAccount";
 import { Organization } from "./pages/org/Organization";
+import { CommunityMember } from "./pages/commem/CommunityMember";
 
 const theme = extendTheme({
   initialColorMode: 'light',
@@ -57,6 +58,7 @@ export const App = () => (
         <Route path="Login" element={<Login />} />
         <Route path="CreateAccount" element={<CreateAccount />} />
         <Route path="Org" element={<Organization />} />
+        <Route path="ComMem" element={<CommunityMember />} />
       </Routes>
     </Router>
   </ChakraProvider>
