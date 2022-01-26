@@ -6,15 +6,16 @@ import {
   HStack,
 } from "@chakra-ui/react"
 import { Logo } from "../../Logo"
-import { FunctionComponent } from "react";
+import React, { FunctionComponent } from "react";
 import { ComMemMenu } from "../../components/ComMemMenu";
 import { ProjectLabel } from "../../components/ProjectLabel";
 
 type ComMemProjectsProps = {
   setPage: React.Dispatch<React.SetStateAction<number>>,
+  setProject: React.Dispatch<React.SetStateAction<string>>,
 }
 
-export const ComMemProjects: FunctionComponent<ComMemProjectsProps> = ({setPage}) => {
+export const ComMemProjects: FunctionComponent<ComMemProjectsProps> = ({setPage, setProject}) => {
   return <Grid p={3} gap={3}>
             <GridItem rowStart={1} rowEnd={1} colStart={1} colEnd={2}>
               <HStack>
@@ -31,13 +32,13 @@ export const ComMemProjects: FunctionComponent<ComMemProjectsProps> = ({setPage}
               </Text>
             </GridItem>
             <GridItem rowStart={4} rowEnd={4} colStart={1} colEnd={2}>
-              <ProjectLabel name="Project A" status="PROPOSED" moneyStatus="Budget: $9,999" likes={6} />
+              <ProjectLabel name="Project A" status="PROPOSED" moneyStatus="Budget: $9,999" likes={6} setPage={setPage} setProject={setProject} />
             </GridItem>
             <GridItem rowStart={5} rowEnd={5} colStart={1} colEnd={2}>
-              <ProjectLabel name="Project B" status="IN PROGRESS" moneyStatus="Raised $1,234 of $5,678" likes={15} />
+              <ProjectLabel name="Project B" status="IN PROGRESS" moneyStatus="Raised $1,234 of $5,678" likes={15} setPage={setPage} setProject={setProject} />
             </GridItem>
             <GridItem rowStart={6} rowEnd={6} colStart={1} colEnd={2}>
-              <ProjectLabel name="Project C" status="REJECTED" moneyStatus="Budget: $10,000" likes={0} />
+              <ProjectLabel name="Project C" status="REJECTED" moneyStatus="Budget: $10,000" likes={0} setPage={setPage} setProject={setProject} />
             </GridItem>
           </Grid>
 }
