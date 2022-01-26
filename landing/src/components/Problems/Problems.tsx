@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
-import { chakra, Fade, Box, Flex, Heading, Stack } from '@chakra-ui/react'
+import { Box, Fade, Flex, Heading, Stack } from '@chakra-ui/react'
 import { Player } from '@lottiefiles/react-lottie-player'
-
-import useOnScreen from '../../hooks/useOnScreen'
+import ismobilejs from 'ismobilejs'
 
 import GlobalIcon from '../../assets/png/global.png'
 import IndividualIcon from '../../assets/png/individual.png'
 import LocalIcon from '../../assets/png/local.png'
+import useOnScreen from '../../hooks/useOnScreen'
 
 import Row from './components/Row'
 
@@ -15,6 +15,8 @@ const Problems = () => {
   const [show, setShow] = useState(false)
   const onScreen = useOnScreen<HTMLDivElement>(ref, '-200px')
 
+  const isMobile = ismobilejs(window.navigator).any
+
   useEffect(() => {
     if (onScreen) {
       setShow(true)
@@ -22,49 +24,50 @@ const Problems = () => {
   }, [onScreen])
 
   return (
-    <Fade in={show}>
-      <Flex
-        alignItems="center"
-        direction={{ base: 'column-reverse', md: 'row' }}
-        justifyContent="space-between"
-        ref={ref}
-      >
-        <Box alignSelf="center" direction="flex" flex={1} mx="auto">
-          <Player
-            autoplay
-            loop
-            src="https://assets7.lottiefiles.com/packages/lf20_wrkvuuof.json"
-            style={{ height: '100%' }}
-          />
-        </Box>
-        <Box
-          direction="flex"
-          margin={{ base: '0 auto 36px', md: '0 0 0 84px' }}
+    <Box ref={ref}>
+      <Fade in={show || isMobile}>
+        <Flex
+          alignItems="center"
+          direction={{ base: 'column-reverse', md: 'row' }}
+          justifyContent="space-between"
         >
-          <Stack direction="column" maxW="560px" spacing={6}>
-            <Heading mb="12px" size="lg">
-              We empower underbanked school communities with financial
-              primitives &amp; governance models.
-            </Heading>
-            <Row
-              image={IndividualIcon}
-              text={`Accessible financial services enable financial mobility & autonomy.`}
-              title="Individual"
+          <Box alignSelf="center" direction="flex" flex={1} mx="auto">
+            <Player
+              autoplay
+              loop
+              src="https://assets1.lottiefiles.com/packages/lf20_fdqi2p8n.json"
+              style={{ height: '100%' }}
             />
-            <Row
-              image={LocalIcon}
-              text={`Voting on school projects enable local-level self-governance.`}
-              title="Local"
-            />
-            <Row
-              image={GlobalIcon}
-              text={`Satchel-wide proposals enable community-guided financial infrastructure.`}
-              title="Global"
-            />
-          </Stack>
-        </Box>
-      </Flex>
-    </Fade>
+          </Box>
+          <Box
+            direction="flex"
+            margin={{ base: '0 auto 36px', md: '0 0 0 84px' }}
+          >
+            <Stack direction="column" maxW="560px" spacing={6}>
+              <Heading mb="12px" size="lg">
+                We empower underbanked school communities with financial
+                primitives &amp; governance models.
+              </Heading>
+              <Row
+                image={IndividualIcon}
+                text={`Accessible financial services enable financial mobility & autonomy.`}
+                title="Individual"
+              />
+              <Row
+                image={LocalIcon}
+                text={`Voting on school projects enable local-level self-governance.`}
+                title="Local"
+              />
+              <Row
+                image={GlobalIcon}
+                text={`Satchel-wide proposals enable community-guided financial infrastructure.`}
+                title="Global"
+              />
+            </Stack>
+          </Box>
+        </Flex>
+      </Fade>
+    </Box>
   )
 }
 
