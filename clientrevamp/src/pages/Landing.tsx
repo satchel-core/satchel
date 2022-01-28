@@ -3,8 +3,9 @@ import {
     Grid,
     GridItem,
     Button,
+    Image
   } from "@chakra-ui/react"
-import { Logo } from "../Logo"
+import Tile from "../assets/satchel_tile.png"
 import { To, useNavigate } from "react-router-dom"
 import { FunctionComponent } from "react";
 
@@ -15,7 +16,7 @@ export const Landing: FunctionComponent = () => {
   }
   return <Grid minH="37vh" p={3}>
               <GridItem rowStart={1} rowEnd={1} colStart={1} colEnd={2}>
-                <Logo h="20vmin" pointerEvents="none" />
+                <Image boxSize='100px' objectFit='cover' src={Tile} alt='Satchel Tile' />
               </GridItem>
               <GridItem rowStart={2} rowEnd={2} colStart={1} colEnd={2}>
                 <Text fontSize="14px">
