@@ -14,7 +14,7 @@ const schoolSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true,
-        validate(value) {
+        validate(value: string) {
             if (!validator.isEthereumAddress(value)) {
                 throw new Error('Address is invalid');
             }
