@@ -1,6 +1,8 @@
-require('dotenv').config();
-const mongoose = require('mongoose');
-const validator = require('validator');
+import * as dotenv from 'dotenv';
+import * as mongoose from 'mongoose';
+import validator from 'validator';
+
+dotenv.config()
 
 const schoolSchema = new mongoose.Schema({
     name: {
@@ -12,7 +14,7 @@ const schoolSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true,
-        validate(value) {
+        validate(value: string) {
             if (!validator.isEthereumAddress(value)) {
                 throw new Error('Address is invalid');
             }
@@ -23,3 +25,5 @@ const schoolSchema = new mongoose.Schema({
 const School = mongoose.model('School', schoolSchema);
 
 module.exports = School;
+
+export default School;

@@ -1,8 +1,10 @@
-require('dotenv').config();
-const mongoose = require('mongoose');
-const validator = require('validator');
+import * as dotenv from 'dotenv';
+import * as mongoose from 'mongoose';
+import validator from 'validator';
 
-const userSchema = new mongoose.Schema({
+dotenv.config();
+
+const comMemSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -12,7 +14,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true,
-        validate(value) {
+        validate(value: string) {
             if (!validator.isEthereumAddress(value)) {
                 throw new Error('Address is invalid');
             }
@@ -21,7 +23,7 @@ const userSchema = new mongoose.Schema({
     school: {
         type: String,
         required: true,
-        validate(value) {
+        validate(value: string) {
             if (!validator.isEthereumAddress(value)) {
                 throw new Error('Address is invalid');
             }
@@ -29,6 +31,8 @@ const userSchema = new mongoose.Schema({
     },
 });
 
-const User = mongoose.model('User', userSchema);
+const ComMem = mongoose.model('ComMem', comMemSchema);
 
-module.exports = User;
+module.exports = ComMem;
+
+export default ComMem;

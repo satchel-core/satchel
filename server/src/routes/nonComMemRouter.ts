@@ -1,5 +1,5 @@
-const express = require('express');
-const School = require('../models/School');
+import express from 'express';
+import NonComMem from '../models/NonComMem';
 require('dotenv').config();
 
 const router = express.Router();
@@ -13,35 +13,23 @@ router.get('/', async (req, res) => {
         });
     }
 
-    let school = {};
+    let user = {};
     try {
-        school = await School.findOne({ address });
+        user = await NonComMem.findOne({ address });
     } catch (e) {
         console.log(e);
         return res.status(500).send(e);
     }
 
-    return res.status(200).json({ success: true, school });
+    return res.status(200).json({ success: true, user });
 });
 
-router.get('/allSchools', async (req, res) => {
-    let schools = [];
-    try {
-        schools = await School.find();
-    } catch (e) {
-        console.log(e);
-        return res.status(500).send(e);
-    }
-
-    return res.status(200).json({ success: true, schools });
-});
-
-router.post('/createSchool', async (req, res) => {
+router.post('/createUser', async (req, res) => { // TODO: handle duplicates?
     const { name, address } = req.body;
 
     if (!name) {
         return res.status(400).json({
-            email: 'Name not found',
+            name: 'Name not found',
         });
     } else if (!address) {
         return res.status(400).json({
@@ -50,8 +38,8 @@ router.post('/createSchool', async (req, res) => {
     }
 
     try {
-        let newSchool = new School({ name, address });
-        await newSchool.save();
+        const newUser = new NonComMem({ name, address });
+        await newUser.save();
     } catch (e) {
         console.log(e);
         return res.status(500).send(e);
@@ -61,3 +49,4 @@ router.post('/createSchool', async (req, res) => {
 });
 
 module.exports = router;
+export default router;

@@ -1,8 +1,9 @@
-const express = require('express');
-const Project = require('../models/Project');
+import express from 'express';
+import Project from '../models/Project';
 require('dotenv').config();
 
 const router = express.Router();
+
 
 router.get('/', async (req, res) => {
     const { schoolAddress } = req.query;
@@ -25,11 +26,11 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/createProject', async (req, res) => {
-    const { name, description, targetFunding, fundingBreakdown, schoolAddress } = req.body;
+    const { name, description, targetFunding, schoolAddress } = req.body;
 
     if (!name) {
         return res.status(400).json({
-            email: 'Name not found',
+            name: 'Name not found',
         });
     } else if (!description) {
         return res.status(400).json({
@@ -39,11 +40,7 @@ router.post('/createProject', async (req, res) => {
         return res.status(400).json({
             targetFunding: 'Target Funding not found',
         });
-    } else if (!fundingBreakdown) {
-        return res.status(400).json({
-            fundingBreakdown: 'Funding Breakdown not found',
-        });
-    } else if (!schoolAddress) {
+    } else if (!schoolAddress) { // TODO: Validate the school address to make sure that it is a valid address
         return res.status(400).json({
             schoolAddress: 'School address not found',
         });
@@ -54,7 +51,6 @@ router.post('/createProject', async (req, res) => {
             name,
             description,
             targetFunding,
-            fundingBreakdown,
             school: schoolAddress,
         });
         await newProject.save();
@@ -67,3 +63,5 @@ router.post('/createProject', async (req, res) => {
 });
 
 module.exports = router;
+
+export default router;
