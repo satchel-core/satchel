@@ -1,0 +1,18 @@
+{
+    "root": true,
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+        "@typescript-eslint"
+    ],
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended"
+    ],
+    "rules": {
+        // Rules: https://eslint.org/docs/rules/
+        // 0 means off, 1 means warning, 2 means error
+        "no-console": 2,
+        "@typescript-eslint/no-unused-vars": 2
+    }
+}
