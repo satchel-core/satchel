@@ -12,7 +12,7 @@
     "rules": {
         // Rules: https://eslint.org/docs/rules/
         // 0 means off, 1 means warning, 2 means error
-        "no-console": 2,
+        "no-console": 1,
         "@typescript-eslint/no-unused-vars": 2
     }
 }

@@ -14,6 +14,9 @@ import { Login } from "./pages/Login";
 import { CreateAccount } from "./pages/createacc/CreateAccount";
 import { Organization } from "./pages/org/Organization";
 import { CommunityMember } from "./pages/commem/CommunityMember";
+import { StateContext, DispatchContext } from "./utils/context";
+import { useReducer } from "react";
+import { loanInitialState, LoanReducer } from "./store/reducers/loan_reducer";
 
 const theme = extendTheme({
   initialColorMode: 'light',
@@ -50,16 +53,34 @@ const theme = extendTheme({
   }
 })
 
-export const App = () => (
-  <ChakraProvider theme={theme}>
-    <Router>
-      <Routes>
-        <Route path="/" element={<Landing />} />
-        <Route path="Login" element={<Login />} />
-        <Route path="CreateAccount" element={<CreateAccount />} />
-        <Route path="Org" element={<Organization />} />
-        <Route path="ComMem" element={<CommunityMember />} />
-      </Routes>
-    </Router>
-  </ChakraProvider>
-)
+export const App = () => {
+  const [loansState, loansDispatch] = useReducer(LoanReducer, loanInitialState);
+
+  return (
+    <ChakraProvider theme={theme}>
+      <StateContext.Provider
+        value={{
+          loans: loansState
+        }}>
+        <DispatchContext.Provider
+          value={{
+            loans: loansDispatch
+          }}>
+          {/* <div>
+            {JSON.stringify(loansState)}
+          </div> */}
+          <Router>
+            <Routes>
+              <Route path="/" element={<Landing />} />
+              <Route path="Login" element={<Login />} />
+              <Route path="CreateAccount" element={<CreateAccount />} />
+              <Route path="Org" element={<Organization />} />
+              <Route path="ComMem" element={<CommunityMember />} />
+            </Routes>
+          </Router>
+        </DispatchContext.Provider>
+      </StateContext.Provider>
+    </ChakraProvider>
+  )
+
+}
