@@ -24,13 +24,13 @@ export const SchoolLabel: FunctionComponent<SchoolLabelProps> = ({name, city, co
     setSchool(name);
   }}>
             <Stat>
-              <StatLabel fontSize="20px" fontWeight="bold">{name}</StatLabel>
+              <StatLabel fontSize="xl" fontWeight="bold">{name}</StatLabel>
               <StatHelpText>
               {city}, {country}
               </StatHelpText>
             </Stat>
             <Stat textAlign="right">
-              <StatLabel fontSize="18px">${balance}</StatLabel>
+              <StatLabel fontSize="lg">${balance}</StatLabel>
               <StatHelpText>
               <StatArrow type='increase' />
                 23.36%
