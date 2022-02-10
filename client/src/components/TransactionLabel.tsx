@@ -12,8 +12,8 @@ type TransactionLabelProps = {
 
 export const TransactionLabel: FunctionComponent<TransactionLabelProps> = ({heading, delta, date}) => {
   return <Stat borderWidth="1px" borderRadius="md" borderColor="black" padding={1}>
-            <StatLabel fontSize="14px">{heading}</StatLabel>
-            <StatLabel fontSize="24px" fontWeight="bold">{delta}</StatLabel>
-            <StatLabel fontSize="14px">{date}</StatLabel>
+            <StatLabel fontSize="sm">{heading}</StatLabel>
+            <StatLabel fontSize="2xl" fontWeight="bold">{delta}</StatLabel>
+            <StatLabel fontSize="sm">{date}</StatLabel>
           </Stat>
 }

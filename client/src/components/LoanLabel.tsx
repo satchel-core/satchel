@@ -12,8 +12,8 @@ type LoanLabelProps = {
 
 export const LoanLabel: FunctionComponent<LoanLabelProps> = ({status, amount, date}) => {
   return <Stat borderWidth="1px" borderRadius="md" borderColor="black" padding={1}>
-            <StatLabel fontSize="14px" fontWeight={700}>{status}</StatLabel>
-            <StatLabel fontSize="24px" fontWeight="bold">{amount}</StatLabel>
-            <StatLabel fontSize="14px">{date}</StatLabel>
+            <StatLabel fontSize="sm" fontWeight={700}>{status}</StatLabel>
+            <StatLabel fontSize="2xl" fontWeight="bold">{amount}</StatLabel>
+            <StatLabel fontSize="sm">{date}</StatLabel>
           </Stat>
 }

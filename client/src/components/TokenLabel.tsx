@@ -17,8 +17,8 @@ type TokenLabelProps = {
 export const TokenLabel: FunctionComponent<TokenLabelProps> = ({name, amount, onClick}) => {
   return <StatGroup borderWidth="1px" borderRadius="md" borderColor="black" padding={1} onClick={onClick}>
             <Stat>
-              <StatLabel fontSize="14px">{name}</StatLabel>
-              <StatLabel fontSize="20px" fontWeight="bold">{amount}</StatLabel>
+              <StatLabel fontSize="sm">{name}</StatLabel>
+              <StatLabel fontSize="xl" fontWeight="bold">{amount}</StatLabel>
               <StatHelpText>
                 <StatArrow type='increase' />
                 23.36%

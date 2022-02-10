@@ -27,12 +27,12 @@ export const ProjectLabel: FunctionComponent<ProjectLabelProps> = ({name, status
     setProject(name);
   }}>
             <Stat>
-              <StatLabel fontSize="14px" fontWeight={700}>{status}</StatLabel>
-              <StatLabel fontSize="24px" fontWeight="bold">{name}</StatLabel>
-              <StatLabel fontSize="12px">{moneyStatus}</StatLabel>
+              <StatLabel fontSize="sm" fontWeight={700}>{status}</StatLabel>
+              <StatLabel fontSize="2xl" fontWeight="bold">{name}</StatLabel>
+              <StatLabel fontSize="xs">{moneyStatus}</StatLabel>
             </Stat>
             <Stat textAlign="right">
-              <StatLabel fontSize="18px" fontWeight="bold">{likes}❤</StatLabel>
+              <StatLabel fontSize="lg" fontWeight="bold">{likes}❤</StatLabel>
             </Stat>
           </StatGroup>
 }
