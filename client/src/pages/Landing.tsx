@@ -7,18 +7,24 @@ import {
 } from "@chakra-ui/react"
 import Tile from "../assets/satchel_tile.png"
 import { To, useNavigate } from "react-router-dom"
-import { FunctionComponent, useContext } from "react";
-import { DispatchContext } from "../utils/context";
+import { FunctionComponent } from "react";
+// import { useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
+import { RootState } from "../store/reducers";
 import { getBorrowBalance } from "../store/actions/loan_actions";
 
 export const Landing: FunctionComponent = () => {
   const navigate = useNavigate();
-  const { loans } = useContext(DispatchContext);
+  // const dispatch = useDispatch()
+  
   function handleClick(toRedirect: To) {
     return () => navigate(toRedirect);
   }
 
+  const counter = useSelector<RootState>((state) => state.loan);
+
   return <Grid minH="37vh" p={3}>
+    <div>{JSON.stringify(counter)}</div>
     <GridItem rowStart={1} rowEnd={1} colStart={1} colEnd={2}>
       <Image boxSize='100px' objectFit='cover' src={Tile} alt='Satchel Tile' />
     </GridItem>
@@ -32,7 +38,7 @@ export const Landing: FunctionComponent = () => {
     </GridItem>
     <GridItem rowStart={4} rowEnd={4} colStart={1} colEnd={1}>
       <Button size="sm" minW="40vw" colorScheme="satchel_blue" variant="outline" onClick={handleClick("/Login")}>LOGIN</Button>
-      <Button size="sm" minW="40vw" colorScheme="satchel_blue" variant="outline" onClick={getBorrowBalance(loans)}>TEST</Button>
+      <Button size="sm" minW="40vw" colorScheme="satchel_blue" variant="outline" onClick={() => getBorrowBalance("TEST")}>TEST</Button>
     </GridItem>
   </Grid>
 }

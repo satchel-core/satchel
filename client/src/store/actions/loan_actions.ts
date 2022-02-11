@@ -6,8 +6,11 @@ import userAbi from "../../contracts/User.sol/User.json";
 import cTokenAbi from "../../contracts/cTokenAbi.json";
 import assets from "../../utils/assets.json";
 import { connectWallet } from "./helpers";
+import { useDispatch } from 'react-redux';
 
-export const getBorrowInterestRate = () => async (dispatch: any) => {
+const dispatch = useDispatch()
+
+export const getBorrowInterestRate = () => async () => {
   const { data } = await axios.get(
     "https://api.compound.finance/api/v2/ctoken",
     {
@@ -29,7 +32,7 @@ export const getBorrowInterestRate = () => async (dispatch: any) => {
   });
 };
 
-export const getBorrowBalance = (contractAddress: string) => async (dispatch: any) => {
+export const getBorrowBalance = (contractAddress: string) => async () => {
   const web3 = await connectWallet();
 
   const promises = assets.map(async (asset) => {
@@ -61,7 +64,7 @@ export const getBorrowBalance = (contractAddress: string) => async (dispatch: an
 };
 
 export const enterMarket =
-  (contractAddress: string, cTokenAddress: string) => async (dispatch: any) => {
+  (contractAddress: string, cTokenAddress: string) => async () => {
     const web3 = await connectWallet();
     const accounts = await web3.eth.getAccounts();
 
@@ -74,7 +77,7 @@ export const enterMarket =
   };
 
 export const exitMarket =
-  (contractAddress: string, cTokenAddress: string) => async (dispatch: any) => {
+  (contractAddress: string, cTokenAddress: string) => async () => {
     const web3 = await connectWallet();
     const accounts = await web3.eth.getAccounts();
 
@@ -86,7 +89,7 @@ export const exitMarket =
     dispatch({ type: types.EXIT_MARKET });
   };
 
-export const borrow = (contractAddress: string, asset: { tokenAddress: string; cTokenAddress: string; decimals: number; }, amount: number) => async (dispatch: any) => {
+export const borrow = (contractAddress: string, asset: { tokenAddress: string; cTokenAddress: string; decimals: number; }, amount: number) => async () => {
   const web3 = await connectWallet();
   const accounts = await web3.eth.getAccounts();
 
@@ -102,7 +105,7 @@ export const borrow = (contractAddress: string, asset: { tokenAddress: string; c
   dispatch(getBorrowBalance(contractAddress));
 };
 
-export const repay = (contractAddress: string, asset: { decimals: number; tokenAddress: string; cTokenAddress: string; }, amount: number) => async (dispatch: any) => {
+export const repay = (contractAddress: string, asset: { decimals: number; tokenAddress: string; cTokenAddress: string; }, amount: number) => async () => {
   const web3 = await connectWallet();
   const accounts = await web3.eth.getAccounts();
   const supply = web3.utils.toHex(amount * Math.pow(10, asset.decimals));
