@@ -8,13 +8,13 @@ import {
 import { RootState } from "../store/reducers";
 import { useSelector, useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
-import { getBorrowBalance } from '../store/actions/loan_actions';
+import { getBorrowInterestRate } from '../store/actions/loan_actions';
 import { handleClick } from "../utils/common";
 
 const Index = () => {
   const counter = useSelector<RootState>((state) => state.loan);
-  const router = useRouter();
   const dispatch = useDispatch();
+  const router = useRouter();
 
   return (
     <Grid minH="37vh" p={3}>
@@ -32,7 +32,7 @@ const Index = () => {
       </GridItem>
       <GridItem rowStart={4} rowEnd={4} colStart={1} colEnd={1}>
         <Button size="sm" minW="40vw" colorScheme="satchel_blue" variant="outline" onClick={handleClick("/login", router)}>LOGIN</Button>
-        <Button size="sm" minW="40vw" colorScheme="satchel_blue" variant="outline" onClick={() => dispatch({type: "get-borrow-balance", payload: "TEST"})}>TEST</Button>
+        <Button size="sm" minW="40vw" colorScheme="satchel_blue" variant="outline" onClick={getBorrowInterestRate(dispatch)}>TEST</Button>
       </GridItem>
     </Grid>
   )

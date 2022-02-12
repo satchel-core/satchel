@@ -13,5 +13,5 @@ type WalletButtonProps = {
 export const WalletButton: FunctionComponent<WalletButtonProps> = ({walletName}) => {
   const router = useRouter();
 
-  return <Button isFullWidth size="sm" borderColor="satchel_blue.500" color="black" variant="outline" leftIcon={<Icon></Icon>} onClick={handleClick("/Org", router)}>{walletName}</Button>;
+  return <Button isFullWidth size="sm" borderColor="satchel_blue.500" color="black" variant="outline" leftIcon={<Icon></Icon>} onClick={handleClick("/org", router)}>{walletName}</Button>;
 }
