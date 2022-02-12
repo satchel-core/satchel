@@ -1,11 +1,13 @@
 import {
-  chakra,
-  ImageProps,
-  forwardRef,
-} from "@chakra-ui/react"
-import logo from "./logo.svg"
+    chakra,
+    ImageProps,
+    forwardRef,
+  } from "@chakra-ui/react"
+  
+  export const Logo = forwardRef<ImageProps, "img">((props, ref) => {
 
-export const Logo = forwardRef<ImageProps, "img">((props, ref) => {
-
-  return <chakra.img src={logo} ref={ref} {...props} />
-})
+    const logo = "/assets/satchel_tile.png";
+  
+    return <chakra.img src={logo} ref={ref} {...props} />
+  })
+  

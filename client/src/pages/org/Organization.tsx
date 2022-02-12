@@ -2,7 +2,7 @@ import {
   Text,
 } from "@chakra-ui/react"
 import { FunctionComponent, useState } from "react";
-import { OrgHome } from "./OrgHome";
+import {OrgHome} from ".";
 import { OrgSchoolHome } from "./OrgSchoolHome";
 import { OrgMembers } from "./OrgMembers";
 import { OrgProjects } from "./OrgProjects";

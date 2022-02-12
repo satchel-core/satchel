@@ -5,7 +5,7 @@ import {
   HStack,
   Tag,
 } from "@chakra-ui/react"
-import { Logo } from "../../Logo"
+import { Logo } from "../../logo"
 import { FunctionComponent } from "react";
 import { OrganizationMenu } from "../../components/OrganizationMenu";
 

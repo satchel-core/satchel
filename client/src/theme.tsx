@@ -1,22 +1,14 @@
-import {
-  ChakraProvider,
-  extendTheme,
-} from "@chakra-ui/react"
-import "@fontsource/inter";
+import { extendTheme } from '@chakra-ui/react'
+import { createBreakpoints } from '@chakra-ui/theme-tools'
 
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-} from "react-router-dom";
-import { Landing } from "./pages/Landing";
-import { Login } from "./pages/Login";
-import { CreateAccount } from "./pages/createacc/CreateAccount";
-import { Organization } from "./pages/org/Organization";
-import { CommunityMember } from "./pages/commem/CommunityMember";
-// import { createStore } from 'redux'
-import { Provider } from 'react-redux'
-import { store } from "./store";
+const fonts = { mono: `'Menlo', monospace` }
+
+const breakpoints = createBreakpoints({
+  sm: '40em',
+  md: '52em',
+  lg: '64em',
+  xl: '80em',
+})
 
 const theme = extendTheme({
   initialColorMode: 'light',
@@ -79,24 +71,4 @@ const theme = extendTheme({
   }
 })
 
-export const App = () => {
-
-  return (
-    <Provider store={store}>
-      <ChakraProvider theme={theme}>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="Login" element={<Login />} />
-          <Route path="CreateAccount" element={<CreateAccount />} />
-          <Route path="Org" element={<Organization />} />
-          <Route path="ComMem" element={<CommunityMember />} />
-        </Routes>
-      </Router>
-    </ChakraProvider>
-
-    </Provider>
-
-  )
-
-}
+export default theme
