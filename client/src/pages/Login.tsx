@@ -1,20 +1,18 @@
 import {
     Box,
     Text,
-    Link,
+    Link as ChakraLink,
     VStack,
     Grid,
     GridItem,
   } from "@chakra-ui/react"
-import { FunctionComponent } from "react"
-import { Logo } from "../Logo"
-import { WalletButton } from "../components/WalletButton"
-import { Link as RouterLink } from "react-router-dom"
+import { WalletButton } from "../components/WalletButton";
+import Link from "next/link"
 
-export const Login: FunctionComponent = () => <Grid p={3} gridTemplateRows="27vh auto">
+const Login = () => <Grid p={3} gridTemplateRows="27vh auto">
                                                 <GridItem rowStart={2} rowEnd={3}>
                                                   <VStack spacing={2}>
-                                                    <Logo h="20vmin" pointerEvents="none" />
+                                                    {/* <Logo h="20vmin" pointerEvents="none" /> */}
                                                     <Box borderWidth="1px" borderRadius="md" borderColor="black" padding="5px">
                                                       <VStack spacing={2}>
                                                         <Text fontSize="16px" fontWeight="bold">
@@ -27,8 +25,10 @@ export const Login: FunctionComponent = () => <Grid p={3} gridTemplateRows="27vh
                                                       </VStack>
                                                     </Box>
                                                     <Text fontSize="12px" fontWeight="bold">
-                                                      New? <Link as={RouterLink} to="/CreateAccount" color="satchel_blue.500">Create Account</Link>
+                                                      New? <ChakraLink as={Link} href="/CreateAccount" color="satchel_blue.500">Create Account</ChakraLink>
                                                     </Text>
                                                   </VStack>
                                                 </GridItem>
                                               </Grid>
+
+export default Login
