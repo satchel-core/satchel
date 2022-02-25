@@ -17,10 +17,9 @@ import {
 } from "@chakra-ui/react"
 import { FunctionComponent, useState } from "react";
 
-import { Logo } from "../../Logo";
+import { Logo } from "../../logo";
 import { OrganizationMenu } from "../../components/OrganizationMenu";
 import { TokenLabel } from "../../components/TokenLabel";
-import { OrgPages } from "./Organization"
 
 type OrgWithdrawProps = {
   origSetPage: React.Dispatch<React.SetStateAction<number>>,
@@ -191,7 +190,7 @@ export const OrgWithdraw: FunctionComponent<OrgWithdrawProps> = ({origSetPage}) 
                     <Text textAlign="center">
                       The withdrawal is being processed. You should see the assets in your wallet within a few hours.
                     </Text>
-                    <Button size="sm" colorScheme="satchel_blue" variant="solid" onClick={() => origSetPage(OrgPages.SchoolHome)}>
+                    <Button size="sm" colorScheme="satchel_blue" variant="solid">
                       RETURN TO SCHOOL HOME
                     </Button>
                   </VStack>

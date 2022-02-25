@@ -8,8 +8,6 @@ import {
   import { FunctionComponent } from "react";
   import { HamburgerIcon } from "@chakra-ui/icons";
 
-  import { OrgPages } from "../pages/org/Organization"
-
   type OrganizationMenuProps = {
     setPage: React.Dispatch<React.SetStateAction<number>>
   }
@@ -18,10 +16,10 @@ import {
     return <Menu>
               <MenuButton as={IconButton} icon={<HamburgerIcon></HamburgerIcon>} />
               <MenuList>
-                <MenuItem onClick={() => setPage(OrgPages.SchoolHome)}>Home</MenuItem>
-                <MenuItem onClick={() => setPage(OrgPages.Projects)}>Projects</MenuItem>
-                <MenuItem onClick={() => setPage(OrgPages.Members)}>Community</MenuItem>
-                <MenuItem onClick={() => setPage(OrgPages.Home)}>Back to Organization</MenuItem>
+                <MenuItem>Home</MenuItem>
+                <MenuItem>Projects</MenuItem>
+                <MenuItem>Community</MenuItem>
+                <MenuItem>Back to Organization</MenuItem>
               </MenuList>
             </Menu>
   }

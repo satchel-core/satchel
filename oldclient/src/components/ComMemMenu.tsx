@@ -9,17 +9,15 @@ import { FunctionComponent } from "react";
 import { HamburgerIcon } from "@chakra-ui/icons";
 
 import { ComMemPages } from "../pages/commem/CommunityMember"
-import { To, useNavigate } from "react-router-dom"
+import { handleClick } from "../utils/common";
+import { useRouter } from "next/router";
 
 type ComMemMenuProps = {
   setPage: React.Dispatch<React.SetStateAction<number>>
 }
 
 export const ComMemMenu: FunctionComponent<ComMemMenuProps> = ({setPage}) => {
-  const navigate = useNavigate();
-  function handleClick(toRedirect: To) {
-    return () => navigate(toRedirect);
-  }
+  const router = useRouter()
 
   return <Menu>
             <MenuButton as={IconButton} icon={<HamburgerIcon></HamburgerIcon>} />
@@ -27,7 +25,7 @@ export const ComMemMenu: FunctionComponent<ComMemMenuProps> = ({setPage}) => {
               <MenuItem onClick={() => setPage(ComMemPages.Home)}>Home</MenuItem>
               <MenuItem onClick={() => setPage(ComMemPages.Projects)}>Projects</MenuItem>
               <MenuItem onClick={() => setPage(ComMemPages.Loans)}>Loans</MenuItem>
-              <MenuItem onClick={handleClick("/")}>Log Out</MenuItem>
+              <MenuItem onClick={handleClick("/", router)}>Log Out</MenuItem>
             </MenuList>
           </Menu>
 }

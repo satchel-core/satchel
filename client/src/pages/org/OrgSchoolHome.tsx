@@ -10,7 +10,6 @@ import { FunctionComponent } from "react";
 import { OrganizationMenu } from "../../components/OrganizationMenu";
 import { TokenLabel } from "../../components/TokenLabel";
 import { TransactionLabel } from "../../components/TransactionLabel";
-import { OrgPages } from "./Organization"
 
 type OrgSchoolHomeProps = {
   setPage: React.Dispatch<React.SetStateAction<number>>,
@@ -26,7 +25,7 @@ export const OrgSchoolHome: FunctionComponent<OrgSchoolHomeProps> = ({setPage, s
               </HStack>
             </GridItem>
             <GridItem rowStart={2} rowEnd={2} colStart={1} colEnd={2}>
-              <Button size="sm" minW="40vw" colorScheme="satchel_blue" variant="outline" onClick={() => setPage(OrgPages.Home)}>RETURN TO ORGANIZATION</Button>
+              <Button size="sm" minW="40vw" colorScheme="satchel_blue" variant="outline">RETURN TO ORGANIZATION</Button>
             </GridItem>
             <GridItem rowStart={3} rowEnd={3} colStart={1} colEnd={2}>
               <Text fontSize="24px">
@@ -44,10 +43,10 @@ export const OrgSchoolHome: FunctionComponent<OrgSchoolHomeProps> = ({setPage, s
               </Text>
             </GridItem>
             <GridItem rowStart={6} rowEnd={6} colStart={1} colEnd={2}>
-              <Button size="sm" minW="40vw" colorScheme="satchel_blue" variant="outline" onClick={() => setPage(OrgPages.Withdraw)}>WITHDRAW MONEY</Button>
+              <Button size="sm" minW="40vw" colorScheme="satchel_blue" variant="outline">WITHDRAW MONEY</Button>
             </GridItem>
             <GridItem rowStart={7} rowEnd={7} colStart={1} colEnd={2}>
-              <Button size="sm" minW="40vw" colorScheme="satchel_blue" variant="outline" onClick={() => setPage(OrgPages.Deposit)}>DEPOSIT MONEY</Button>
+              <Button size="sm" minW="40vw" colorScheme="satchel_blue" variant="outline">DEPOSIT MONEY</Button>
             </GridItem>
             <GridItem rowStart={8} rowEnd={8} colStart={1} colEnd={2}>
               <Text fontSize="12px">

@@ -9,8 +9,8 @@ import {
   Route,
   Routes,
 } from "react-router-dom";
-import { Landing } from "./pages/Landing";
-import { Login } from "./pages/Login";
+import { Landing } from "./pages";
+import { Login } from "./pages/login";
 import { CreateAccount } from "./pages/createacc/CreateAccount";
 import { Organization } from "./pages/org/Organization";
 import { CommunityMember } from "./pages/commem/CommunityMember";
