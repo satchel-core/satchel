@@ -55,7 +55,6 @@ export const getBorrowBalance = (contractAddress: string, dispatch: Dispatch<any
     payload[assets[i].symbol] = results[i] / 10 ** assets[i].decimals;
   }
 
-  console.log(process.env.REACT_APP_CONTRACT_ADDRESS);
   dispatch({
     type: types.GET_BORROW_BALANCE,
     payload,

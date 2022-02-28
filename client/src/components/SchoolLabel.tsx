@@ -6,21 +6,22 @@ import {
   StatGroup,
   StatArrow
 } from "@chakra-ui/react"
+import { useRouter } from "next/router"
+import { handleClick, stripAddress } from "../utils/common"
+import { schoolType } from "../store/reducers/school_reducer"
 
 type SchoolLabelProps = {
-  name: string,
-  city: string,
-  country: string,
+  // TODO: any is bad vibes rip
+  school: any
   balance: string,
-  id: string,
 }
 
-export const SchoolLabel: FunctionComponent<SchoolLabelProps> = ({ name, city, country, balance, id }) => {
+export const SchoolLabel: FunctionComponent<SchoolLabelProps> = ({ school, balance }) => {
+  const router = useRouter()
+  const { address, city, country, name } = school
+
   return <StatGroup borderWidth="1px" borderRadius="md" borderColor="black" padding={1}
-  // onClick={() => {
-  //   setPage(OrgPages.SchoolHome);
-  //   setSchool(name);
-  // }}
+    onClick={handleClick("/school/" + stripAddress(address), router)}
   >
     <Stat>
       <StatLabel fontSize="xl" fontWeight="bold">{name}</StatLabel>
