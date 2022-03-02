@@ -179,7 +179,7 @@ export const deploySchool = (schoolName: string, router: NextRouter, dispatch: D
 //     };
 // };
 
-export const getSchoolBalance = (contractAddress: string, dispatch: Dispatch<any>) => async () => {
+export const getSchoolBalance = (contractAddress: string) => async (dispatch) => {
     console.log("TEST")
     const web3 = await connectWallet();
 

@@ -5,7 +5,7 @@ import {
   Button,
   HStack,
 } from "@chakra-ui/react"
-import { Logo } from "../../logo"
+import { Logo } from "../../Logo"
 import { FunctionComponent } from "react";
 import { OrganizationMenu } from "../../components/OrganizationMenu";
 import { TokenLabel } from "../../components/TokenLabel";
@@ -22,7 +22,7 @@ const OrgSchoolHome = ({ school }) => {
   const dispatch = useDispatch();
   const schoolState = useSelector((state: RootState) => state.school);
 
-  getSchoolBalance("0x6bf76B2668fF5446fbaDCb94231E2A44ba077bd6", dispatch);
+  // getSchoolBalance("0x6bf76B2668fF5446fbaDCb94231E2A44ba077bd6");
   console.log(schoolState.balance);
   console.log("TEST")
 
