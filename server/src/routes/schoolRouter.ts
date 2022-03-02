@@ -37,20 +37,32 @@ router.get('/allSchools', async (req, res) => {
 });
 
 router.post('/createSchool', async (req, res) => {
-    const { name, address } = req.body;
+    const { name, address, orgAddress, city, country } = req.body;
 
     if (!name) {
         return res.status(400).json({
-            email: 'Name not found',
+            name: 'Name not found',
         });
     } else if (!address) {
         return res.status(400).json({
             address: 'Address not found',
         });
+    } else if (!orgAddress) {
+        return res.status(400).json({
+            orgAddress: 'Org Address not found',
+        });
+    } else if (!city) {
+        return res.status(400).json({
+            city: 'City not found',
+        });
+    } else if (!country) {
+        return res.status(400).json({
+            country: 'Country not found',
+        });
     }
 
     try {
-        let newSchool = new School({ name, address });
+        let newSchool = new School({ name, address, orgAddress, city, country });
         await newSchool.save();
     } catch (e) {
         console.log(e);

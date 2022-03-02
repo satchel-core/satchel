@@ -1,8 +1,10 @@
-import { combineReducers } from 'redux'
-import {LoanReducer} from './loan_reducer'
+import { combineReducers } from 'redux';
+import {LoanReducer} from './loan_reducer';
+import {schoolReducer} from './school_reducer';
 
-export const rootReducer = combineReducers({
-    loan: LoanReducer
-});
+const reducers = {
+    loan: LoanReducer,
+    school: schoolReducer
+}
 
-export type RootState = ReturnType<typeof rootReducer>
+export const rootReducer = combineReducers(reducers);

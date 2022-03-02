@@ -5,13 +5,13 @@ import {
   Button,
   Image
 } from "@chakra-ui/react"
-import { RootState } from "../store/reducers";
 import { useSelector, useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
-import { getBorrowInterestRate } from '../store/actions/loan_actions';
-import { handleClick } from "../utils/common";
+import { handleClick, handleCustomUrl } from "../utils/common";
+import { RootState } from "../store";
+import { deploySchool, getSchoolBalance } from "../store/actions/school_actions";
 
-const Index = () => {
+const Index = (props) => {
   const counter = useSelector<RootState>((state) => state.loan);
   const dispatch = useDispatch();
   const router = useRouter();
@@ -32,10 +32,16 @@ const Index = () => {
       </GridItem>
       <GridItem rowStart={4} rowEnd={4} colStart={1} colEnd={1}>
         <Button size="sm" minW="40vw" colorScheme="satchel_blue" variant="outline" onClick={handleClick("/login", router)}>LOGIN</Button>
-        <Button size="sm" minW="40vw" colorScheme="satchel_blue" variant="outline" onClick={getBorrowInterestRate(dispatch)}>TEST</Button>
+        <Button size="sm" minW="40vw" colorScheme="satchel_blue" variant="outline" onClick={deploySchool("New School", router, dispatch, props.app_server, props.contract_address)}>TEST</Button>
+        <Button size="sm" minW="40vw" colorScheme="satchel_blue" variant="outline" onClick={getSchoolBalance("0x3a3A6677553Bad5AE99cCDB64e714E54744A4bb3", dispatch)}>UPDATE SCHOOL BALANCE</Button>
       </GridItem>
     </Grid>
   )
+}
+
+// TODO: I'm uncomfortable with this - Ritik
+export async function getServerSideProps() {
+  return { props: { app_server: process.env.REACT_APP_SERVER_URL, contract_address: process.env.REACT_APP_CONTRACT_ADDRESS } }
 }
 
 

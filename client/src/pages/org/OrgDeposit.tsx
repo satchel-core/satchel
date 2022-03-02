@@ -20,7 +20,6 @@ import { FunctionComponent, useState } from "react";
 import { Logo } from "../../logo";
 import { OrganizationMenu } from "../../components/OrganizationMenu";
 import { TokenLabel } from "../../components/TokenLabel";
-import { OrgPages } from "./Organization"
 
 type OrgDepositProps = {
   origSetPage: React.Dispatch<React.SetStateAction<number>>,
@@ -84,7 +83,7 @@ export const OrgDeposit: FunctionComponent<OrgDepositProps> = ({origSetPage}) =>
                   </HStack>
                 </GridItem>
                 <GridItem rowStart={2} rowEnd={2} colStart={1} colEnd={2}>
-                  <Button size="sm" colorScheme="satchel_blue" variant="outline" onClick={() => setPage(DepositPages.Asset)}>
+                  <Button size="sm" colorScheme="satchel_blue" variant="outline">
                     GO BACK
                   </Button>
                 </GridItem>
@@ -191,7 +190,7 @@ export const OrgDeposit: FunctionComponent<OrgDepositProps> = ({origSetPage}) =>
                     <Text textAlign="center">
                       The deposit has been processed. You should see the assets on Satchel within a few hours.
                     </Text>
-                    <Button size="sm" colorScheme="satchel_blue" variant="solid" onClick={() => origSetPage(OrgPages.SchoolHome)}>
+                    <Button size="sm" colorScheme="satchel_blue" variant="solid">
                       RETURN TO SCHOOL HOME
                     </Button>
                   </VStack>

@@ -16,7 +16,9 @@ export const LOAD_WITHDRAW = "load-withdraw";
 export const LOGOUT_USER = "logout_user";
 
 export const GET_SCHOOL_INFO = "get_school_info";
+export const SET_SCHOOL_INFO = "get_school_info";
 export const GET_SCHOOL_PROJECTS = "get_school_projects";
+export const SET_TOKEN_BALANCES = "set_token_balances";
 
 export const LOAD_LOGIN_SCHOOL = "load_login_school";
 export const LOAD_CREATE_SCHOOL = "load_create_school";

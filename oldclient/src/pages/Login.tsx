@@ -9,7 +9,6 @@ import {
 import { FunctionComponent } from "react"
 import { Logo } from "../Logo"
 import { WalletButton } from "../components/WalletButton"
-import { Link as RouterLink } from "react-router-dom"
 
 export const Login: FunctionComponent = () => <Grid p={3} gridTemplateRows="27vh auto">
                                                 <GridItem rowStart={2} rowEnd={3}>
@@ -27,7 +26,7 @@ export const Login: FunctionComponent = () => <Grid p={3} gridTemplateRows="27vh
                                                       </VStack>
                                                     </Box>
                                                     <Text fontSize="12px" fontWeight="bold">
-                                                      New? <Link as={RouterLink} to="/CreateAccount" color="satchel_blue.500">Create Account</Link>
+                                                      New? <Link to="/createaccount" color="satchel_blue.500">Create Account</Link>
                                                     </Text>
                                                   </VStack>
                                                 </GridItem>

@@ -4,8 +4,27 @@ require('dotenv').config();
 
 const router = express.Router();
 
-
 router.get('/', async (req, res) => {
+    const { schoolId } = req.query;
+
+    if (!schoolId) {
+        return res.status(400).json({
+            address: 'School ID not found',
+        });
+    }
+
+    let projects = [];
+    try {
+        projects = await Project.findById(schoolId);
+    } catch (e) {
+        console.log(e);
+        return res.status(400).send(e);
+    }
+
+    return res.status(200).json({ success: true, projects });
+});
+
+router.get('/allProjects', async (req, res) => {
     const { schoolAddress } = req.query;
 
     if (!schoolAddress) {

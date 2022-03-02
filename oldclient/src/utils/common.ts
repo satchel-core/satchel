@@ -1,5 +1,5 @@
-import NextRouter from 'next/router';
+import { NextRouter } from 'next/router';
 
-export function handleClick(url: string, router: typeof NextRouter) {
+export function handleClick(url: string, router: NextRouter) {
     return () => router.push(url);
   }

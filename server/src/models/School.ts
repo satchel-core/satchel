@@ -20,6 +20,26 @@ const schoolSchema = new mongoose.Schema({
             }
         },
     },
+    orgAddress: {
+        type: String,
+        required: true,
+        unique: true,
+        validate(value: string) {
+            if (!validator.isEthereumAddress(value)) {
+                throw new Error('Address is invalid');
+            }
+        },
+    },
+    city: {
+        type: String,
+        required: true,
+        trim: true,
+    },
+    country: {
+        type: String,
+        required: true,
+        trim: true,
+    }
 });
 
 const School = mongoose.model('School', schoolSchema);

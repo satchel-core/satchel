@@ -1,6 +1,7 @@
 import express from 'express';
 import Org from '../models/Org';
 import * as dotenv from 'dotenv';
+import School from '../models/School';
 
 dotenv.config();
 
@@ -36,6 +37,19 @@ router.get('/allOrgs', async (req, res) => {
     }
 
     return res.status(200).json({ success: true, orgs });
+});
+
+router.get('/getSchools', async(req, res) => {
+    const { orgAddress } = req.query;
+    let schools = [];
+    try {
+        schools = await School.find({ orgAddress });
+    } catch (e) {
+        console.log(e);
+        return res.status(500).send(e);
+    }
+
+    return res.status(200).json({ success: true, schools });
 });
 
 router.post('/createOrg', async (req, res) => {
