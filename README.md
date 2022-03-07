@@ -65,6 +65,22 @@ We plan to add the following improvements:
 
 https://drive.google.com/file/d/1QZLnBp_bgxWfy5A656H2NElpQDETdfjT/preview
 
+## Additional resources
+
+[High Level Overview](https://www.notion.so/Satchel-Overview-813e7234767e4171b27a688501a3d859)
+
+[Tokenomics](https://www.notion.so/Tokenomics-of-SATCH-591695a3a7fa479dab773943b9010224)
+
+[Edefi (Edu + Defi)](https://mirror.xyz/0xeb1C15146E98E461252B98217FdCa25c6c1f3875/yj2q6u-ql5LYM5h8apjbme_FHr-PXubZbcsD_2eqMpc)
+
+[Landing Page](https://satchel.finance/)
+
+[Deck](https://www.notion.so/Satchel-Overview-813e7234767e4171b27a688501a3d859)
+
+[Smart Contract Outline](https://www.notion.so/Satchel-Smart-Contract-Outline-3a736da184954ff9b264a8413616172as)
+
+[MVP Demo](https://drive.google.com/file/d/1QZLnBp_bgxWfy5A656H2NElpQDETdfjT/view)
+
 ## License
 
     Copyright 2022 Satchel Labs
