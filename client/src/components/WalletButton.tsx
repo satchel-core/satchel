@@ -60,7 +60,7 @@ export const WalletButton: FunctionComponent<WalletButtonProps> = ({
     // .catch(err => {
     //   window.alert(err);
     //   this.setState({ loading: false });
-    // });
+    // }); test
   };
 
   const handleSignup = async (publicAddress: string) => {
