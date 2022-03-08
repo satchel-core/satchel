@@ -59,19 +59,21 @@ router.get('/getSchools', async (req, res) => {
 router.post('/createOrg', async (req, res) => {
     const { name, address, schools } = req.body;
 
-    if (!name) {
-        return res.status(400).json({
-            email: 'Name not found',
-        });
-    } else if (!schools) {
-        return res.status(400).json({
-            email: 'Schools not found',
-        });
-    } else if (!address) {
-        return res.status(400).json({
-            address: 'Address not found',
-        });
-    }
+    console.log(name, address, schools);
+
+    // if (!name) {
+    //     return res.status(400).json({
+    //         email: 'Name not found',
+    //     });
+    // } else if (!schools) {
+    //     return res.status(400).json({
+    //         email: 'Schools not found',
+    //     });
+    // } else if (!address) {
+    //     return res.status(400).json({
+    //         address: 'Address not found',
+    //     });
+    // }
 
     try {
         let newOrg = new Org({ name, schools, address });

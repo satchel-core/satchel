@@ -1,25 +1,24 @@
-import { FunctionComponent } from "react"
-import {
-  Button,
-  Icon,
-} from "@chakra-ui/react"
+import { FunctionComponent } from "react";
+import { Button, Icon } from "@chakra-ui/react";
 import { handleClick, stripAddress } from "../utils/common";
 import { NextRouter, useRouter } from "next/router";
 import Web3 from "web3";
 let web3: Web3 | undefined = undefined; // Will hold the web3 instance
 
 type WalletButtonProps = {
-  walletName: string
-}
+  walletName: string;
+};
 
-export const WalletButton: FunctionComponent<WalletButtonProps> = ({walletName}) => {
+export const WalletButton: FunctionComponent<WalletButtonProps> = ({
+  walletName,
+}) => {
   const router = useRouter();
   // TODO: Remove this later
-  const address_org = "6bf76B2668fF5446fbaDCb94231E2A44ba077bd6"
-  
+  const address_org = "6bf76B2668fF5446fbaDCb94231E2A44ba077bd6";
+
   const handleLogin = async () => {
     if (!(window as any).ethereum) {
-      window.alert('Please install MetaMask first.');
+      window.alert("Please install MetaMask first.");
       return;
     }
     if (!web3) {
@@ -31,14 +30,14 @@ export const WalletButton: FunctionComponent<WalletButtonProps> = ({walletName})
         // with the injected provider given by MetaMask
         web3 = new Web3((window as any).ethereum);
       } catch (error) {
-        window.alert('You need to allow MetaMask.');
+        window.alert("You need to allow MetaMask.");
         return;
       }
     }
 
     const coinbase = await web3.eth.getCoinbase();
     if (!coinbase) {
-      window.alert('Please activate MetaMask first.');
+      window.alert("Please activate MetaMask first.");
       return;
     }
 
@@ -46,42 +45,40 @@ export const WalletButton: FunctionComponent<WalletButtonProps> = ({walletName})
 
     // Look if org with current publicAddress is already present on backend
     fetch(
-      `${
-        process.env.REACT_APP_SERVER_URL
-      }/api/org/?address=${stripAddress(publicAddress)}`
+      `http://localhost:4000/api/org/?address=${stripAddress(publicAddress)}`
     )
-      .then(response => response.json())
+      .then((response) => response.json())
       // If yes, retrieve it. If no, create it.
-      .then(users =>
-        users.length ? users[0] : handleSignup(publicAddress)
-      )
+      .then((users) => (users.length ? users[0] : handleSignup(publicAddress)))
       // Popup MetaMask confirmation modal to sign message
       .then(handleSignMessage)
       // Send signature to backend on the /auth route
       .then(handleAuthenticate)
-      .then(handleClick(publicAddress, router))
-      // Pass accessToken back to parent component (to save it in localStorage)
-      // .then(onLoggedIn)
-      // .catch(err => {
-      //   window.alert(err);
-      //   this.setState({ loading: false });
-      // });
+      .then(handleClick(publicAddress, router));
+    // Pass accessToken back to parent component (to save it in localStorage)
+    // .then(onLoggedIn)
+    // .catch(err => {
+    //   window.alert(err);
+    //   this.setState({ loading: false });
+    // });
   };
 
-  
-  const handleSignup = (publicAddress: string) => {
-    return fetch(`${process.env.REACT_APP_SERVER_URL}/createOrg`, {
-      body: JSON.stringify({ name: "Your Mom", publicAddress, schools: [] }),
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      method: 'POST'
-    }).then(response => response.json());
+  const handleSignup = async (publicAddress: string) => {
+    const response = await fetch(`http://localhost:4000/api/org/createOrg`, {
+      body: JSON.stringify({
+        name: "Your Mom",
+        address: publicAddress,
+        schools: [],
+      }),
+      headers: { "Content-Type": "application/json" },
+      method: "POST",
+    });
+    return response.json();
   };
-  
+
   const handleAuthenticate = ({
     publicAddress,
-    signature
+    signature,
   }: {
     publicAddress: string;
     signature: string;
@@ -89,14 +86,14 @@ export const WalletButton: FunctionComponent<WalletButtonProps> = ({walletName})
     fetch(`${process.env.REACT_APP_SERVER_URL}/auth`, {
       body: JSON.stringify({ publicAddress, signature }),
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
-      method: 'POST'
-    }).then(response => response.json());
+      method: "POST",
+    }).then((response) => response.json());
 
   const handleSignMessage = async ({
     publicAddress,
-    nonce
+    nonce,
   }: {
     publicAddress: string;
     nonce: string;
@@ -105,26 +102,26 @@ export const WalletButton: FunctionComponent<WalletButtonProps> = ({walletName})
       const signature = await web3!.eth.personal.sign(
         `I am signing my one-time nonce: ${nonce}`,
         publicAddress,
-        '' // MetaMask will ignore the password argument here
+        "" // MetaMask will ignore the password argument here
       );
 
       return { publicAddress, signature };
     } catch (err) {
-      throw new Error('You need to sign the message to be able to log in.');
+      throw new Error("You need to sign the message to be able to log in.");
     }
   };
 
-
-  return <Button 
-            isFullWidth 
-            size="sm" 
-            borderColor="satchel_blue.500" 
-            color="black" 
-            variant="outline" 
-            leftIcon={<Icon></Icon>} 
-            onClick={handleLogin}>
-              {walletName}
-          </Button>;
-}
-
-
+  return (
+    <Button
+      isFullWidth
+      size="sm"
+      borderColor="satchel_blue.500"
+      color="black"
+      variant="outline"
+      leftIcon={<Icon></Icon>}
+      onClick={handleLogin}
+    >
+      {walletName}
+    </Button>
+  );
+};
