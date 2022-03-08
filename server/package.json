@@ -22,14 +22,18 @@
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
     "dotenv": "^14.3.2",
+    "eth-sig-util": "^3.0.1",
+    "ethereumjs-util": "^7.1.4",
     "express": "^4.17.2",
     "helmet": "^5.0.2",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.1.8",
     "rimraf": "^3.0.2",
     "serverless-http": "^2.7.0",
     "validator": "^13.7.0"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^8.5.8",
     "@types/validator": "^13.7.1",
     "@typescript-eslint/parser": "^5.10.2",
     "ts-node": "^10.4.0",
