@@ -9,7 +9,7 @@ import {
     useToast,
   } from "@chakra-ui/react"
 import { FunctionComponent } from "react";
-import { Logo } from "../../logo"
+import { Logo } from "../../Logo"
 import { QuestionIcon } from '@chakra-ui/icons'
 
 type CreateAccIsCommProps = {

@@ -6,7 +6,7 @@ import {
   HStack,
   Badge,
 } from "@chakra-ui/react"
-import { Logo } from "../../logo"
+import { Logo } from "../../Logo"
 import { handleClick } from "../../utils/common";
 import { useRouter } from "next/router";
 import { ComMemMenu } from "../../components/ComMemMenu";
