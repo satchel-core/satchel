@@ -179,20 +179,17 @@ export const deploySchool = (schoolName: string, router: NextRouter, dispatch: D
 //     };
 // };
 
-export const getSchoolBalance = (contractAddress: string) => async (dispatch) => {
-    console.log("TEST")
+export const getSchoolBalance = (contractAddress: string, dispatch: Dispatch<any>) => async () => {
     const web3 = await connectWallet();
 
     let schoolContract = new web3.eth.Contract(schoolAbi.abi as AbiItem[], contractAddress);
+    console.log(schoolContract)
     try {
         const promises = assets.map(async (asset) => {
-            console.log(asset);
             return schoolContract.methods.getBalance(asset.tokenAddress).call();
         });
-        console.log(promises);
 
         let data = await Promise.all(promises);
-        console.log(data);
         const tokenBalances = {};
 
         for (let i = 0; i < assets.length; i++) {
@@ -200,15 +197,18 @@ export const getSchoolBalance = (contractAddress: string) => async (dispatch) =>
                 (data[i] / (10 ** assets[i].decimals)).toFixed(assets[i].decimals)
             );
         }
-        console.log(tokenBalances);
         dispatch({ type: types.SET_TOKEN_BALANCES, payload: tokenBalances });
 
         const tokens = getKeys(tokenBalances)
-        const tokenPrices = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/token/getTokenPrices?tokens=${tokens}`)
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/token/getTokenPrices?tokens=${tokens}`)
+        const tokenPrices = await res.json();
 
         var finalBalance: number = 0;
         for (const key of tokens) {
-            finalBalance = finalBalance + (tokenBalances[key] / tokenPrices[key]["USD"]["price"])
+            console.log("START")
+            console.log(tokenBalances)
+            console.log(tokenPrices.data[key]["quote"]["USD"]["price"])
+            finalBalance = finalBalance + (tokenBalances[key] * tokenPrices.data[key]["quote"]["USD"]["price"])
         }
 
         console.log(finalBalance)

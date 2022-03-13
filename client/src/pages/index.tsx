@@ -33,7 +33,7 @@ const Index = (props) => {
       <GridItem rowStart={4} rowEnd={4} colStart={1} colEnd={1}>
         <Button size="sm" minW="40vw" colorScheme="satchel_blue" variant="outline" onClick={handleClick("/login", router)}>LOGIN</Button>
         <Button size="sm" minW="40vw" colorScheme="satchel_blue" variant="outline" onClick={deploySchool("New School", router, dispatch, props.app_server, props.contract_address)}>TEST</Button>
-        <Button size="sm" minW="40vw" colorScheme="satchel_blue" variant="outline" onClick={getSchoolBalance("0x3a3A6677553Bad5AE99cCDB64e714E54744A4bb3")}>UPDATE SCHOOL BALANCE</Button>
+        <Button size="sm" minW="40vw" colorScheme="satchel_blue" variant="outline" onClick={getSchoolBalance("0x3a3a6677553bad5ae99ccdb64e714e54744a4bb3", dispatch)}>UPDATE SCHOOL BALANCE</Button>
       </GridItem>
     </Grid>
   )

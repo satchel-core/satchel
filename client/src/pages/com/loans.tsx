@@ -4,7 +4,7 @@ import {
   GridItem,
   HStack,
 } from "@chakra-ui/react"
-import { Logo } from "../../Logo"
+import { Logo } from "../../logo"
 import { ComMemMenu } from "../../components/ComMemMenu";
 import { LoanLabel } from "../../components/LoanLabel";
 

@@ -5,7 +5,7 @@ import {
   Button,
   HStack,
 } from "@chakra-ui/react"
-import { Logo } from "../../Logo"
+import { Logo } from "../../logo"
 import { FunctionComponent } from "react";
 import { OrganizationMenu } from "../../components/OrganizationMenu";
 import { TokenLabel } from "../../components/TokenLabel";
@@ -21,10 +21,6 @@ const OrgSchoolHome = ({ school }) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const schoolState = useSelector((state: RootState) => state.school);
-
-  // getSchoolBalance("0x6bf76B2668fF5446fbaDCb94231E2A44ba077bd6");
-  console.log(schoolState.balance);
-  console.log("TEST")
 
   return <Grid p={3} gap={3}>
     <GridItem rowStart={1} rowEnd={1} colStart={1} colEnd={2}>
@@ -48,7 +44,7 @@ const OrgSchoolHome = ({ school }) => {
     </GridItem>
     <GridItem rowStart={5} rowEnd={5} colStart={1} colEnd={2}>
       <Text fontSize="48px">
-        ${JSON.stringify(schoolState)}
+        {schoolState.balance}
       </Text>
     </GridItem>
     <GridItem rowStart={6} rowEnd={6} colStart={1} colEnd={2}>
@@ -88,7 +84,8 @@ const OrgSchoolHome = ({ school }) => {
 export async function getServerSideProps(context) {
   const schoolAddress = context.query.index
   const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/school/?address=${schoolAddress}`)
-  const school = await res.json();
+  const data = await res.json();
+  const school = data.school;
 
   return { props: { school } }
 }
