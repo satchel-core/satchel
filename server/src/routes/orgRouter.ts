@@ -1,7 +1,11 @@
-import express from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import Org from '../models/Org';
 import * as dotenv from 'dotenv';
 import School from '../models/School';
+import * as ethUtil from 'ethereumjs-util';
+import * as sigUtil from 'eth-sig-util';
+import * as jwt from 'jsonwebtoken';
+import { config } from '../config';
 
 dotenv.config();
 
@@ -39,7 +43,7 @@ router.get('/allOrgs', async (req, res) => {
     return res.status(200).json({ success: true, orgs });
 });
 
-router.get('/getSchools', async(req, res) => {
+router.get('/getSchools', async (req, res) => {
     const { orgAddress } = req.query;
     let schools = [];
     try {
@@ -55,19 +59,21 @@ router.get('/getSchools', async(req, res) => {
 router.post('/createOrg', async (req, res) => {
     const { name, address, schools } = req.body;
 
-    if (!name) {
-        return res.status(400).json({
-            email: 'Name not found',
-        });
-    } else if (!schools) {
-        return res.status(400).json({
-            email: "Schools not found"
-        })
-    } else if (!address) {
-        return res.status(400).json({
-            address: 'Address not found',
-        });
-    }
+    console.log(name, address, schools);
+
+    // if (!name) {
+    //     return res.status(400).json({
+    //         email: 'Name not found',
+    //     });
+    // } else if (!schools) {
+    //     return res.status(400).json({
+    //         email: 'Schools not found',
+    //     });
+    // } else if (!address) {
+    //     return res.status(400).json({
+    //         address: 'Address not found',
+    //     });
+    // }
 
     try {
         let newOrg = new Org({ name, schools, address });

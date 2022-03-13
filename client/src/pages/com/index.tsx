@@ -5,7 +5,7 @@ import {
   Button,
   HStack,
 } from "@chakra-ui/react"
-import { Logo } from "../../logo"
+import { Logo } from "../../Logo"
 import { ComMemMenu } from "../../components/ComMemMenu";
 import { TokenLabel } from "../../components/TokenLabel";
 import { handleClick } from "../../utils/common";

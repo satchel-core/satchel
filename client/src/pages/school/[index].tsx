@@ -10,7 +10,7 @@ import { FunctionComponent } from "react";
 import { OrganizationMenu } from "../../components/OrganizationMenu";
 import { TokenLabel } from "../../components/TokenLabel";
 import { TransactionLabel } from "../../components/TransactionLabel";
-import { getKeys, goBack, handleClick, handleCustomUrl, makeAddress } from "../../utils/common";
+import { getKeys, goBack, handleClick, handleCustomUrl } from "../../utils/common";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
@@ -86,7 +86,7 @@ const OrgSchoolHome = ({ school }) => {
 }
 
 export async function getServerSideProps(context) {
-  const schoolAddress = makeAddress(context.query.index)
+  const schoolAddress = context.query.index
   const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/school/?address=${schoolAddress}`)
   const school = await res.json();
 

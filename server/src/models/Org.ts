@@ -1,5 +1,6 @@
 import * as dotenv from 'dotenv';
 import * as mongoose from 'mongoose';
+import * as ethUtil from 'ethereumjs-util';
 import validator from 'validator';
 
 dotenv.config();
@@ -31,7 +32,12 @@ const orgSchema = new mongoose.Schema({
             }
         },
         default: [], // TODO: Check if we should be defaulting to an empty array
-    }
+    },
+    nonce: {
+        allowNull: false,
+        type: Number,
+        defaultValue: () => Math.floor(Math.random() * 1000000), // Initialize with a random nonce
+    },
 });
 
 const Org = mongoose.model('Org', orgSchema);

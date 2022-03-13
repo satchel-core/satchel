@@ -17,7 +17,7 @@ import {
 } from "@chakra-ui/react"
 import { FunctionComponent, useState } from "react";
 
-import { Logo } from "../../logo";
+import { Logo } from "../../Logo";
 import { OrganizationMenu } from "../../components/OrganizationMenu";
 import { TokenLabel } from "../../components/TokenLabel";
 

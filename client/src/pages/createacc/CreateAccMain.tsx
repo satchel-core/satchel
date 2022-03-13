@@ -8,7 +8,7 @@ import {
   } from "@chakra-ui/react"
 import { useRouter } from "next/router";
 import { FunctionComponent, useState } from "react";
-import { Logo } from "../../logo"
+import { Logo } from "../../Logo"
 import { handleClick } from "../../utils/common";
 import { CreateAccPages } from "./CreateAccount"
 
