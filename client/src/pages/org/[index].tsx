@@ -9,7 +9,7 @@ import { Logo } from "../../Logo"
 import React from "react";
 import { SchoolLabel } from "../../components/SchoolLabel";
 import { useRouter } from "next/router";
-import { handleClick, makeAddress } from "../../utils/common";
+import { handleClick } from "../../utils/common";
 import { schoolType } from "../../store/reducers/school_reducer";
 
 const OrgHome = ({ data }) => {
@@ -43,7 +43,7 @@ const OrgHome = ({ data }) => {
 }
 
 export async function getServerSideProps(context) {
-  const orgAddress = makeAddress(context.query.index)
+  const orgAddress = context.query.index
   const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/org/getSchools?orgAddress=${orgAddress}`)
   const data = await res.json()
 

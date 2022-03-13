@@ -11,6 +11,7 @@ import orgRouter from './routes/orgRouter';
 import nonComMemRouter from './routes/nonComMemRouter';
 import tokenRouter from './routes/tokenRouter';
 import comMemRouter from './routes/comMemRouter';
+import authController from './controllers/authController'
 
 dotenv.config();
 
@@ -36,6 +37,7 @@ app.use('/api/school/', schoolRouter);
 app.use('/api/project/', projectRouter);
 app.use('/api/token/', tokenRouter)
 app.use('/api/org/', orgRouter)
+app.use('/api/auth/', authController)
 
 app.listen(port, () => {
     console.log(`Listening on port ${port}`);
