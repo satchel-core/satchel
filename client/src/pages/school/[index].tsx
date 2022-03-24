@@ -6,7 +6,7 @@ import {
   HStack,
 } from "@chakra-ui/react"
 import { Logo } from "../../logo"
-import { FunctionComponent } from "react";
+import { FunctionComponent, useEffect } from "react";
 import { OrganizationMenu } from "../../components/OrganizationMenu";
 import { TokenLabel } from "../../components/TokenLabel";
 import { TransactionLabel } from "../../components/TransactionLabel";
@@ -21,6 +21,10 @@ const OrgSchoolHome = ({ school }) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const schoolState = useSelector((state: RootState) => state.school);
+
+  useEffect(() => {
+    getSchoolBalance("0x3a3a6677553bad5ae99ccdb64e714e54744a4bb3", dispatch)
+  }, []);
 
   return <Grid p={3} gap={3}>
     <GridItem rowStart={1} rowEnd={1} colStart={1} colEnd={2}>
@@ -44,7 +48,7 @@ const OrgSchoolHome = ({ school }) => {
     </GridItem>
     <GridItem rowStart={5} rowEnd={5} colStart={1} colEnd={2}>
       <Text fontSize="48px">
-        {schoolState.balance}
+        {schoolState.balance.toFixed(2)}
       </Text>
     </GridItem>
     <GridItem rowStart={6} rowEnd={6} colStart={1} colEnd={2}>
@@ -82,7 +86,7 @@ const OrgSchoolHome = ({ school }) => {
 }
 
 export async function getServerSideProps(context) {
-  const schoolAddress = context.query.index
+  const schoolAddress = context.query.index.toLowerCase()
   const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/school/?address=${schoolAddress}`)
   const data = await res.json();
   const school = data.school;
