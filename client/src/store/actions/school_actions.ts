@@ -140,13 +140,14 @@ export const deploySchool = (schoolName: string, router: NextRouter, dispatch: D
 
         console.log(schoolName + " created");
         console.log(id);
-        const schoolAddress = await contractInstance.methods.schoolArray(id).call();
+        const schoolAddress: string = await contractInstance.methods.schoolArray(id).call();
         console.log(schoolAddress); // Gives address of school contract
+        const address = schoolAddress.toLowerCase();
 
         const body = {
             name: schoolName,
-            address: schoolAddress,
-            orgAddress: "0x6bf76B2668fF5446fbaDCb94231E2A44ba077bd6",
+            address: address,
+            orgAddress: "0x6bf76b2668ff5446fbadcb94231e2a44ba077bd6",
             city: "Nice",
             country: "France"
         }
@@ -160,7 +161,7 @@ export const deploySchool = (schoolName: string, router: NextRouter, dispatch: D
             payload: body,
         });
 
-        handleCustomUrl("school/", schoolAddress, router)
+        handleCustomUrl("school/", address, router)
 
     } catch (err) {
         console.log(err);
@@ -179,11 +180,11 @@ export const deploySchool = (schoolName: string, router: NextRouter, dispatch: D
 //     };
 // };
 
-export const getSchoolBalance = (contractAddress: string, dispatch: Dispatch<any>) => async () => {
+export const getSchoolBalance = async (contractAddress: string, dispatch: Dispatch<any>) => {
     const web3 = await connectWallet();
 
     let schoolContract = new web3.eth.Contract(schoolAbi.abi as AbiItem[], contractAddress);
-    console.log(schoolContract)
+    // console.log(schoolContract)
     try {
         const promises = assets.map(async (asset) => {
             return schoolContract.methods.getBalance(asset.tokenAddress).call();
@@ -205,13 +206,13 @@ export const getSchoolBalance = (contractAddress: string, dispatch: Dispatch<any
 
         var finalBalance: number = 0;
         for (const key of tokens) {
-            console.log("START")
-            console.log(tokenBalances)
-            console.log(tokenPrices.data[key]["quote"]["USD"]["price"])
+            // console.log("START")
+            // console.log(tokenBalances)
+            // console.log(tokenPrices.data[key]["quote"]["USD"]["price"])
             finalBalance = finalBalance + (tokenBalances[key] * tokenPrices.data[key]["quote"]["USD"]["price"])
         }
 
-        console.log(finalBalance)
+        // console.log(finalBalance)
 
         dispatch({ type: types.SET_SCHOOL_BALANCE, payload: finalBalance })
 
@@ -223,8 +224,36 @@ export const getSchoolBalance = (contractAddress: string, dispatch: Dispatch<any
     }
 };
 
+const underlyingDecimals = 18;
+
+export const depositSchool = async (schoolAddress: string, depositAmt: number, asset: any, dispatch: Dispatch<any>) => {
+
+    const web3 = await connectWallet();
+
+    const amount = web3.utils.toHex(depositAmt * 10 ** underlyingDecimals);
+    // dispatch({ type: types.LOAD_SCHOOL_WITHDRAW });
+    try {
+        const accounts = await web3.eth.getAccounts();
+        let schoolInstance = new web3.eth.Contract(schoolAbi.abi as AbiItem[], schoolAddress);
+
+        console.log(depositAmt)
+        console.log(amount)
+
+        await schoolInstance.methods
+            .depositBalance(asset.tokenAddress, asset.aTokenAddress, amount)
+            .send({
+                from: accounts[0],
+                gasLimit: web3.utils.toHex(1000000),
+                gasPrice: web3.utils.toHex(20000000000),
+            });
+
+        dispatch(getSchoolBalance(schoolAddress, dispatch));
+    } catch (err) {
+        console.log(err.message);
+    }
+};
+
 // This is probably broken...
-// const underlyingDecimals = 18;
 // export const withdrawSchool =
 //     (schoolAddress, withdraw, asset) => async (dispatch) => {
 //         const web3 = await connectWallet();

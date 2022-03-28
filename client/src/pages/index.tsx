@@ -9,7 +9,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import { handleClick, handleCustomUrl } from "../utils/common";
 import { RootState } from "../store";
-import { deploySchool, getSchoolBalance } from "../store/actions/school_actions";
+import { deploySchool, depositSchool, getSchoolBalance } from "../store/actions/school_actions";
+import assets from "../utils/assets.json";
 
 const Index = (props) => {
   const counter = useSelector<RootState>((state) => state.loan);
@@ -32,8 +33,10 @@ const Index = (props) => {
       </GridItem>
       <GridItem rowStart={4} rowEnd={4} colStart={1} colEnd={1}>
         <Button size="sm" minW="40vw" colorScheme="satchel_blue" variant="outline" onClick={handleClick("/login", router)}>LOGIN</Button>
-        <Button size="sm" minW="40vw" colorScheme="satchel_blue" variant="outline" onClick={deploySchool("New School TESTING", router, dispatch, props.app_server, props.contract_address)}>TEST</Button>
-        {/* <Button size="sm" minW="40vw" colorScheme="satchel_blue" variant="outline" onClick={getSchoolBalance("0x3a3a6677553bad5ae99ccdb64e714e54744a4bb3")}>UPDATE SCHOOL BALANCE</Button> */}
+        {/* Works: */}
+        {/* <Button size="sm" minW="40vw" colorScheme="satchel_blue" variant="outline" onClick={deploySchool("New School TESTING", router, dispatch, props.app_server, props.contract_address)}>TEST</Button> */}
+        {/* idk working on it */}
+        <Button size="sm" minW="40vw" colorScheme="satchel_blue" variant="outline" onClick={() => depositSchool("0x3a3a6677553bad5ae99ccdb64e714e54744a4bb3", 9, assets[0], dispatch)}>TEST</Button>
       </GridItem>
     </Grid>
   )
