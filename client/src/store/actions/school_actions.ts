@@ -1,17 +1,17 @@
-import Web3 from "web3";
-import axios from "axios";
+import Web3 from 'web3';
+import axios from 'axios';
 
-import * as types from "./types";
-import contractAbi from "../../contracts/UnicefSatchel.sol/UnicefSatchel.json";
-import assets from "../../utils/assets.json";
-import userAbi from "../../contracts/User.sol/User.json";
-import schoolAbi from "../../contracts/School.sol/School.json";
-import { connectWallet } from "./helpers";
+import * as types from './types';
+import contractAbi from '../../contracts/UnicefSatchel.sol/UnicefSatchel.json';
+import assets from '../../utils/assets.json';
+import erc20Abi from '../../contracts/erc20Abi.json';
+import schoolAbi from '../../contracts/School.sol/School.json';
+import { connectWallet } from './helpers';
 import { AbiItem } from 'web3-utils';
 import { useDispatch } from 'react-redux';
-import { NextRouter, useRouter } from "next/router";
-import { getKeys, handleCustomUrl } from "../../utils/common";
-import { Dispatch } from "react";
+import { NextRouter, useRouter } from 'next/router';
+import { getKeys, handleCustomUrl } from '../../utils/common';
+import { Dispatch } from 'react';
 
 // const dispatch = useDispatch();
 // declare const window: any;
@@ -117,60 +117,65 @@ import { Dispatch } from "react";
 //     }
 // };
 
-export const deploySchool = (schoolName: string, router: NextRouter, dispatch: Dispatch<any>, app_server: string, contract_address: string) => async () => {
-    const web3 = await connectWallet();
+export const deploySchool =
+	(
+		schoolName: string,
+		router: NextRouter,
+		dispatch: Dispatch<any>,
+		app_server: string,
+		contract_address: string,
+	) =>
+	async () => {
+		const web3 = await connectWallet();
 
-    let contractInstance = new web3.eth.Contract(
-        contractAbi.abi as AbiItem[],
-        contract_address
-    );
-    dispatch({ type: types.LOAD_CREATE_SCHOOL });
+		let contractInstance = new web3.eth.Contract(
+			contractAbi.abi as AbiItem[],
+			contract_address,
+		);
+		dispatch({ type: types.LOAD_CREATE_SCHOOL });
 
-    try {
-        const accounts = await web3.eth.getAccounts();
-        const gasPrice = await web3.eth.getGasPrice();
-        const gasEstimate = await contractInstance.methods
-            .newSchool(schoolName)
-            .estimateGas({ from: accounts[0] }); // TODO: How do we react if the transaction is rejected?
+		try {
+			const accounts = await web3.eth.getAccounts();
+			const gasPrice = await web3.eth.getGasPrice();
+			const gasEstimate = await contractInstance.methods
+				.newSchool(schoolName)
+				.estimateGas({ from: accounts[0] }); // TODO: How do we react if the transaction is rejected?
 
-        const { events } = await contractInstance.methods
-            .newSchool(schoolName)
-            .send({ from: accounts[0], gasPrice: gasPrice, gas: gasEstimate });
-        const id = events.newSchoolEvent.returnValues.schoolId;
+			const { events } = await contractInstance.methods
+				.newSchool(schoolName)
+				.send({ from: accounts[0], gasPrice: gasPrice, gas: gasEstimate });
+			const id = events.newSchoolEvent.returnValues.schoolId;
 
-        console.log(schoolName + " created");
-        console.log(id);
-        const schoolAddress: string = await contractInstance.methods.schoolArray(id).call();
-        console.log(schoolAddress); // Gives address of school contract
-        const address = schoolAddress.toLowerCase();
+			console.log(schoolName + ' created');
+			console.log(id);
+			const schoolAddress: string = await contractInstance.methods.schoolArray(id).call();
+			console.log(schoolAddress); // Gives address of school contract
+			const address = schoolAddress.toLowerCase();
 
-        const body = {
-            name: schoolName,
-            address: address,
-            orgAddress: "0x6bf76b2668ff5446fbadcb94231e2a44ba077bd6",
-            city: "Nice",
-            country: "France"
-        }
+			const body = {
+				name: schoolName,
+				address: address,
+				orgAddress: '0x6bf76b2668ff5446fbadcb94231e2a44ba077bd6',
+				city: 'Nice',
+				country: 'France',
+			};
 
-        await axios.post(
-            `${app_server}/api/school/createSchool`, body
-        );
+			await axios.post(`${app_server}/api/school/createSchool`, body);
 
-        dispatch({
-            type: types.GET_SCHOOL_INFO,
-            payload: body,
-        });
+			dispatch({
+				type: types.GET_SCHOOL_INFO,
+				payload: body,
+			});
 
-        handleCustomUrl("school/", address, router)
-
-    } catch (err) {
-        console.log(err);
-        return dispatch({
-            type: types.SCHOOL_LOGIN_ERROR,
-            payload: err.message,
-        });
-    }
-};
+			handleCustomUrl('school/', address, router);
+		} catch (err) {
+			console.log(err);
+			return dispatch({
+				type: types.SCHOOL_LOGIN_ERROR,
+				payload: err.message,
+			});
+		}
+	};
 
 // export const handleSchoolLogout = (history) => {
 //     history.push({ pathname: "/Login" });
@@ -181,76 +186,91 @@ export const deploySchool = (schoolName: string, router: NextRouter, dispatch: D
 // };
 
 export const getSchoolBalance = async (contractAddress: string, dispatch: Dispatch<any>) => {
-    const web3 = await connectWallet();
+	const web3 = await connectWallet();
 
-    let schoolContract = new web3.eth.Contract(schoolAbi.abi as AbiItem[], contractAddress);
-    // console.log(schoolContract)
-    try {
-        const promises = assets.map(async (asset) => {
-            return schoolContract.methods.getBalance(asset.tokenAddress).call();
-        });
+	let schoolContract = new web3.eth.Contract(schoolAbi.abi as AbiItem[], contractAddress);
+	// console.log(schoolContract)
+	try {
+		const promises = assets.map(async (asset) => {
+			return schoolContract.methods.getBalance(asset.tokenAddress).call();
+		});
 
-        let data = await Promise.all(promises);
-        const tokenBalances = {};
+		let data = await Promise.all(promises);
+		const tokenBalances = {};
 
-        for (let i = 0; i < assets.length; i++) {
-            tokenBalances[assets[i].symbol] = Number(
-                (data[i] / (10 ** assets[i].decimals)).toFixed(assets[i].decimals)
-            );
-        }
-        dispatch({ type: types.SET_TOKEN_BALANCES, payload: tokenBalances });
+		for (let i = 0; i < assets.length; i++) {
+			tokenBalances[assets[i].symbol] = Number(
+				(data[i] / 10 ** assets[i].decimals).toFixed(assets[i].decimals),
+			);
+		}
+		dispatch({ type: types.SET_TOKEN_BALANCES, payload: tokenBalances });
 
-        const tokens = getKeys(tokenBalances)
-        const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/token/getTokenPrices?tokens=${tokens}`)
-        const tokenPrices = await res.json();
+		const tokens = getKeys(tokenBalances);
+		const res = await fetch(
+			`${process.env.NEXT_PUBLIC_SERVER_URL}/api/token/getTokenPrices?tokens=${tokens}`,
+		);
+		const tokenPrices = await res.json();
 
-        var finalBalance: number = 0;
-        for (const key of tokens) {
-            // console.log("START")
-            // console.log(tokenBalances)
-            // console.log(tokenPrices.data[key]["quote"]["USD"]["price"])
-            finalBalance = finalBalance + (tokenBalances[key] * tokenPrices.data[key]["quote"]["USD"]["price"])
-        }
+		var finalBalance: number = 0;
+		for (const key of tokens) {
+			// console.log("START")
+			// console.log(tokenBalances)
+			// console.log(tokenPrices.data[key]["quote"]["USD"]["price"])
+			finalBalance =
+				finalBalance + tokenBalances[key] * tokenPrices.data[key]['quote']['USD']['price'];
+		}
 
-        // console.log(finalBalance)
+		// console.log(finalBalance)
 
-        dispatch({ type: types.SET_SCHOOL_BALANCE, payload: finalBalance })
+		dispatch({ type: types.SET_SCHOOL_BALANCE, payload: finalBalance });
 
-        return finalBalance;
-
-    } catch (e) {
-        console.log(e);
-        console.log(e.message);
-    }
+		return finalBalance;
+	} catch (e) {
+		console.log(e);
+		console.log(e.message);
+	}
 };
 
 const underlyingDecimals = 18;
 
-export const depositSchool = async (schoolAddress: string, depositAmt: number, asset: any, dispatch: Dispatch<any>) => {
+export const depositSchool = async (
+	schoolAddress: string,
+	depositAmt: number,
+	asset: any,
+	dispatch: Dispatch<any>,
+) => {
+	const web3 = await connectWallet();
 
-    const web3 = await connectWallet();
+	const amount = web3.utils.toHex(depositAmt * 10 ** underlyingDecimals);
+	// dispatch({ type: types.LOAD_SCHOOL_WITHDRAW });
+	try {
+		const accounts = await web3.eth.getAccounts();
 
-    const amount = web3.utils.toHex(depositAmt * 10 ** underlyingDecimals);
-    // dispatch({ type: types.LOAD_SCHOOL_WITHDRAW });
-    try {
-        const accounts = await web3.eth.getAccounts();
-        let schoolInstance = new web3.eth.Contract(schoolAbi.abi as AbiItem[], schoolAddress);
+		console.log(depositAmt);
+		console.log(amount);
 
-        console.log(depositAmt)
-        console.log(amount)
+		let erc20Instance = new web3.eth.Contract(erc20Abi as AbiItem[], asset.tokenAddress);
+		await erc20Instance.methods.approve(schoolAddress, amount).send({
+			from: accounts[0],
+			gasLimit: web3.utils.toHex(1000000),
+			gasPrice: web3.utils.toHex(20000000000),
+		});
 
-        await schoolInstance.methods
-            .depositBalance(asset.tokenAddress, asset.aTokenAddress, amount)
-            .send({
-                from: accounts[0],
-                gasLimit: web3.utils.toHex(1000000),
-                gasPrice: web3.utils.toHex(20000000000),
-            });
+		let schoolInstance = new web3.eth.Contract(schoolAbi.abi as AbiItem[], schoolAddress);
 
-        dispatch(getSchoolBalance(schoolAddress, dispatch));
-    } catch (err) {
-        console.log(err.message);
-    }
+		console.log(schoolInstance.methods);
+		console.log('Approved');
+		await schoolInstance.methods.deposit(asset.tokenAddress, asset.aTokenAddress, amount).send({
+			from: accounts[0],
+			gasLimit: web3.utils.toHex(1000000),
+			gasPrice: web3.utils.toHex(20000000000),
+		});
+
+		console.log('Balance sent');
+		dispatch(getSchoolBalance(schoolAddress, dispatch));
+	} catch (err) {
+		console.log(err.message);
+	}
 };
 
 // This is probably broken...
