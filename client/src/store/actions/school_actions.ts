@@ -2,7 +2,7 @@ import Web3 from 'web3';
 import axios from 'axios';
 
 import * as types from './types';
-import contractAbi from '../../contracts/UnicefSatchel.sol/UnicefSatchel.json';
+import contractAbi from '../../contracts/Satchel.sol/Satchel.json';
 import assets from '../../utils/assets.json';
 import erc20Abi from '../../contracts/erc20Abi.json';
 import schoolAbi from '../../contracts/School.sol/School.json';
