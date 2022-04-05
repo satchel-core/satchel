@@ -185,14 +185,14 @@ export const deploySchool =
 //     };
 // };
 
-export const getSchoolBalance = async (contractAddress: string, dispatch: Dispatch<any>) => {
+export const getSchoolBalance = async (userAddress: string, contractAddress: string, dispatch: Dispatch<any>) => {
 	const web3 = await connectWallet();
 
 	let schoolContract = new web3.eth.Contract(schoolAbi.abi as AbiItem[], contractAddress);
 	// console.log(schoolContract)
 	try {
 		const promises = assets.map(async (asset) => {
-			return schoolContract.methods.getBalance(asset.tokenAddress).call();
+			return schoolContract.methods.getBalance(userAddress, asset.tokenAddress).call();
 		});
 
 		let data = await Promise.all(promises);
@@ -267,7 +267,7 @@ export const depositSchool = async (
 		});
 
 		console.log('Balance sent');
-		dispatch(getSchoolBalance(schoolAddress, dispatch));
+		// dispatch(getSchoolBalance(schoolAddress, dispatch));
 	} catch (err) {
 		console.log(err.message);
 	}

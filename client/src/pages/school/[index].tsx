@@ -23,7 +23,7 @@ const OrgSchoolHome = ({ school }) => {
   const schoolState = useSelector((state: RootState) => state.school);
 
   useEffect(() => {
-    getSchoolBalance("0x3a3a6677553bad5ae99ccdb64e714e54744a4bb3", dispatch)
+    getSchoolBalance("0x6bf76B2668fF5446fbaDCb94231E2A44ba077bd6", "0x3a3a6677553bad5ae99ccdb64e714e54744a4bb3", dispatch)
   }, []);
 
   return <Grid p={3} gap={3}>

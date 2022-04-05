@@ -60,7 +60,7 @@ const Index = (props) => {
 					onClick={() =>
 						depositSchool(
 							'0x9d4d647f42c4c297734456bD72c4fad540530251',
-							9,
+							0.001,
 							assets[0],
 							dispatch,
 						)
