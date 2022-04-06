@@ -3,17 +3,26 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import { handleClick, handleCustomUrl } from '../utils/common';
 import { RootState } from '../store';
-import { deploySchool, depositSchool, getSchoolBalance } from '../store/actions/school_actions';
+import {
+	deploySchool,
+	depositSchool,
+	getUserBalanceInSchool,
+} from '../store/actions/school_actions';
 import assets from '../utils/assets.json';
+import { useEffect } from 'react';
 
 const Index = (props) => {
-	const counter = useSelector<RootState>((state) => state.loan);
+	const schoolStore = useSelector<RootState>((state) => state.school);
 	const dispatch = useDispatch();
 	const router = useRouter();
 
+	useEffect(() => {
+		getUserBalanceInSchool('0x9d4d647f42c4c297734456bD72c4fad540530251', dispatch);
+	});
+
 	return (
 		<Grid minH="37vh" p={3}>
-			<div>{JSON.stringify(counter)}</div>
+			<div>{JSON.stringify(schoolStore)}</div>
 			<GridItem rowStart={1} rowEnd={1} colStart={1} colEnd={2}>
 				<Image
 					boxSize="100px"

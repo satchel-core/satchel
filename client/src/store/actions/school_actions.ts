@@ -185,14 +185,16 @@ export const deploySchool =
 //     };
 // };
 
-export const getSchoolBalance = async (userAddress: string, contractAddress: string, dispatch: Dispatch<any>) => {
+export const getUserBalanceInSchool = async (contractAddress: string, dispatch: Dispatch<any>) => {
 	const web3 = await connectWallet();
 
 	let schoolContract = new web3.eth.Contract(schoolAbi.abi as AbiItem[], contractAddress);
-	// console.log(schoolContract)
+
 	try {
+		const accounts = await web3.eth.getAccounts();
+
 		const promises = assets.map(async (asset) => {
-			return schoolContract.methods.getBalance(userAddress, asset.tokenAddress).call();
+			return await schoolContract.methods.getBalance(asset.aTokenAddress, accounts[0]).call();
 		});
 
 		let data = await Promise.all(promises);
@@ -205,26 +207,26 @@ export const getSchoolBalance = async (userAddress: string, contractAddress: str
 		}
 		dispatch({ type: types.SET_TOKEN_BALANCES, payload: tokenBalances });
 
-		const tokens = getKeys(tokenBalances);
-		const res = await fetch(
-			`${process.env.NEXT_PUBLIC_SERVER_URL}/api/token/getTokenPrices?tokens=${tokens}`,
-		);
-		const tokenPrices = await res.json();
+		// const tokens = getKeys(tokenBalances);
+		// const res = await fetch(
+		// 	`${process.env.NEXT_PUBLIC_SERVER_URL}/api/token/getTokenPrices?tokens=${tokens}`,
+		// );
+		// const tokenPrices = await res.json();
 
-		var finalBalance: number = 0;
-		for (const key of tokens) {
-			// console.log("START")
-			// console.log(tokenBalances)
-			// console.log(tokenPrices.data[key]["quote"]["USD"]["price"])
-			finalBalance =
-				finalBalance + tokenBalances[key] * tokenPrices.data[key]['quote']['USD']['price'];
-		}
+		// var finalBalance: number = 0;
+		// for (const key of tokens) {
+		// 	// console.log("START")
+		// 	// console.log(tokenBalances)
+		// 	// console.log(tokenPrices.data[key]["quote"]["USD"]["price"])
+		// 	finalBalance =
+		// 		finalBalance + tokenBalances[key] * tokenPrices.data[key]['quote']['USD']['price'];
+		// }
 
 		// console.log(finalBalance)
 
-		dispatch({ type: types.SET_SCHOOL_BALANCE, payload: finalBalance });
+		// dispatch({ type: types.SET_SCHOOL_BALANCE, payload: finalBalance });
 
-		return finalBalance;
+		// return finalBalance;
 	} catch (e) {
 		console.log(e);
 		console.log(e.message);
@@ -267,9 +269,10 @@ export const depositSchool = async (
 		});
 
 		console.log('Balance sent');
-		// dispatch(getSchoolBalance(schoolAddress, dispatch));
+		dispatch(getUserBalanceInSchool(schoolAddress, dispatch));
 	} catch (err) {
 		console.log(err.message);
+		dispatch({ type: types.DEPOSIT_FAIL, payload: err.message });
 	}
 };
 
