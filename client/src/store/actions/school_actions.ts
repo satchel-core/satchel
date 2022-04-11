@@ -233,8 +233,6 @@ export const getUserBalanceInSchool = async (contractAddress: string, dispatch: 
 	}
 };
 
-const underlyingDecimals = 18;
-
 export const depositSchool = async (
 	schoolAddress: string,
 	depositAmt: number,
@@ -243,13 +241,13 @@ export const depositSchool = async (
 ) => {
 	const web3 = await connectWallet();
 
-	const amount = web3.utils.toHex(depositAmt * 10 ** underlyingDecimals);
+	const amount = web3.utils.toHex(depositAmt * 10 ** asset.decimals);
 	// dispatch({ type: types.LOAD_SCHOOL_WITHDRAW });
 	try {
 		const accounts = await web3.eth.getAccounts();
 
-		console.log(depositAmt);
-		console.log(amount);
+		// console.log(depositAmt);
+		// console.log(amount);
 
 		let erc20Instance = new web3.eth.Contract(erc20Abi as AbiItem[], asset.tokenAddress);
 		await erc20Instance.methods.approve(schoolAddress, amount).send({
@@ -276,32 +274,31 @@ export const depositSchool = async (
 	}
 };
 
-// This is probably broken...
-// export const withdrawSchool =
-//     (schoolAddress, withdraw, asset) => async (dispatch) => {
-//         const web3 = await connectWallet();
+export const withdrawSchool = async (
+	schoolAddress: string,
+	withdrawAmt: number,
+	asset: any,
+	dispatch: Dispatch<any>,
+) => {
+	const web3 = await connectWallet();
 
-//         const amount = web3.utils.toHex(
-//             withdraw * Math.pow(10, underlyingDecimals)
-//         );
-//         dispatch({ type: types.LOAD_SCHOOL_WITHDRAW });
-//         try {
-//             const accounts = await web3.eth.getAccounts();
-//             const schoolInstance = new web3.eth.Contract(
-//                 schoolAbi.abi,
-//                 schoolAddress
-//             );
+	const amount = web3.utils.toHex(withdrawAmt * Math.pow(10, asset.decimals));
+	// dispatch({ type: types.LOAD_SCHOOL_WITHDRAW });
+	try {
+		const accounts = await web3.eth.getAccounts();
+		const schoolInstance = new web3.eth.Contract(schoolAbi.abi as AbiItem[], schoolAddress);
 
-//             await schoolInstance.methods
-//                 .withdrawBalance(amount, asset.tokenAddress)
-//                 .send({
-//                     from: accounts[0],
-//                     gasLimit: web3.utils.toHex(1000000),
-//                     gasPrice: web3.utils.toHex(20000000000),
-//                 });
+		await schoolInstance.methods
+			.withdraw(asset.tokenAddress, asset.aTokenAddress, amount)
+			.send({
+				from: accounts[0],
+				gasLimit: web3.utils.toHex(1000000),
+				gasPrice: web3.utils.toHex(20000000000),
+			});
 
-//             dispatch(getSchoolBalance(schoolAddress));
-//         } catch (err) {
-//             console.log(err.message);
-//         }
-//     };
+		dispatch(getUserBalanceInSchool(schoolAddress, dispatch));
+	} catch (err) {
+		console.log(err.message);
+		dispatch({ type: types.DEPOSIT_FAIL, payload: err.message });
+	}
+};

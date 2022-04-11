@@ -6,6 +6,7 @@ import { RootState } from '../store';
 import {
 	deploySchool,
 	depositSchool,
+	withdrawSchool,
 	getUserBalanceInSchool,
 } from '../store/actions/school_actions';
 import assets from '../utils/assets.json';
@@ -69,13 +70,30 @@ const Index = (props) => {
 					onClick={() =>
 						depositSchool(
 							'0x9d4d647f42c4c297734456bD72c4fad540530251',
-							0.001,
-							assets[0],
+							1,
+							assets[1],
 							dispatch,
 						)
 					}
 				>
-					TEST
+					TEST DEPOSIT
+				</Button>
+
+				<Button
+					size="sm"
+					minW="40vw"
+					colorScheme="satchel_blue"
+					variant="outline"
+					onClick={() =>
+						withdrawSchool(
+							'0x9d4d647f42c4c297734456bD72c4fad540530251',
+							1,
+							assets[1],
+							dispatch,
+						)
+					}
+				>
+					TEST WITHDRAW
 				</Button>
 			</GridItem>
 		</Grid>

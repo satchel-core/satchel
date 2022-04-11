@@ -21,21 +21,21 @@ async function deploySchool() {
   const satchelContract = new web3.eth.Contract(satchelAbi.abi, satchelAddress);
 
   const accounts = await web3.eth.getAccounts();
-  // await satchelContract.methods
-  //   .createOrg(3, accounts[0])
-  //   .send({ from: accounts[0] });
+  await satchelContract.methods
+    .createOrg(4, "0x6bf76B2668fF5446fbaDCb94231E2A44ba077bd6")
+    .send({ from: accounts[0] });
 
-  // let orgAddress = await satchelContract.methods.orgs(3).call();
-  let orgAddress = "0xd562BeBcAD4dC498Fc0D2A745CFD3db34a773964";
+  let orgAddress = await satchelContract.methods.orgs(4).call();
+  // let orgAddress = "0xd562BeBcAD4dC498Fc0D2A745CFD3db34a773964";
   console.log(orgAddress);
 
-  const orgContract = new web3.eth.Contract(orgAbi.abi, orgAddress);
-  await orgContract.methods
-    .createSchool(2, lendingPoolAddress)
-    .send({ from: accounts[0] });
-  let schoolAddress = await orgContract.methods.schools(2).call();
+  // const orgContract = new web3.eth.Contract(orgAbi.abi, orgAddress);
+  // await orgContract.methods
+  //   .createSchool(4, lendingPoolAddress)
+  //   .send({ from: accounts[0] });
+  // let schoolAddress = await orgContract.methods.schools(2).call();
 
-  console.log(schoolAddress); // 0x9d4d647f42c4c297734456bD72c4fad540530251
+  // console.log(schoolAddress); // 0x9d4d647f42c4c297734456bD72c4fad540530251
 }
 
 deploySchool();
