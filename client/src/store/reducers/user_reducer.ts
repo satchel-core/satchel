@@ -1,4 +1,25 @@
-// import * as types from "../actions/types";
+import * as types from '../actions/types';
+
+export type userType = {
+	interestRates: any;
+};
+
+const userInitialState: userType = {
+	interestRates: {},
+};
+
+export const userReducer = (
+	state: userType = userInitialState,
+	action: { type: string; payload: any },
+) => {
+	const { type, payload } = action;
+	switch (type) {
+		case types.GET_INTEREST_RATES:
+			return { ...state, interestRates: payload };
+		default:
+			return state;
+	}
+};
 
 // const INITIAL_STATE = {
 //   address: "",
@@ -47,4 +68,4 @@
 //   }
 // }
 
-export {}
+export {};

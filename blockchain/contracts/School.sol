@@ -58,6 +58,7 @@ contract School is Exponential {
     function deposit(address asset, address lpAsset, uint amount) public {
 
         // console.log(totalShares[lpAsset]);
+        // console.log(amount);
         // Check if the user has previously deposited
         if (totalShares[lpAsset] == 0){
             return depositInitial(asset, lpAsset, amount);

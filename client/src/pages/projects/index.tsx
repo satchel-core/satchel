@@ -5,7 +5,7 @@ import {
   Button,
   HStack,
 } from "@chakra-ui/react"
-import { Logo } from "../../Logo"
+import { Logo } from "../../logo"
 import React from "react";
 import { ComMemMenu } from "../../components/ComMemMenu";
 import { ProjectLabel } from "../../components/ProjectLabel";

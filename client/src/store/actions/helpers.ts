@@ -6,7 +6,6 @@ declare let window: any;
 export const connectWallet = async () => {
   if (!window.ethereum) {
     console.log("Metamask not installed");
-    console.log(process.env.REACT_APP_INFURA);
     const provider = new WalletConnectProvider({
       infuraId: process.env.REACT_APP_INFURA,
     });
@@ -16,7 +15,6 @@ export const connectWallet = async () => {
     await provider.enable();
     return new Web3(<any>provider);
   } else {
-    console.log(process.env.REACT_APP_INFURA);
     await window.ethereum.request({
       method: "eth_requestAccounts",
     });

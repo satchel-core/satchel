@@ -37,6 +37,12 @@ if (!goerliMainnetNodeURL) {
   throw new Error("Please set your ARCHIVE_GOERLI_NODE_URL in a .env file");
 }
 
+const kovanMainnetNodeURL: string | undefined =
+  process.env.ARCHIVE_KOVAN_NODE_URL;
+if (!kovanMainnetNodeURL) {
+  throw new Error("Please set your ARCHIVE_KOVAN_NODE_URL in a .env file");
+}
+
 const GOERLI_PRIVATE_KEY = process.env.GOERLI_PRIVATE_KEY;
 
 ////////////////////////////////////////////////////////////
@@ -64,6 +70,10 @@ const config: HardhatUserConfig = {
     },
     goerli: {
       url: goerliMainnetNodeURL,
+      accounts: [`0x${GOERLI_PRIVATE_KEY}`],
+    },
+    kovan: {
+      url: kovanMainnetNodeURL,
       accounts: [`0x${GOERLI_PRIVATE_KEY}`],
     },
     // local: {

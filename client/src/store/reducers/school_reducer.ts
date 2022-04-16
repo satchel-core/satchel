@@ -19,7 +19,7 @@ const schoolInitialState: schoolType = {
     deployLoading: false,
     withdrawLoading: false,
     tokenBalances: {},
-    balance: 0,
+    balance: 0.00,
 };
 
 export const schoolReducer = (state: schoolType = schoolInitialState, action: { type: string; payload: any; }) => {
