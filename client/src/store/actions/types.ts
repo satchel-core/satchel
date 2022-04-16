@@ -9,6 +9,7 @@ export const GET_ASSET_PRICES = 'get-asset-prices';
 export const GET_NAME = 'get_name';
 export const GET_CONTRIBUTION = 'get_contribution';
 export const GET_INTEREST_RATE = 'get_interest_rate';
+export const GET_INTEREST_RATES = 'get_interest_rates';
 
 export const LOAD_DEPOSIT = 'load-deposit';
 export const DEPOSIT_FAIL = 'deposit-fail';
@@ -34,3 +35,4 @@ export const ENTER_MARKET = 'enter_market';
 export const EXIT_MARKET = 'exit_market';
 export const BORROW = 'borrow';
 export const REPAY = 'repay';
+

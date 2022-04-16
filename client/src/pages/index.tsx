@@ -23,7 +23,6 @@ const Index = (props) => {
 
 	return (
 		<Grid minH="37vh" p={3}>
-			<div>{JSON.stringify(schoolStore)}</div>
 			<GridItem rowStart={1} rowEnd={1} colStart={1} colEnd={2}>
 				<Image
 					boxSize="100px"

@@ -1,14 +1,20 @@
-// import axios from "axios";
+import axios from 'axios';
 // import Web3 from "web3";
 // import WalletConnectProvider from "@walletconnect/web3-provider";
 
-// import * as types from "../types";
+import * as types from './types';
 // import contractAbi from "../../contracts/UnicefSatchel.sol/UnicefSatchel.json";
 // import erc20Abi from "../../contracts/User.sol/Erc20.json";
-// import cTokenAbi from "../../contracts/User.sol/CErc20.json";
+import cTokenAbi from "../../contracts/cTokenAbi.json";
+
+// import cTokenAbi from "../../../contracts/User.sol/CErc20.json";
 // import userAbi from "../../contracts/User.sol/User.json";
 // import schoolAbi from "../../contracts/School.sol/School.json";
-// import assets from "../../assets.json";
+// import cTokenAbi from "../../contracts/User.sol/Erc20.json";
+import assets from '../../utils/assets.json';
+import { Dispatch } from 'react';
+import { connectWallet } from './helpers';
+import Web3 from 'web3';
 // import { connectWallet } from "../../components/helpers";
 
 // export const handleUserLogin = (history) => async (dispatch) => {
@@ -183,6 +189,37 @@
 //   }
 // };
 
+export const getInterestRates = async (dispatch: Dispatch<any>) => {
+
+	const { data } = await axios.get('https://api.compound.finance/api/v2/ctoken', {
+		params: {
+			addresses: assets.map((asset) => asset.aTokenAddressMainnet),
+		},
+	});
+
+    const interestRates = {}
+    for (let i = 0; i < data.cToken.length; i++) {
+        const asset  = data.cToken[i]
+        interestRates[asset.underlying_symbol] = asset.supply_rate.value * 50
+    }
+	console.log('Interest rate...');
+	console.log(interestRates);
+
+	dispatch({
+		type: types.GET_INTEREST_RATES,
+		payload: interestRates,
+	});
+};
+
+// export const getAssetsHeld = async (
+// 	dispatch: Dispatch<any>,
+// ) => {
+//     const web3 = await connectWallet();
+
+//     const tokenInst = new web3.eth.Contract(cTokenAbi, token.address);
+//     const balance = await tokenInst.methods.balanceOf(address).call()
+// }
+
 // export const getAssetPrices = () => async (dispatch) => {
 //   const priceData = await axios.get(
 //     `${process.env.REACT_APP_SERVER_URL}/api/user/getTokenPrices`,
@@ -210,7 +247,7 @@
 //     "https://api.compound.finance/api/v2/ctoken",
 //     {
 //       params: {
-//         addresses: assets.map((asset) => asset.cTokenAddressMainnet),
+//         addresses: assets.map((asset) => asset.aTokenAddressMainnet),
 //       },
 //     }
 //   );
@@ -327,4 +364,4 @@
 //   }
 // };
 
-export {}
+export {};
