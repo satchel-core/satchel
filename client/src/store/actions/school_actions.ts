@@ -116,67 +116,6 @@ import { Dispatch } from 'react';
 //         });
 //     }
 // };
-
-export const deploySchool =
-	(
-		schoolName: string,
-		router: NextRouter,
-		dispatch: Dispatch<any>,
-		app_server: string,
-		contract_address: string,
-	) =>
-	async () => {
-		const web3 = await connectWallet();
-
-		let contractInstance = new web3.eth.Contract(
-			contractAbi.abi as AbiItem[],
-			contract_address,
-		);
-		dispatch({ type: types.LOAD_CREATE_SCHOOL });
-
-		try {
-			const accounts = await web3.eth.getAccounts();
-			const gasPrice = await web3.eth.getGasPrice();
-			const gasEstimate = await contractInstance.methods
-				.newSchool(schoolName)
-				.estimateGas({ from: accounts[0] }); // TODO: How do we react if the transaction is rejected?
-
-			const { events } = await contractInstance.methods
-				.newSchool(schoolName)
-				.send({ from: accounts[0], gasPrice: gasPrice, gas: gasEstimate });
-			const id = events.newSchoolEvent.returnValues.schoolId;
-
-			console.log(schoolName + ' created');
-			console.log(id);
-			const schoolAddress: string = await contractInstance.methods.schoolArray(id).call();
-			console.log(schoolAddress); // Gives address of school contract
-			const address = schoolAddress.toLowerCase();
-
-			const body = {
-				name: schoolName,
-				address: address,
-				orgAddress: '0x6bf76b2668ff5446fbadcb94231e2a44ba077bd6',
-				city: 'Nice',
-				country: 'France',
-			};
-
-			await axios.post(`${app_server}/api/school/createSchool`, body);
-
-			dispatch({
-				type: types.GET_SCHOOL_INFO,
-				payload: body,
-			});
-
-			handleCustomUrl('school/', address, router);
-		} catch (err) {
-			console.log(err);
-			return dispatch({
-				type: types.SCHOOL_LOGIN_ERROR,
-				payload: err.message,
-			});
-		}
-	};
-
 // export const handleSchoolLogout = (history) => {
 //     history.push({ pathname: "/Login" });
 //     return {

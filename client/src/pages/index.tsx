@@ -4,11 +4,11 @@ import { useRouter } from 'next/router';
 import { handleClick, handleCustomUrl } from '../utils/common';
 import { RootState } from '../store';
 import {
-	deploySchool,
 	depositSchool,
 	withdrawSchool,
 	getUserBalanceInSchool,
 } from '../store/actions/school_actions';
+import { deploySchool, deployOrg } from '../store/actions/org_actions';
 import assets from '../utils/assets.json';
 import { useEffect } from 'react';
 
@@ -70,7 +70,7 @@ const Index = (props) => {
 						depositSchool(
 							'0x9d4d647f42c4c297734456bD72c4fad540530251',
 							1,
-							assets[1],
+							assets[0],
 							dispatch,
 						)
 					}
@@ -87,7 +87,7 @@ const Index = (props) => {
 						withdrawSchool(
 							'0x9d4d647f42c4c297734456bD72c4fad540530251',
 							1,
-							assets[1],
+							assets[0],
 							dispatch,
 						)
 					}

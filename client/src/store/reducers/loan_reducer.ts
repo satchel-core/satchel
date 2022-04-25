@@ -5,7 +5,7 @@ const loanInitialState = {
   borrowBalance: {},
 };
 
-export const LoanReducer = (state = loanInitialState, action: { type: string; payload: any; }) => {
+export const loanReducer = (state = loanInitialState, action: { type: string; payload: any; }) => {
   const { type, payload } = action;
   switch (type) {
     case types.GET_BORROW_INTEREST_RATE:
