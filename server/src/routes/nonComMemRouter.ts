@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
         });
     }
 
-    let user = {};
+    let user = {} as any;
     try {
         user = await NonComMem.findOne({ address });
     } catch (e) {

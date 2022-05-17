@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
         });
     }
 
-    let school = {};
+    let school = {} as any;
     try {
         school = await School.findOne({ address });
     } catch (e) {

@@ -128,12 +128,13 @@ export const getUserBalanceInSchool = async (contractAddress: string, dispatch: 
 	const web3 = await connectWallet();
 
 	let schoolContract = new web3.eth.Contract(schoolAbi.abi as AbiItem[], contractAddress);
-
+	console.log(contractAddress)
 	try {
 		const accounts = await web3.eth.getAccounts();
 
 		const promises = assets.map(async (asset) => {
-			return await schoolContract.methods.getBalance(asset.aTokenAddress, accounts[0]).call();
+			console.log(asset.aTokenAddress);
+			return schoolContract.methods.getBalance(asset.aTokenAddress, accounts[0]).call();
 		});
 
 		let data = await Promise.all(promises);
@@ -144,6 +145,7 @@ export const getUserBalanceInSchool = async (contractAddress: string, dispatch: 
 				(data[i] / 10 ** assets[i].decimals).toFixed(assets[i].decimals),
 			);
 		}
+		console.log(tokenBalances)
 		dispatch({ type: types.SET_TOKEN_BALANCES, payload: tokenBalances });
 
 		// const tokens = getKeys(tokenBalances);

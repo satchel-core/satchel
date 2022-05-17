@@ -169,6 +169,9 @@ contract School is Exponential {
      * @return the number of TOKENS the user has in the protocol, multipled by 10^18
      */
     function getBalance(address asset, address user) public view returns(uint) {
+        if (totalShares[asset] == 0) {
+            return 0;
+        }
         return getTotalBalance(asset) * userData[user][asset].shares / totalShares[asset];
     }
 

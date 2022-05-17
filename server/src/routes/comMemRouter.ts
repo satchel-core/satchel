@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
         });
     }
 
-    let user = {};
+    let user = {} as any;
     try {
         user = await ComMem.findOne({ address });
     } catch (e) {

@@ -18,8 +18,8 @@ const Index = (props) => {
 	const router = useRouter();
 
 	useEffect(() => {
-		getUserBalanceInSchool('0x9d4d647f42c4c297734456bD72c4fad540530251', dispatch);
-	});
+		getUserBalanceInSchool('0xA05cFa1C33E7561F8d14E04c9c9372721D370c34', dispatch);
+	}, []);
 
 	return (
 		<Grid minH="37vh" p={3}>

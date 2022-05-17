@@ -291,6 +291,7 @@ describe("School Specific Functionality", function () {
   const lendingPoolAddress = "0x7d2768dE32b0b80b7a3454c06BdAc94A69DDc7A9";
   const daiAddress = "0x6b175474e89094c44da98b954eedeac495271d0f";
   const aDaiAddress = "0x028171bCA77440897B824Ca71D1c56caC55b68A3";
+  const aUSDCAddress = "0xBcca60bB61934080951369a648Fb03DF4F96263C";
   const zeroAddress = "0x0000000000000000000000000000000000000000";
 
   const uncertainty = 10 ** 13;
@@ -362,6 +363,12 @@ describe("School Specific Functionality", function () {
       // Check that the school issued the correct amount of shares
       let shares = await school.totalShares(aDai.address);
       expect(shares.sub(daiAmtForAlice).abs().lte(uncertainty)).to.be.true;
+    });
+
+    it("User should be able to check balance of assets they do not have", async () => {
+      // Check that the school reports 0 USDC for Alice
+      let aliceUSDCBalance = await school.getBalance(aUSDCAddress, alice.address);
+      expect(aliceUSDCBalance).to.be.eq(0);
     });
 
     it("User should be able to deposit multiple times and the school should get aDai", async () => {

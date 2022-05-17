@@ -14,16 +14,16 @@
 		"url": "https://dynamic-assets.coinbase.com/3c15df5e2ac7d4abbe9499ed9335041f00c620f28e8de2f93474a9f432058742cdf4674bd43f309e69778a26969372310135be97eb183d91c492154176d455b8/asset_icons/9d67b728b6c8f457717154b3a35f9ddc702eae7e76c4684ee39302c4d7fd0bb8.png",
 		"tokenAddress": "0xe22da380ee6B445bb8273C81944ADEB6E8450422",
 		"aTokenAddress": "0xe12AFeC5aa12Cf614678f9bFeeB98cA9Bb95b5B0",
-		"aTokenAddressMainnet": "0x39aa39c021dfbae8fac545936693ac917d5e7563",
+		"aTokenAddressMainnet": "0xBcca60bB61934080951369a648Fb03DF4F96263C",
 		"decimals": 6
 	},
 	{
-		"name": "ZeroX Token",
-		"symbol": "ZRX",
-		"url": "https://dynamic-assets.coinbase.com/3d0b1dc2a70acb73379c2d35a1e641f4438702ce8e4a4855b5514ad2758e3f520797d3ae7a9aa675d683188302e4d09c801a5195d89382d4296933dd72217717/asset_icons/1597d628dd19b7885433a2ac2d7de6ad196c519aeab4bfe679706aacbf1df78a.png",
-		"tokenAddress": "0xD0d76886cF8D952ca26177EB7CfDf83bad08C00C",
-		"aTokenAddress": "0xf02D7C23948c9178C68f5294748EB778Ab5e5D9c",
-		"aTokenAddressMainnet": "0xb3319f5d18bc0d84dd1b4825dcde5d5f7266d407",
-		"decimals": 18
+		"aTokenAddress": "0x87b1f4cf9BD63f7BBD3eE1aD04E8F52540349347",
+		"symbol": "WETH",
+		"tokenAddress": "0xd0A1E359811322d97991E03f863a0C30C2cF029C",
+		"decimals": 18,
+		"name": "Wrapped Ether",
+		"url": "https://dynamic-assets.coinbase.com/90184cca292578d533bb00d9ee98529b889c15126bb120582309286b9129df9886781b30c85c21ee9cae9f2db6dc11e88633c7361fdd1ba5046ea444e101ae15/asset_icons/ebc24b163bf1f58a9732a9a1d2faa5b2141b041d754ddc2260c5e76edfed261e.png",
+		"aTokenAddressMainnet": "0x030bA81f1c18d280636F32af80b9AAd02Cf0854e"
 	}
 ]

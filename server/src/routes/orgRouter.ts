@@ -20,7 +20,7 @@ router.get('/', async (req, res) => {
         });
     }
 
-    let org = {};
+    let org = {} as any;
     try {
         org = await Org.findOne({ address });
     } catch (e) {
