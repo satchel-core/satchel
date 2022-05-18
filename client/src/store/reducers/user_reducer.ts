@@ -2,10 +2,14 @@ import * as types from '../actions/types';
 
 export type userType = {
 	interestRates: any;
+	tokenBalances: any;
+	balance: number;
 };
 
 const userInitialState: userType = {
 	interestRates: {},
+	tokenBalances: {},
+	balance: 0.0,
 };
 
 export const userReducer = (
@@ -16,6 +20,10 @@ export const userReducer = (
 	switch (type) {
 		case types.GET_INTEREST_RATES:
 			return { ...state, interestRates: payload };
+		case types.GET_USER_TOKEN_BALANCE:
+			return { ...state, tokenBalances: payload };
+		case types.GET_USER_TOTAL_BALANCE:
+			return { ...state, balance: payload };
 		default:
 			return state;
 	}

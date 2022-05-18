@@ -7,13 +7,13 @@ import {
 	depositSchool,
 	withdrawSchool,
 	getUserBalanceInSchool,
-} from '../store/actions/school_actions';
+} from '../store/actions/user_actions';
 import { deploySchool, deployOrg } from '../store/actions/org_actions';
 import assets from '../utils/assets.json';
 import { useEffect } from 'react';
 
 const Index = (props) => {
-	const schoolStore = useSelector<RootState>((state) => state.school);
+	const userStore = useSelector<RootState>((state) => state.user);
 	const dispatch = useDispatch();
 	const router = useRouter();
 
@@ -21,6 +21,7 @@ const Index = (props) => {
 		getUserBalanceInSchool('0xA05cFa1C33E7561F8d14E04c9c9372721D370c34', dispatch);
 	}, []);
 
+	console.log(userStore);
 	return (
 		<Grid minH="37vh" p={3}>
 			<GridItem rowStart={1} rowEnd={1} colStart={1} colEnd={2}>
@@ -68,7 +69,7 @@ const Index = (props) => {
 					variant="outline"
 					onClick={() =>
 						depositSchool(
-							'0x9d4d647f42c4c297734456bD72c4fad540530251',
+							'0xA05cFa1C33E7561F8d14E04c9c9372721D370c34',
 							1,
 							assets[0],
 							dispatch,
@@ -85,7 +86,7 @@ const Index = (props) => {
 					variant="outline"
 					onClick={() =>
 						withdrawSchool(
-							'0x9d4d647f42c4c297734456bD72c4fad540530251',
+							'0xA05cFa1C33E7561F8d14E04c9c9372721D370c34',
 							1,
 							assets[0],
 							dispatch,
@@ -100,13 +101,13 @@ const Index = (props) => {
 };
 
 // TODO: I'm uncomfortable with this - Ritik
-export async function getServerSideProps() {
-	return {
-		props: {
-			app_server: process.env.REACT_APP_SERVER_URL,
-			contract_address: process.env.REACT_APP_CONTRACT_ADDRESS,
-		},
-	};
-}
+// export async function getServerSideProps() {
+// 	return {
+// 		props: {
+// 			app_server: process.env.REACT_APP_SERVER_URL,
+// 			contract_address: process.env.REACT_APP_CONTRACT_ADDRESS,
+// 		},
+// 	};
+// }
 
 export default Index;

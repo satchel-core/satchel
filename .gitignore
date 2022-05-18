@@ -6,3 +6,4 @@ cache/
 artifacts/
 client/contract_types
 blockchain/contract_types
+.vscode/settings.json
