@@ -9,7 +9,7 @@ import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { schoolType } from '../../store/reducers/school_reducer';
-import { getUserBalanceInSchool } from '../../store/actions/school_actions';
+import { getUserBalanceInSchool } from '../../store/actions/user_actions';
 import { DepositEnums } from '../../utils/depositEnums';
 import { Context } from '../../utils/context';
 import { SelectAsset } from '../../components/SelectAsset';
@@ -21,7 +21,7 @@ const OrgSchoolHome = ({ school }) => {
 	const dispatch = useDispatch();
 	const schoolState = useSelector((state: RootState) => state.school);
 	const userState = useSelector((state: RootState) => state.school);
-	
+
 	useEffect(() => {
 		getUserBalanceInSchool('0x3a3a6677553bad5ae99ccdb64e714e54744a4bb3', dispatch);
 		getInterestRates(dispatch);
@@ -61,14 +61,20 @@ const OrgSchoolHome = ({ school }) => {
 				</Button>
 			</GridItem>
 			<GridItem rowStart={7} rowEnd={7} colStart={1} colEnd={2}>
-				<Button size="sm" minW="40vw" colorScheme="satchel_blue" variant="outline" onClick={handleClick(`/deposit/${school.address}`, router) }>
+				<Button
+					size="sm"
+					minW="40vw"
+					colorScheme="satchel_blue"
+					variant="outline"
+					onClick={handleClick(`/deposit/${school.address}`, router)}
+				>
 					DEPOSIT MONEY
 				</Button>
 			</GridItem>
 			<GridItem rowStart={8} rowEnd={8} colStart={1} colEnd={2}>
 				<Text fontSize="12px">TOKENS HELD</Text>
 			</GridItem>
-			<SelectAsset nextPage={() => {}} offset={9}/>
+			<SelectAsset nextPage={() => {}} offset={9} />
 			<GridItem rowStart={12} rowEnd={12} colStart={1} colEnd={2}>
 				<Text fontSize="12px">TRANSACTION HISTORY</Text>
 			</GridItem>
@@ -90,7 +96,7 @@ const OrgSchoolHome = ({ school }) => {
 	);
 };
 
-export async function getServerSideProps (context) {
+export async function getServerSideProps(context) {
 	const schoolAddress = context.query.index.toLowerCase();
 	const res = await fetch(
 		`${process.env.REACT_APP_SERVER_URL}/api/school/?address=${schoolAddress}`,

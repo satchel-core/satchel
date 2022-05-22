@@ -26,7 +26,7 @@ import { SelectAsset } from '../../components/SelectAsset';
 import { DepositEnums } from '../../utils/depositEnums';
 import { Context } from '../../utils/context';
 import { useDispatch, useSelector } from 'react-redux';
-import { depositSchool, getUserBalanceInSchool } from '../../store/actions/school_actions';
+import { depositSchool, getUserBalanceInSchool } from '../../store/actions/user_actions';
 import { RootState } from '../../store';
 import { getInterestRates } from '../../store/actions/user_actions';
 
