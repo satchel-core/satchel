@@ -7,7 +7,7 @@ export const connectWallet = async () => {
 	if (!window.ethereum) {
 		console.log('Metamask not installed');
 		const provider = new WalletConnectProvider({
-			infuraId: process.env.REACT_APP_INFURA,
+			infuraId: process.env.NEXT_PUBLIC_INFURA,
 		});
 		// await provider.disconnect();
 

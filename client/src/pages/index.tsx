@@ -8,7 +8,6 @@ import {
 	withdrawSchool,
 	getUserBalanceInSchool,
 } from '../store/actions/user_actions';
-import { deploySchool, deployOrg } from '../store/actions/org_actions';
 import assets from '../utils/assets.json';
 import { useEffect } from 'react';
 
@@ -34,8 +33,8 @@ const Index = (props) => {
 			</GridItem>
 			<GridItem rowStart={2} rowEnd={2} colStart={1} colEnd={2}>
 				<Text fontSize="14px">
-					Satchel uplifts underbanked school communities by facilitating locally-governed
-					projects & capital growth via DeFi-powered donations & financial primitives.
+					Satchel uplifts underbanked school communities by facilitating locally-governed projects &
+					capital growth via DeFi-powered donations & financial primitives.
 				</Text>
 			</GridItem>
 			<GridItem rowStart={3} rowEnd={3} colStart={1} colEnd={2}>
@@ -57,7 +56,7 @@ const Index = (props) => {
 					variant="outline"
 					onClick={handleClick('/login', router)}
 				>
-					LOGIN
+					LOGIN (Admin)
 				</Button>
 				{/* Works: */}
 				{/* <Button size="sm" minW="40vw" colorScheme="satchel_blue" variant="outline" onClick={deploySchool("New School TESTING", router, dispatch, props.app_server, props.contract_address)}>TEST</Button> */}
@@ -68,12 +67,7 @@ const Index = (props) => {
 					colorScheme="satchel_blue"
 					variant="outline"
 					onClick={() =>
-						depositSchool(
-							'0xA05cFa1C33E7561F8d14E04c9c9372721D370c34',
-							1,
-							assets[0],
-							dispatch,
-						)
+						depositSchool('0xA05cFa1C33E7561F8d14E04c9c9372721D370c34', 1, assets[0], dispatch)
 					}
 				>
 					TEST DEPOSIT
@@ -85,12 +79,7 @@ const Index = (props) => {
 					colorScheme="satchel_blue"
 					variant="outline"
 					onClick={() =>
-						withdrawSchool(
-							'0xA05cFa1C33E7561F8d14E04c9c9372721D370c34',
-							1,
-							assets[0],
-							dispatch,
-						)
+						withdrawSchool('0xA05cFa1C33E7561F8d14E04c9c9372721D370c34', 1, assets[0], dispatch)
 					}
 				>
 					TEST WITHDRAW

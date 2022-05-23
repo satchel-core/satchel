@@ -54,7 +54,7 @@ export const WalletButton: FunctionComponent<WalletButtonProps> = ({ walletName 
 	};
 
 	const handleSignup = async (publicAddress: string) => {
-		const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/org/createOrg`, {
+		const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/org/createOrg`, {
 			body: JSON.stringify({
 				name: 'ritik test org', // TODO: Fix this later
 				address: publicAddress,

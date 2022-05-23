@@ -36,11 +36,30 @@ router.get('/allSchools', async (req, res) => {
     return res.status(200).json({ success: true, schools });
 });
 
+router.post('/deploySchool', async (req, res) => {
+    const { schoolId, address } = req.body;
+
+    if (!address) {
+        return res.status(400).json({
+            address: 'Address not found',
+        });
+    }
+
+    try {
+        let school = await School.findOne({ _id: schoolId });
+        school.address = address.toLowerCase();
+        await school.save();
+    } catch (e) {
+        console.log(e);
+        return res.status(500).send(e);
+    }
+});
+
 router.post('/createSchool', async (req, res) => {
     const { name, addressObj, orgAddressObj, city, country } = req.body;
 
-    const address = String(addressObj).toLowerCase
-    const orgAddress = String(orgAddressObj).toLowerCase
+    const address = String(addressObj).toLowerCase;
+    const orgAddress = String(orgAddressObj).toLowerCase;
 
     if (!name) {
         return res.status(400).json({
