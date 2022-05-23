@@ -60,9 +60,10 @@ export const WalletButton: FunctionComponent<WalletButtonProps> = ({
   const handleSignup = async (publicAddress: string) => {
     const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/org/createOrg`, {
       body: JSON.stringify({
-        name: "Your Mom", // TODO: Fix this later
+        name: "ritik test org", // TODO: Fix this later
         address: publicAddress,
         schools: [],
+        nonce: 314,
       }),
       headers: { "Content-Type": "application/json" },
       method: "POST",
