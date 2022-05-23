@@ -57,9 +57,9 @@ router.get('/getSchools', async (req, res) => {
 });
 
 router.post('/createOrg', async (req, res) => {
-    const { name, address, schools } = req.body;
+    const { name, addObj, schools } = req.body;
 
-    console.log(name, address, schools);
+    // console.log(name, address, schools);
 
     // if (!name) {
     //     return res.status(400).json({
@@ -75,6 +75,7 @@ router.post('/createOrg', async (req, res) => {
     //     });
     // }
 
+    const address = String(addObj).toLowerCase
     try {
         let newOrg = new Org({ name, schools, address });
         await newOrg.save();

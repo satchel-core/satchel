@@ -37,7 +37,10 @@ router.get('/allSchools', async (req, res) => {
 });
 
 router.post('/createSchool', async (req, res) => {
-    const { name, address, orgAddress, city, country } = req.body;
+    const { name, addressObj, orgAddressObj, city, country } = req.body;
+
+    const address = String(addressObj).toLowerCase
+    const orgAddress = String(orgAddressObj).toLowerCase
 
     if (!name) {
         return res.status(400).json({

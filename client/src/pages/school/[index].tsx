@@ -99,7 +99,7 @@ const OrgSchoolHome = ({ school }) => {
 export async function getServerSideProps(context) {
 	const schoolAddress = context.query.index.toLowerCase();
 	const res = await fetch(
-		`${process.env.REACT_APP_SERVER_URL}/api/school/?address=${schoolAddress}`,
+		`${process.env.NEXT_PUBLIC_SERVER_URL}/api/school/?address=${schoolAddress}`,
 	);
 	const data = await res.json();
 	const school = data.school;
