@@ -20,10 +20,10 @@ const OrgSchoolHome = ({ school }) => {
 	const context = useContext(Context);
 	const dispatch = useDispatch();
 	const schoolState = useSelector((state: RootState) => state.school);
-	const userState = useSelector((state: RootState) => state.school);
+	const userState = useSelector((state: RootState) => state.user);
 
 	useEffect(() => {
-		getUserBalanceInSchool('0x3a3a6677553bad5ae99ccdb64e714e54744a4bb3', dispatch);
+		getUserBalanceInSchool(school.address, dispatch);
 		getInterestRates(dispatch);
 	}, []);
 
@@ -53,7 +53,7 @@ const OrgSchoolHome = ({ school }) => {
 				<Text fontSize="12px">CURRENT BALANCE</Text>
 			</GridItem>
 			<GridItem rowStart={5} rowEnd={5} colStart={1} colEnd={2}>
-				<Text fontSize="48px">{schoolState.balance.toFixed(2)}</Text>
+				<Text fontSize="48px">{userState.balance.toFixed(2)} USD</Text>
 			</GridItem>
 			<GridItem rowStart={6} rowEnd={6} colStart={1} colEnd={2}>
 				<Button size="sm" minW="40vw" colorScheme="satchel_blue" variant="outline">

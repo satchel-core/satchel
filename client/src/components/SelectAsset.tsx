@@ -27,8 +27,8 @@ export const SelectAsset = ({ nextPage, offset }) => {
 						<TokenLabel
 							name={value.symbol}
 							img={value.url}
-							amount="AMT"
-							rate={userState.interestRates[value.symbol]}
+							amount={userState.tokenBalances[value.symbol].toFixed(4)}
+							rate={userState.interestRates[value.symbol].toFixed(4)}
 							onClick={() => {
 								context.setAsset(value.symbol);
 								nextPage();
@@ -37,31 +37,10 @@ export const SelectAsset = ({ nextPage, offset }) => {
 					</GridItem>
 				);
 			})}
-
-			{/* <GridItem rowStart={5} rowEnd={5} colStart={1} colEnd={2}>
-				<TokenLabel
-					name="DAI"
-					amount="761.3"
-					onClick={() => {
-						context.setAsset('DAI');
-						nextPage();
-					}}
-				/>
-			</GridItem> */}
-			{/* <GridItem rowStart={6} rowEnd={6} colStart={1} colEnd={2}>
-				<TokenLabel
-					name="TETHER"
-					amount="16.36"
-					onClick={() => {
-						context.setAsset('TETHER');
-						nextPage();
-					}}
-				/>
-			</GridItem> */}
 		</>
 	);
 };
 
-export async function getServerSideProps(context) {
-	return { props: { schoolAddress } };
-}
+// export async function getServerSideProps(context) {
+// 	return { props: { schoolAddress } };
+// }
