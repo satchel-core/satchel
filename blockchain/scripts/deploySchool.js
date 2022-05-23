@@ -18,16 +18,17 @@ let provider = new HDWalletProvider({
 const web3 = new Web3(provider);
 
 async function deploySchool() {
+  console.log("Deploying School");
   const satchelContract = new web3.eth.Contract(satchelAbi.abi, satchelAddress);
 
   const accounts = await web3.eth.getAccounts();
-  await satchelContract.methods
-    .createOrg(1, "0x20E43CAdC9961eDfc61170EeeF66d571C5993DFC")
-    .send({ from: accounts[0] });
+  // await satchelContract.methods
+  //   .createOrg(2, "0x6bf76B2668fF5446fbaDCb94231E2A44ba077bd6")
+  //   .send({ from: accounts[0] });
 
-  let orgAddress = await satchelContract.methods.orgs(1).call();
-  // let orgAddress = "0xd562BeBcAD4dC498Fc0D2A745CFD3db34a773964";
-  // tim org = 0x4069aB4ca5d35A85F938E7D917c74ca4C38B3C46
+  // let orgAddress = await satchelContract.methods.orgs(2).call();
+  let orgAddress = "0x8ad02C8c4Cf2394A6e361d2617a876D4dd68E2d6";
+  // // tim org = 0x4069aB4ca5d35A85F938E7D917c74ca4C38B3C46
   console.log(orgAddress);
 
   const orgContract = new web3.eth.Contract(orgAbi.abi, orgAddress);
@@ -39,4 +40,6 @@ async function deploySchool() {
   console.log(schoolAddress); // 0x9d4d647f42c4c297734456bD72c4fad540530251
 }
 
-deploySchool();
+deploySchool()
+  .then(() => {})
+  .catch((err) => {});
