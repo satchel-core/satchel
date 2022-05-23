@@ -14,7 +14,15 @@ const orgSchema = new mongoose.Schema({
     address: {
         type: String,
         required: true,
-        unique: true,
+        validate(value: string) {
+            if (!validator.isEthereumAddress(value)) {
+                throw new Error('Address is invalid');
+            }
+        },
+    },
+    ownerAddress: {
+        type: String,
+        required: true,
         validate(value: string) {
             if (!validator.isEthereumAddress(value)) {
                 throw new Error('Address is invalid');

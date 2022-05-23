@@ -121,13 +121,11 @@ export const withdrawSchool = async (
 		const accounts = await web3.eth.getAccounts();
 		const schoolInstance = new web3.eth.Contract(schoolAbi.abi as AbiItem[], schoolAddress);
 
-		await schoolInstance.methods
-			.withdraw(asset.tokenAddress, asset.aTokenAddress, amount)
-			.send({
-				from: accounts[0],
-				gasLimit: web3.utils.toHex(1000000),
-				gasPrice: web3.utils.toHex(20000000000),
-			});
+		await schoolInstance.methods.withdraw(asset.tokenAddress, asset.aTokenAddress, amount).send({
+			from: accounts[0],
+			gasLimit: web3.utils.toHex(1000000),
+			gasPrice: web3.utils.toHex(20000000000),
+		});
 
 		getUserBalanceInSchool(schoolAddress, dispatch);
 	} catch (err) {
@@ -154,9 +152,7 @@ export const getInterestRates = async (dispatch: Dispatch<any>) => {
 
 	for (let i = 0; i < data.reserves.length; i++) {
 		if (assetSymbols.includes(data.reserves[i].symbol)) {
-			interestRates[data.reserves[i].symbol] = calculateInterest(
-				data.reserves[i].liquidityRate,
-			);
+			interestRates[data.reserves[i].symbol] = calculateInterest(data.reserves[i].liquidityRate);
 		}
 	}
 
