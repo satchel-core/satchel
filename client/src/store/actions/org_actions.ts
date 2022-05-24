@@ -31,14 +31,8 @@ export const deployOrg =
 	};
 
 export const deploySchool =
-	(
-		schoolName: string,
-		router: NextRouter,
-		dispatch: Dispatch<any>,
-		org_address: string,
-		lending_pool_address: string,
-	) =>
-	async () => {
+	(schoolName: string, router: NextRouter, org_address: string, lending_pool_address: string) =>
+	async (dispatch: Dispatch<any>) => {
 		console.log('trying to deploy school');
 		const web3 = await connectWallet();
 
@@ -53,6 +47,7 @@ export const deploySchool =
 				city: 'Nice',
 				country: 'France',
 			};
+			console.log(body);
 			await axios.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/school/createSchool`, body);
 			let { data } = await axios.get(
 				`${process.env.NEXT_PUBLIC_SERVER_URL}/api/school/?address=${org_address}`,
@@ -62,17 +57,20 @@ export const deploySchool =
 			const accounts = await web3.eth.getAccounts();
 			const gasPrice = await web3.eth.getGasPrice();
 			const gasEstimate = await orgContract.methods
-				.newSchool(id, lending_pool_address)
+				.createSchool(id, lending_pool_address)
 				.estimateGas({ from: accounts[0] }); // TODO: How do we react if the transaction is rejected?
 
-			await orgContract.methods
-				.newSchool(id, lending_pool_address)
+			console.log(gasEstimate);
+			let events = await orgContract.methods
+				.createSchool(id, lending_pool_address)
 				.send({ from: accounts[0], gasPrice: gasPrice, gas: gasEstimate });
+
+			console.log(events);
 			const schoolAddress: string = await orgContract.methods.schools(id).call();
 
 			await axios.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/school/deploySchool`, {
 				_id: data.school._id.valueOf(),
-				address: schoolAddress.toLowerCase(),
+				address: schoolAddress,
 			});
 
 			dispatch(getSchoolByOrg(org_address));
@@ -92,10 +90,29 @@ export const getSchoolByOrg = (orgAddress: string) => async (dispatch: Dispatch<
 		const { data } = await axios.get(
 			`${process.env.NEXT_PUBLIC_SERVER_URL}/api/org/getSchools?orgAddress=${orgAddress}`,
 		);
-		console.log(data);
+		// console.log(data);
 		return dispatch({
 			type: types.GET_SCHOOL_BY_ORG,
 			payload: data.schools,
+		});
+	} catch (err) {
+		console.log(err);
+		// return dispatch({
+		// 	type: types.SCHOOL_LOGIN_ERROR,
+		// 	payload: err.message,
+		// });
+	}
+};
+
+export const getOrgInfo = (orgAddress: string) => async (dispatch: Dispatch<any>) => {
+	try {
+		const { data } = await axios.get(
+			`${process.env.NEXT_PUBLIC_SERVER_URL}/api/org/?address=${orgAddress}`,
+		);
+		// console.log(data);
+		return dispatch({
+			type: types.GET_ORG_INFO,
+			payload: data.org,
 		});
 	} catch (err) {
 		console.log(err);

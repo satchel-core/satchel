@@ -8,7 +8,7 @@ import { SchoolLabel } from '../../components/SchoolLabel';
 import { useRouter } from 'next/router';
 import { handleClick } from '../../utils/common';
 import { schoolType } from '../../store/reducers/school_reducer';
-import { deploySchool, getSchoolByOrg } from '../../store/actions/org_actions';
+import { deploySchool, getOrgInfo, getSchoolByOrg } from '../../store/actions/org_actions';
 
 const OrgHome = ({ orgAddress }) => {
 	const router = useRouter();
@@ -31,7 +31,7 @@ const OrgHome = ({ orgAddress }) => {
 				</HStack>
 			</GridItem>
 			<GridItem rowStart={2} rowEnd={2} colStart={1} colEnd={2}>
-				<Text fontSize="24px">Organization Name</Text>
+				<Text fontSize="24px">{orgState.org.name}</Text>
 			</GridItem>
 			<GridItem rowStart={3} rowEnd={3} colStart={1} colEnd={2}>
 				<Button
@@ -40,12 +40,13 @@ const OrgHome = ({ orgAddress }) => {
 					colorScheme="satchel_blue"
 					variant="outline"
 					onClick={() =>
-						deploySchool(
-							'no name school',
-							null,
-							dispatch,
-							orgAddress,
-							process.env.NEXT_PUBLIC_LENDINGPOOL_ADDRESS,
+						dispatch(
+							deploySchool(
+								'no name school',
+								router,
+								orgAddress,
+								process.env.NEXT_PUBLIC_LENDINGPOOL_ADDRESS,
+							),
 						)
 					}
 				>
@@ -66,6 +67,7 @@ const OrgHome = ({ orgAddress }) => {
 
 export const getServerSideProps = wrapper.getServerSideProps((store) => async (context) => {
 	await store.dispatch(getSchoolByOrg(context.query.index as string));
+	await store.dispatch(getOrgInfo(context.query.index as string));
 	return { props: { orgAddress: context.query.index } };
 });
 

@@ -18,7 +18,7 @@ export const LOAD_WITHDRAW = 'load-withdraw';
 
 export const LOGOUT_USER = 'logout_user';
 
-export const GET_SCHOOL_BY_ORG = 'get_school_by_org';
+export const GET_SCHOOL_BY_ORG = 'get_school_by_org'; // used
 export const GET_SCHOOL_INFO = 'get_school_info';
 export const SET_SCHOOL_INFO = 'set_school_info';
 export const GET_SCHOOL_PROJECTS = 'get_school_projects';
@@ -30,6 +30,8 @@ export const SCHOOL_LOGIN_ERROR = 'school_login_error';
 
 export const SET_SCHOOL_BALANCE = 'set_school_balance';
 export const LOAD_SCHOOL_WITHDRAW = 'load_school_withdraw';
+
+export const GET_ORG_INFO = 'get_org_info';
 
 // export const GET_BORROW_INTEREST_RATE = 'get_borrow_interest_rate';
 // export const GET_BORROW_BALANCE = 'get-borrow-balance';
