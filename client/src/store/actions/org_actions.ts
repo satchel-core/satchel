@@ -88,3 +88,22 @@ export const deploySchool =
 			});
 		}
 	};
+
+export const getSchoolByOrg = (orgAddress: string) => async (dispatch: Dispatch<any>) => {
+	try {
+		const { data } = await axios.get(
+			`${process.env.NEXT_PUBLIC_SERVER_URL}/api/org/getSchools?orgAddress=${orgAddress}`,
+		);
+		console.log(data);
+		return dispatch({
+			type: types.GET_SCHOOL_BY_ORG,
+			payload: data.schools,
+		});
+	} catch (err) {
+		console.log(err);
+		// return dispatch({
+		// 	type: types.SCHOOL_LOGIN_ERROR,
+		// 	payload: err.message,
+		// });
+	}
+};
