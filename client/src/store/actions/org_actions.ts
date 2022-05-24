@@ -39,6 +39,7 @@ export const deploySchool =
 		lending_pool_address: string,
 	) =>
 	async () => {
+		console.log('trying to deploy school');
 		const web3 = await connectWallet();
 
 		let orgContract = new web3.eth.Contract(orgAbi.abi as AbiItem[], org_address);
@@ -56,7 +57,7 @@ export const deploySchool =
 			let { data } = await axios.get(
 				`${process.env.NEXT_PUBLIC_SERVER_URL}/api/school/?address=${org_address}`,
 			);
-
+			console.log(data);
 			let id = '0x' + data.school._id.valueOf();
 			const accounts = await web3.eth.getAccounts();
 			const gasPrice = await web3.eth.getGasPrice();
@@ -74,12 +75,9 @@ export const deploySchool =
 				address: schoolAddress.toLowerCase(),
 			});
 
-			dispatch({
-				type: types.GET_SCHOOL_INFO,
-				payload: body,
-			});
+			dispatch(getSchoolByOrg(org_address));
 
-			handleCustomUrl('school/', schoolAddress, router);
+			// handleCustomUrl('school/', schoolAddress, router);
 		} catch (err) {
 			console.log(err);
 			return dispatch({

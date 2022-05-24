@@ -16,7 +16,7 @@ export const rootReducer = (state, action) => {
 	if (action.type === HYDRATE) {
 		const nextState = {
 			...state, // use previous state
-			org: action.payload.org, // on hydrate, overwrite org with stored value
+			org: { ...action.payload.org }, // on hydrate, overwrite org with new state
 		};
 		// if (state.count.count) nextState.count.count = state.count.count; // preserve count value on client side navigation
 		return nextState;

@@ -7,8 +7,16 @@ export type userType = {
 };
 
 const userInitialState: userType = {
-	interestRates: {},
-	tokenBalances: {},
+	interestRates: {
+		DAI: 0,
+		USDC: 0,
+		WETH: 0,
+	},
+	tokenBalances: {
+		DAI: 0,
+		USDC: 0,
+		WETH: 0,
+	},
 	balance: 0.0,
 };
 

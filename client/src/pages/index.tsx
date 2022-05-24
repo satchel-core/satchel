@@ -16,9 +16,9 @@ const Index = (props) => {
 	const dispatch = useDispatch();
 	const router = useRouter();
 
-	useEffect(() => {
-		getUserBalanceInSchool('0xA05cFa1C33E7561F8d14E04c9c9372721D370c34', dispatch);
-	}, []);
+	// useEffect(() => {
+	// 	getUserBalanceInSchool('0xA05cFa1C33E7561F8d14E04c9c9372721D370c34', dispatch);
+	// }, []);
 
 	console.log(userStore);
 	return (
@@ -66,9 +66,9 @@ const Index = (props) => {
 					minW="40vw"
 					colorScheme="satchel_blue"
 					variant="outline"
-					onClick={() =>
-						depositSchool('0xA05cFa1C33E7561F8d14E04c9c9372721D370c34', 1, assets[0], dispatch)
-					}
+					// onClick={() =>
+					// 	depositSchool('0xA05cFa1C33E7561F8d14E04c9c9372721D370c34', 1, assets[0], () => {})
+					// }
 				>
 					TEST DEPOSIT
 				</Button>
@@ -78,9 +78,9 @@ const Index = (props) => {
 					minW="40vw"
 					colorScheme="satchel_blue"
 					variant="outline"
-					onClick={() =>
-						withdrawSchool('0xA05cFa1C33E7561F8d14E04c9c9372721D370c34', 1, assets[0], dispatch)
-					}
+					// onClick={() =>
+					// 	withdrawSchool('0xA05cFa1C33E7561F8d14E04c9c9372721D370c34', 1, assets[0], () => {})
+					// }
 				>
 					TEST WITHDRAW
 				</Button>

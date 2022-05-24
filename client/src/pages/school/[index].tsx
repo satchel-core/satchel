@@ -7,7 +7,7 @@ import { TransactionLabel } from '../../components/TransactionLabel';
 import { getKeys, goBack, handleClick, handleCustomUrl } from '../../utils/common';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../store';
+import { RootState, wrapper } from '../../store';
 import { schoolType } from '../../store/reducers/school_reducer';
 import { getUserBalanceInSchool } from '../../store/actions/user_actions';
 import { DepositEnums } from '../../utils/depositEnums';
@@ -17,14 +17,12 @@ import { getInterestRates } from '../../store/actions/user_actions';
 
 const OrgSchoolHome = ({ school }) => {
 	const router = useRouter();
-	const context = useContext(Context);
 	const dispatch = useDispatch();
 	const schoolState = useSelector((state: RootState) => state.school);
 	const userState = useSelector((state: RootState) => state.user);
 
 	useEffect(() => {
-		getUserBalanceInSchool(school.address, dispatch);
-		getInterestRates(dispatch);
+		dispatch(getUserBalanceInSchool(school.address));
 	}, []);
 
 	return (

@@ -10,9 +10,10 @@ import { handleClick } from '../../utils/common';
 import { schoolType } from '../../store/reducers/school_reducer';
 import { deploySchool, getSchoolByOrg } from '../../store/actions/org_actions';
 
-const OrgHome = ({ data }) => {
+const OrgHome = ({ orgAddress }) => {
 	const router = useRouter();
 	const orgState = useSelector((state: RootState) => state.org);
+	const dispatch = useDispatch();
 
 	return (
 		<Grid p={3} gap={3}>
@@ -33,7 +34,21 @@ const OrgHome = ({ data }) => {
 				<Text fontSize="24px">Organization Name</Text>
 			</GridItem>
 			<GridItem rowStart={3} rowEnd={3} colStart={1} colEnd={2}>
-				<Button size="sm" minW="40vw" colorScheme="satchel_blue" variant="outline">
+				<Button
+					size="sm"
+					minW="40vw"
+					colorScheme="satchel_blue"
+					variant="outline"
+					onClick={() =>
+						deploySchool(
+							'no name school',
+							null,
+							dispatch,
+							orgAddress,
+							process.env.NEXT_PUBLIC_LENDINGPOOL_ADDRESS,
+						)
+					}
+				>
 					ADD NEW SCHOOL
 				</Button>
 			</GridItem>
@@ -49,19 +64,9 @@ const OrgHome = ({ data }) => {
 	);
 };
 
-// export async function getServerSideProps(context) {
-// 	const orgAddress = context.query.index;
-// 	const res = await fetch(
-// 		`${process.env.NEXT_PUBLIC_SERVER_URL}/api/org/getSchools?orgAddress=${orgAddress}`,
-// 	);
-// 	const data = await res.json();
-
-// 	return { props: { data } };
-// }
-
 export const getServerSideProps = wrapper.getServerSideProps((store) => async (context) => {
-	store.dispatch(getSchoolByOrg(context.query.index as string));
-	return { props: {} };
+	await store.dispatch(getSchoolByOrg(context.query.index as string));
+	return { props: { orgAddress: context.query.index } };
 });
 
 export default OrgHome;

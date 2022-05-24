@@ -109,9 +109,7 @@ export const Deposit = ({ schoolAddress }) => {
 							<Stat>
 								<StatLabel fontSize="12px">SATCHEL</StatLabel>
 								<StatLabel fontSize="36px">0.00</StatLabel>
-								<StatLabel fontSize="18px">
-									${schoolState.balance.toFixed(2)}
-								</StatLabel>
+								<StatLabel fontSize="18px">${schoolState.balance.toFixed(2)}</StatLabel>
 							</Stat>
 						</StatGroup>
 					</GridItem>
@@ -186,12 +184,9 @@ export const Deposit = ({ schoolAddress }) => {
 							colorScheme="satchel_blue"
 							variant="solid"
 							onClick={() => {
-								depositSchool(
-									schoolAddress,
-									parseFloat(amount),
-									assetMap[context.asset],
-									dispatch,
-								).then(handleCustomUrl('/confirm/', schoolAddress, router));
+								dispatch(
+									depositSchool(schoolAddress, parseFloat(amount), assetMap[context.asset], router),
+								);
 							}}
 						>
 							CONFIRM DEPOSIT
