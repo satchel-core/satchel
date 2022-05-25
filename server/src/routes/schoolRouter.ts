@@ -1,4 +1,5 @@
 import express from 'express';
+import Org from '../models/Org';
 import School from '../models/School';
 require('dotenv').config();
 
@@ -53,6 +54,10 @@ router.post('/deploySchool', async (req, res) => {
         let school = await School.findOne({ _id });
         school.address = address.toLowerCase();
         await school.save();
+
+        let org = await Org.findOne({ address: school.orgAddress });
+        org.schools.push(school.address);
+        await org.save();
     } catch (e) {
         console.log(e);
         return res.status(500).send(e);

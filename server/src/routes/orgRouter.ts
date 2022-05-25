@@ -7,6 +7,7 @@ import Org from '../models/Org';
 import * as dotenv from 'dotenv';
 import School from '../models/School';
 import satchelAbi from '../contracts/Satchel.sol/Satchel.json';
+import { getWeb3 } from '../common';
 
 dotenv.config();
 
@@ -72,15 +73,7 @@ router.post('/createOrg', async (req, res) => {
         });
     }
 
-    console.log(process.env.MNEMONIC);
-    const provider = new HDWalletProvider({
-        mnemonic: {
-            phrase: process.env.MNEMONIC!,
-        },
-        providerOrUrl: process.env.INFURA,
-    });
-
-    const web3 = new Web3(provider);
+    const web3 = getWeb3();
 
     const address = String(ownerAddress).toLowerCase();
     let newOrg = {} as any;
