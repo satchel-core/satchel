@@ -85,10 +85,10 @@ export const deploySchool =
 		}
 	};
 
-export const getSchoolByOrg = (orgAddress: string) => async (dispatch: Dispatch<any>) => {
+export const getSchoolByOrg = (ownerAddress: string) => async (dispatch: Dispatch<any>) => {
 	try {
 		const { data } = await axios.get(
-			`${process.env.NEXT_PUBLIC_SERVER_URL}/api/org/getSchools?orgAddress=${orgAddress}`,
+			`${process.env.NEXT_PUBLIC_SERVER_URL}/api/org/getSchools?ownerAddress=${ownerAddress}`,
 		);
 		// console.log(data);
 		return dispatch({
@@ -104,10 +104,10 @@ export const getSchoolByOrg = (orgAddress: string) => async (dispatch: Dispatch<
 	}
 };
 
-export const getOrgInfo = (orgAddress: string) => async (dispatch: Dispatch<any>) => {
+export const getOrgInfo = (ownerAddress: string) => async (dispatch: Dispatch<any>) => {
 	try {
 		const { data } = await axios.get(
-			`${process.env.NEXT_PUBLIC_SERVER_URL}/api/org/?address=${orgAddress}`,
+			`${process.env.NEXT_PUBLIC_SERVER_URL}/api/org/?ownerAddress=${ownerAddress}`,
 		);
 		// console.log(data);
 		return dispatch({

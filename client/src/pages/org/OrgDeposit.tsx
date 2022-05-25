@@ -79,7 +79,7 @@ export const OrgDeposit: FunctionComponent<OrgDepositProps> = ({origSetPage}) =>
                 <GridItem rowStart={1} rowEnd={1} colStart={1} colEnd={2}>
                   <HStack>
                     <Logo h="20vmin" pointerEvents="none" />
-                    <OrganizationMenu setPage={origSetPage}/>
+                    <OrganizationMenu/>
                   </HStack>
                 </GridItem>
                 <GridItem rowStart={2} rowEnd={2} colStart={1} colEnd={2}>
@@ -139,7 +139,7 @@ export const OrgDeposit: FunctionComponent<OrgDepositProps> = ({origSetPage}) =>
                 <GridItem rowStart={1} rowEnd={1} colStart={1} colEnd={2}>
                   <HStack>
                     <Logo h="20vmin" pointerEvents="none" />
-                    <OrganizationMenu setPage={origSetPage}/>
+                    <OrganizationMenu/>
                   </HStack>
                 </GridItem>
                 <GridItem rowStart={2} rowEnd={2} colStart={1} colEnd={2}>
@@ -179,7 +179,7 @@ export const OrgDeposit: FunctionComponent<OrgDepositProps> = ({origSetPage}) =>
                 <GridItem rowStart={1} rowEnd={1} colStart={1} colEnd={2}>
                   <HStack>
                     <Logo h="20vmin" pointerEvents="none" />
-                    <OrganizationMenu setPage={origSetPage}/>
+                    <OrganizationMenu/>
                   </HStack>
                 </GridItem>
                 <GridItem rowStart={2} rowEnd={3}>

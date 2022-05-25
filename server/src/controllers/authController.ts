@@ -9,20 +9,20 @@ import { config } from '../config';
 dotenv.config();
 
 const create = (req: Request, res: Response, next: NextFunction) => {
-    const { signature, address } = req.body;
+    const { signature, ownerAddress } = req.body;
 
-    if (!signature || !address)
+    if (!signature || !ownerAddress)
         return res.status(400).send({ error: 'Request should have signature and publicAddress' });
 
     return (
-        Org.findOne({ where: { address } })
+        Org.findOne({ where: { ownerAddress } })
             ////////////////////////////////////////////////////
             // Step 1: Get the user with the given publicAddress
             ////////////////////////////////////////////////////
             .then((user) => {
                 if (!user)
                     return res.status(401).send({
-                        error: `User with publicAddress ${address} is not found in database`,
+                        error: `User with publicAddress ${ownerAddress} is not found in database`,
                     });
                 return user;
             })
@@ -47,7 +47,7 @@ const create = (req: Request, res: Response, next: NextFunction) => {
 
                 // The signature verification is successful if the address found with
                 // sigUtil.recoverPersonalSignature matches the initial publicAddress
-                if (sigAdd.toLowerCase() === address.toLowerCase()) {
+                if (sigAdd.toLowerCase() === ownerAddress.toLowerCase()) {
                     return user;
                 } else {
                     return res.status(401).send({ error: 'Signature verification failed' });
@@ -75,7 +75,7 @@ const create = (req: Request, res: Response, next: NextFunction) => {
                         {
                             payload: {
                                 id: user.id,
-                                address,
+                                ownerAddress,
                             },
                         },
                         config.secret,

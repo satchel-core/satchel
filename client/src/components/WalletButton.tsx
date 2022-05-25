@@ -39,7 +39,7 @@ export const WalletButton: FunctionComponent<WalletButtonProps> = ({ walletName 
 		}
 
 		// Look if org with current publicAddress is already present on backend
-		fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/org?address=${publicAddress}`)
+		fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/org/getOrg?ownerAddress=${publicAddress}`)
 			.then((response) => response.json())
 			// If yes, retrieve it. If no, create it.
 			.then((org) => (org ? org : handleSignup(publicAddress)))
@@ -67,9 +67,9 @@ export const WalletButton: FunctionComponent<WalletButtonProps> = ({ walletName 
 		return response.json();
 	};
 
-	const handleAuthenticate = ({ address, signature }: { address: string; signature: string }) =>
+	const handleAuthenticate = ({ ownerAddress, signature }: { ownerAddress: string; signature: string }) =>
 		fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/auth`, {
-			body: JSON.stringify({ address, signature }),
+			body: JSON.stringify({ address: ownerAddress, signature }),
 			headers: {
 				'Content-Type': 'application/json',
 			},
@@ -82,14 +82,14 @@ export const WalletButton: FunctionComponent<WalletButtonProps> = ({ walletName 
 		org: any; // TODO: grr change this
 	}) => {
 		try {
-			const address: string = org.address;
+			const ownerAddress: string = org.ownerAddress;
 			const signature = await web3!.eth.personal.sign(
 				`I am signing my one-time nonce: ${org.nonce}`,
-				address,
+				ownerAddress,
 				'', // MetaMask will ignore the password argument here
 			);
 
-			return { address, signature };
+			return { ownerAddress, signature };
 		} catch (err) {
 			console.log(err);
 			throw new Error('You need to sign the message to be able to log in.');

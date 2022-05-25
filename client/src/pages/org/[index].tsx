@@ -10,7 +10,7 @@ import { handleClick } from '../../utils/common';
 import { schoolType } from '../../store/reducers/school_reducer';
 import { deploySchool, getOrgInfo, getSchoolByOrg } from '../../store/actions/org_actions';
 
-const OrgHome = ({ orgAddress }) => {
+const OrgHome = ({ ownerAddress }) => {
 	const router = useRouter();
 	const orgState = useSelector((state: RootState) => state.org);
 	const dispatch = useDispatch();
@@ -42,9 +42,9 @@ const OrgHome = ({ orgAddress }) => {
 					onClick={() =>
 						dispatch(
 							deploySchool(
-								'no name school',
+								orgState.org.name,
 								router,
-								orgAddress,
+								ownerAddress,
 								process.env.NEXT_PUBLIC_LENDINGPOOL_ADDRESS,
 							),
 						)
@@ -68,7 +68,7 @@ const OrgHome = ({ orgAddress }) => {
 export const getServerSideProps = wrapper.getServerSideProps((store) => async (context) => {
 	await store.dispatch(getSchoolByOrg(context.query.index as string));
 	await store.dispatch(getOrgInfo(context.query.index as string));
-	return { props: { orgAddress: context.query.index } };
+	return { props: { ownerAddress: context.query.index } };
 });
 
 export default OrgHome;

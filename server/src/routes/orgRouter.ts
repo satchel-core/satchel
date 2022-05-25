@@ -32,6 +32,28 @@ router.get('/', async (req, res) => {
     return res.status(200).json({ success: true, org });
 });
 
+router.get('/getOrg', async (req, res) => {
+    var { ownerAddress } = req.query;
+
+    ownerAddress = String(ownerAddress).toLowerCase();
+
+    if (!ownerAddress) {
+        return res.status(400).json({
+            ownerAddress: 'Address not found',
+        });
+    }
+
+    let org = {} as any;
+    try {
+        org = await Org.findOne({ ownerAddress });
+    } catch (e) {
+        console.log(e);
+        return res.status(500).send(e);
+    }
+
+    return res.status(200).json({ success: true, org });
+});
+
 router.get('/allOrgs', async (req, res) => {
     let orgs = [];
     try {
@@ -45,10 +67,10 @@ router.get('/allOrgs', async (req, res) => {
 });
 
 router.get('/getSchools', async (req, res) => {
-    const { orgAddress } = req.query;
+    const { ownerAddress } = req.query;
     let schools = [];
     try {
-        schools = await School.find({ orgAddress });
+        schools = await School.find({ ownerAddress });
     } catch (e) {
         console.log(e);
         return res.status(500).send(e);
@@ -85,7 +107,8 @@ router.post('/createOrg', async (req, res) => {
     const address = String(ownerAddress).toLowerCase();
     let newOrg = {} as any;
     try {
-        newOrg = new Org({ name, schools: [], address, ownerAddress: address });
+        newOrg = new Org({ name, schools: [], address, ownerAddress: address});
+        console.log(newOrg)
         await newOrg.save();
 
         const id = '0x' + newOrg._id.valueOf();
