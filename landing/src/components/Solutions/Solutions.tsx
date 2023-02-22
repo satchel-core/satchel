@@ -1,14 +1,14 @@
 import { useEffect, useRef, useState } from 'react'
-import { Fade, Box, chakra, SimpleGrid } from '@chakra-ui/react'
+import { Box, chakra, Fade, SimpleGrid } from '@chakra-ui/react'
 import { Player } from '@lottiefiles/react-lottie-player'
+import ismobilejs from 'ismobilejs'
 
 import Solution0 from '../../assets/png/solutions0.png'
 import Solution1 from '../../assets/png/solutions1.png'
 import Solution2 from '../../assets/png/solutions2.png'
 import Solution3 from '../../assets/png/solutions3.png'
-
-import Card from './components/Card'
 import useOnScreen from '../../hooks/useOnScreen'
+import Card from './components/Card'
 
 const cardText = [
   'Splits yield between individuals & schools for  socioeconomic mobility',
@@ -22,6 +22,8 @@ const Solutions = () => {
   const [show, setShow] = useState(false)
   const onScreen = useOnScreen<HTMLDivElement>(ref, '-200px')
 
+  const isMobile = ismobilejs(window.navigator).any
+
   useEffect(() => {
     if (onScreen) {
       setShow(true)
@@ -29,7 +31,7 @@ const Solutions = () => {
   }, [onScreen])
 
   return (
-    <Fade in={show}>
+    <Fade in={show || isMobile}>
       <Box maxW="760px" mx="auto" ref={ref} textAlign="center" mb="36px">
         <chakra.h2
           textStyle="heading"
@@ -45,9 +47,11 @@ const Solutions = () => {
       <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10}>
         <Box position="relative">
           <Box
-            position="absolute"
             display={{ base: 'none', md: 'inline' }}
-            top={-20}
+            left="-10pxpx"
+            position="absolute"
+            top="-81px"
+            width="100px"
             zIndex={2}
           >
             <Player
@@ -59,14 +63,19 @@ const Solutions = () => {
           </Box>
           <Card image={Solution0}>{cardText[0]}</Card>
         </Box>
-        <Card image={Solution1}>{cardText[1]}</Card>
-        <Card image={Solution2}>{cardText[2]}</Card>
+        <Box position="relative">
+          <Card image={Solution1}>{cardText[1]}</Card>
+        </Box>
+        <Box position="relative">
+          <Card image={Solution2}>{cardText[2]}</Card>
+        </Box>
         <Box position="relative">
           <Box
-            position="absolute"
             bottom={0}
             display={{ base: 'none', md: 'inline' }}
-            right="-65px"
+            position="absolute"
+            right="-82px"
+            width="100px"
             zIndex={2}
           >
             <Player
